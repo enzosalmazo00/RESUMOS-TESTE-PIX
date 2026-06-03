@@ -119,7 +119,7 @@ nav.tabs button.active{background:var(--accent2);color:var(--bg);border-color:va
 .score-card{text-align:center;padding:48px 32px;background:var(--card);border-radius:20px;border:1px solid var(--border)}
 .score-big{font-family:var(--font-display);font-size:72px;font-weight:800;background:linear-gradient(135deg,var(--accent2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .score-msg{color:var(--muted);font-size:16px;margin-top:8px}
-#scrolltop{position:fixed;bottom:24px;left:24px;z-index:200;background:var(--accent2);color:var(--bg);width:40px;height:40px;border-radius:50%;border:none;cursor:pointer;font-size:18px;box-shadow:0 4px 20px rgba(56,232,192,0.4);transition:all 0.2s;display:none;align-items:center;justify-content:center}
+#scrolltop{position:fixed;bottom:24px;right:24px;z-index:200;background:var(--accent2);color:var(--bg);width:40px;height:40px;border-radius:50%;border:none;cursor:pointer;font-size:18px;box-shadow:0 4px 20px rgba(56,232,192,0.4);transition:all 0.2s;display:none;align-items:center;justify-content:center}
 #scrolltop:hover{transform:translateY(-2px)}
 .ottoni-badge{display:inline-block;background:linear-gradient(135deg,var(--gold),var(--accent3));color:var(--bg);font-family:var(--font-mono);font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:1px;text-transform:uppercase;margin-left:8px;vertical-align:middle}
 .slide-note{background:rgba(79,156,249,0.07);border:1px dashed rgba(79,156,249,0.25);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--muted);margin-bottom:16px;font-style:italic}
@@ -144,7 +144,6 @@ nav.tabs button.active{background:var(--accent2);color:var(--bg);border-color:va
 <body>
 <canvas id="particles"></canvas>
 <header>
-  <a href="dashboard.html" style="display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:12px;border:1px solid rgba(56,232,192,0.25);background:transparent;color:rgba(56,232,192,0.7);font-family:var(--font-body);font-size:12px;font-weight:500;text-decoration:none;transition:all .2s;margin-bottom:20px;" onmouseover="this.style.background='rgba(56,232,192,0.08)';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='rgba(56,232,192,0.7)'">← Voltar ao Dashboard</a>
   <div class="badge">🧬 Genética Médica P2 · 2026</div>
   <h1>Resumo Completo — Genética Médica P2</h1>
   <p class="sub">Emery — Elementos de Genética Médica · Dr. Roberto Ottoni · UCP Pedro Juan Caballero</p>
@@ -1055,6 +1054,25 @@ function nextQuestion(){currentQ++;renderQuiz();}
 function restartQuiz(){currentQ=0;score=0;answered=false;renderQuiz();}
 renderQuiz();
 </script>
+<!-- ── Botão Voltar ── -->
+<a href="dashboard.html" style="
+  position:fixed; bottom:24px; left:24px; z-index:9999;
+  display:flex; align-items:center; gap:9px;
+  padding:12px 26px;
+  background:rgba(2,10,22,0.93);
+  border:1.5px solid rgba(34,211,238,0.42);
+  border-radius:50px;
+  color:#e2f8fc;
+  font-size:13px; font-weight:600; letter-spacing:0.03em;
+  text-decoration:none;
+  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  box-shadow:0 4px 24px rgba(34,211,238,0.16), inset 0 1px 0 rgba(255,255,255,0.04);
+  transition:all .25s ease;
+" onmouseover="this.style.background='rgba(34,211,238,0.14)';this.style.borderColor='rgba(34,211,238,0.85)';this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 32px rgba(34,211,238,0.26)'"
+   onmouseout="this.style.background='rgba(2,10,22,0.93)';this.style.borderColor='rgba(34,211,238,0.42)';this.style.transform='translateY(0)';this.style.boxShadow='0 4px 24px rgba(34,211,238,0.16)'">
+  ← Voltar
+</a>
+
 <script src="study-timer.js"></script>
 </body>
 </html>
