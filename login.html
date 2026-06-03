@@ -328,7 +328,7 @@
     <div class="field">
       <label>Senha</label>
       <div style="position:relative;">
-        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" style="padding-right:46px;">
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" style="padding-right:46px;" oninput="updateStrength()">
         <button type="button" id="togglePassword" onclick="togglePasswordVisibility()" style="
           position:absolute; right:14px; top:50%; transform:translateY(-50%);
           background:transparent; border:none; cursor:pointer;
@@ -336,6 +336,15 @@
           transition:color .2s;
         " onmouseover="this.style.color='rgba(34,211,238,0.85)'" 
            onmouseout="this.style.color='rgba(34,211,238,0.45)'">👁</button>
+      </div>
+      <!-- Medidor de força — só aparece no cadastro -->
+      <div id="strengthMeter" style="display:none;margin-top:8px;">
+        <div style="display:flex;gap:4px;margin-bottom:5px;">
+          <div id="bar1" style="flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,0.08);transition:background .3s;"></div>
+          <div id="bar2" style="flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,0.08);transition:background .3s;"></div>
+          <div id="bar3" style="flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,0.08);transition:background .3s;"></div>
+        </div>
+        <div id="strengthLabel" style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.3);transition:color .3s;"></div>
       </div>
     </div>
 
@@ -671,6 +680,7 @@ window.authConfig = {
     mainBtn.textContent   = isLogin ? "Entrar"       : "Cadastrar";
     toggleBtn.textContent = isLogin ? "Criar conta"  : "Já tenho conta";
     forgotBtn.style.display = isLogin ? "block" : "none";
+    document.getElementById("strengthMeter").style.display = "none";
     msg.textContent = ""; email.value = ""; password.value = "";
     showForceBtn(false); pendingUserId = null;
     setTimeout(updateMainBtn, 10);
@@ -759,6 +769,45 @@ window.authConfig = {
       setLoading(false);
     }
   });
+
+  // Medidor de força de senha
+  window.updateStrength = function() {
+    if (isLogin) return; // só no cadastro
+    var pass = document.getElementById("password").value;
+    var meter = document.getElementById("strengthMeter");
+    var bar1 = document.getElementById("bar1");
+    var bar2 = document.getElementById("bar2");
+    var bar3 = document.getElementById("bar3");
+    var label = document.getElementById("strengthLabel");
+
+    if (!pass) {
+      meter.style.display = "none";
+      return;
+    }
+    meter.style.display = "block";
+
+    // Calcular força
+    var score = 0;
+    if (pass.length >= 6) score++;
+    if (pass.length >= 10) score++;
+    if (/[A-Z]/.test(pass) || /[0-9]/.test(pass)) score++;
+    if (/[^A-Za-z0-9]/.test(pass) && pass.length >= 8) score++;
+
+    var level = score <= 1 ? 1 : score <= 2 ? 2 : 3;
+
+    var configs = {
+      1: { color:"#f87171", label:"🔴 Fraca — tente usar letras e números" },
+      2: { color:"#fbbf24", label:"🟡 Média — adicione caracteres especiais ou mais letras" },
+      3: { color:"#4ade80", label:"🟢 Ótima — senha forte!" }
+    };
+
+    var cfg = configs[level];
+    bar1.style.background = cfg.color;
+    bar2.style.background = level >= 2 ? cfg.color : "rgba(255,255,255,0.08)";
+    bar3.style.background = level >= 3 ? cfg.color : "rgba(255,255,255,0.08)";
+    label.style.color = cfg.color;
+    label.textContent = cfg.label;
+  };
 
   // Toggle senha visível/oculta
   window.togglePasswordVisibility = function() {
