@@ -4,11 +4,6 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin — Resumos do Enzo</title>
-  <script>
-    document.documentElement.style.visibility = "hidden";
-    // Safety net: always show page after 5s no matter what
-    setTimeout(function(){ document.documentElement.style.visibility = "visible"; }, 5000);
-  </script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -126,6 +121,11 @@
   </style>
 </head>
 <body>
+<div id="loadingOverlay" style="position:fixed;inset:0;z-index:9999;background:linear-gradient(160deg,#020d1a 0%,#010812 50%,#020d1a 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
+  <div style="width:36px;height:36px;border:3px solid rgba(34,211,238,0.2);border-top-color:#22d3ee;border-radius:50%;animation:spin .8s linear infinite;"></div>
+  <div style="font-family:Poppins,sans-serif;font-size:14px;color:rgba(125,211,232,0.6);">Verificando acesso…</div>
+</div>
+<script>setTimeout(function(){var ov=document.getElementById('loadingOverlay');if(ov&&ov.style.display!=='none'){ov.innerHTML='<div style="font-size:32px">&#9888;</div><div style="font-family:Poppins,sans-serif;font-size:14px;color:#fca5a5;text-align:center;padding:0 24px;line-height:1.6;">Tempo esgotado.<br>Verifique sua conexao e recarregue.</div><button onclick="location.reload()" style="margin-top:8px;padding:10px 24px;border:1px solid rgba(252,165,165,0.4);border-radius:10px;background:transparent;color:#fca5a5;font-family:Poppins,sans-serif;font-size:13px;cursor:pointer;">Recarregar</button>';}},8000);</script>
 <div class="container">
   <div class="header">
     <div style="display:flex;align-items:center;gap:14px;">
@@ -229,6 +229,17 @@ var RESUMOS_COLS=[
   {key:"imunologia_p1",label:"Imuno P1"},{key:"imunologia_p2",label:"Imuno P2"},{key:"imunologia_final",label:"Imuno Final"},
   {key:"pacote_p1",label:"Pacote P1"},{key:"pacote_p2",label:"Pacote P2"},{key:"pacote_final",label:"Pacote Final"}
 ];
+function hideOverlay(){
+  var ov=document.getElementById('loadingOverlay');
+  if(ov)ov.style.display='none';
+}
+function showOverlayError(msg){
+  var ov=document.getElementById('loadingOverlay');
+  if(ov){
+    ov.style.flexDirection='column';
+    ov.innerHTML="<div style='font-size:32px'>&#9888;</div><div style='font-family:Poppins,sans-serif;font-size:14px;color:#fca5a5;text-align:center;padding:0 24px;line-height:1.6;'>"+msg+"</div><button onclick='location.reload()' style='margin-top:8px;padding:10px 24px;border:1px solid rgba(252,165,165,0.4);border-radius:10px;background:transparent;color:#fca5a5;font-family:Poppins,sans-serif;font-size:13px;cursor:pointer;'>Recarregar</button>";
+  }
+}
 async function init(){
   try{
     var r=await client.auth.getSession();
@@ -236,20 +247,16 @@ async function init(){
     if(!session){window.location.replace("login.html");return;}
     var pr=await client.from("profiles").select("is_admin,email").eq("id",session.user.id).single();
     if(!pr.data||!pr.data.is_admin){
-      document.documentElement.style.visibility="visible";
+      hideOverlay();
       alert("Acesso negado. Apenas administradores.");
       window.location.replace("dashboard.html");return;
     }
-    document.documentElement.style.visibility="visible";
+    hideOverlay();
     document.getElementById("adminEmail").textContent=session.user.email;
     await Promise.all([loadAlunos(),loadOrders()]);
   }catch(err){
     console.error("[admin] init error:",err);
-    document.documentElement.style.visibility="visible";
-    var d=document.createElement("div");
-    d.style.cssText="position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(2,8,16,0.95);color:#fca5a5;font-family:Poppins,sans-serif;font-size:14px;text-align:center;padding:24px;gap:16px;";
-    d.innerHTML="<div style='font-size:32px'>&#9888;</div><div>Erro ao carregar painel.<br>Verifique sua conexao e tente novamente.</div><button onclick='location.reload()' style='padding:10px 24px;border:1px solid rgba(252,165,165,0.4);border-radius:10px;background:transparent;color:#fca5a5;font-family:Poppins,sans-serif;font-size:13px;cursor:pointer;'>Recarregar</button>";
-    document.body.appendChild(d);
+    showOverlayError("Erro ao carregar painel.<br>Verifique sua conexao e tente novamente.");
   }
 }
 async function loadAlunos(){
