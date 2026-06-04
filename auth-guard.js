@@ -24,7 +24,7 @@
   "use strict";
 
   var SUPABASE_URL = "https://chqhdmjqnjjdatowfyif.supabase.co";
-  var SUPABASE_KEY = "sb_publishable_cgNwK1hWh8IoNm9cX9M7zQ_oqk6Dszn";
+  var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNocWhkbWpxbmpqZGF0b3dmeWlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyNDc0MDAsImV4cCI6MjA5NTgyMzQwMH0.v_7y0YD9R1LvFJkz9Vr_zJX0_CE2lo8OY5xX-KtVcFk";
   var LOGIN_PAGE     = "login.html";
   var DASHBOARD_PAGE = "dashboard.html";
 
