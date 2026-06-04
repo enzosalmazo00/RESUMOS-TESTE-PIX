@@ -24,7 +24,7 @@
   "use strict";
 
   var SUPABASE_URL = "https://chqhdmjqnjjdatowfyif.supabase.co";
-  var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNocWhkbWpxbmpqZGF0b3dmeWlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyNDc0MDAsImV4cCI6MjA5NTgyMzQwMH0.v_7y0YD9R1LvFJkz9Vr_zJX0_CE2lo8OY5xX-KtVcFk";
+  var SUPABASE_KEY = "sb_publishable_cgNwK1hWh8IoNm9cX9M7zQ_oqk6Dszn";
   var LOGIN_PAGE     = "login.html";
   var DASHBOARD_PAGE = "dashboard.html";
 
@@ -112,22 +112,26 @@
     var fields = "is_approved, active_session, device_id" + extraFields;
 
     var profile = null;
-    try {
-      var res = await client
-        .from("profiles")
-        .select(fields)
-        .eq("id", session.user.id)
-        .single();
+    // Tenta buscar o perfil até 3 vezes com delay crescente
+    for (var tentativa = 1; tentativa <= 3; tentativa++) {
+      try {
+        var res = await client
+          .from("profiles")
+          .select(fields)
+          .eq("id", session.user.id)
+          .single();
 
-      if (res.error) throw res.error;
-      profile = res.data;
-    } catch (err) {
-      console.error("[auth-guard] Erro ao buscar perfil:", err);
-      _showErrorOverlay("Erro ao carregar perfil. Tente recarregar a página.");
-      return;
+        if (res.error) throw res.error;
+        profile = res.data;
+        if (profile) break; // Sucesso!
+      } catch (err) {
+        console.warn("[auth-guard] Tentativa " + tentativa + " falhou:", err);
+        if (tentativa < 3) {
+          await new Promise(function(r){ setTimeout(r, tentativa * 1000); });
+        }
+      }
     }
 
-    // [C2] CORREÇÃO: profile null pode ser RLS bloqueando, não logout
     if (!profile) {
       _showErrorOverlay("Não foi possível carregar seus dados. Recarregue a página.");
       return;
