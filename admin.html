@@ -325,18 +325,6 @@ function renderAlunos(list){
     "</div>";
   });
   tbody.innerHTML=rows;cards.innerHTML=cds;
-  function _act(e){
-    var b=e.target.closest("[data-act]");
-    if(!b)return;
-    var id=b.dataset.id||"", em=b.dataset.email||"", 
-        key=b.dataset.key||"", act=b.dataset.act;
-    if(act==="edit")openModal(id);
-    else if(act==="revoke")quickRevoke(id,em);
-    else if(act==="grant")quickGrantAll(id,em);
-    else if(act==="toggle")toggleResumo(key);
-    else if(act==="presente")togglePresente(key);
-  }
-  tbody.onclick=_act; cards.onclick=_act;
 }
 window.filterAlunos=function(){
   var s=document.getElementById("searchInput").value.toLowerCase();
@@ -480,6 +468,19 @@ function showToast(msg,type){
 }
 window.goToDashboard=function(){window.location.href="dashboard.html";};
 window.doLogout=async function(){await client.auth.signOut();window.location.replace("login.html");};
+
+// Event delegation global para botoes de acao
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-act]");
+  if(!b)return;
+  var id=b.dataset.id||"", em=b.dataset.email||"",
+      key=b.dataset.key||"", act=b.dataset.act;
+  if(act==="edit")openModal(id);
+  else if(act==="revoke")quickRevoke(id,em);
+  else if(act==="grant")quickGrantAll(id,em);
+  else if(act==="toggle"&&window.toggleResumo)toggleResumo(key);
+  else if(act==="presente"&&window.togglePresente)togglePresente(key);
+});
 init();
 })();
 </script>
