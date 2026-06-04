@@ -415,8 +415,8 @@
         <div class="ez-identity">
           <div class="ez-avatar">Ez</div>
           <div>
-            <div class="ez-name">Enzo IA</div>
-            <div class="ez-status">● Gemini · PubMed</div>
+            <div class="ez-name">Enzo IA <span id="ez-header-nome" style="font-weight:400;font-size:11px;color:var(--ez-dim);"></span></div>
+            <div class="ez-status" id="ez-status-bar">● Groq · Gemini · PubMed · SciELO</div>
             ${contexto ? `<div class="ez-ctx-badge">📖 ${contexto}</div>` : ''}
           </div>
         </div>
@@ -605,6 +605,31 @@
     return palavras.slice(0, 4).join(' ');
   }
 
+  // ── SCIELO ────────────────────────────────────────────────────────────────
+  async function ezSciELO(query) {
+    try {
+      var q = encodeURIComponent(query);
+      var url = "https://search.scielo.org/api/v1/search/?q=" + q
+        + "&lang=pt&count=3&from=0&output=json&format=json";
+      var r = await fetch(url);
+      if (!r.ok) return [];
+      var d = await r.json();
+      var hits = (d.hits && d.hits.hits) || [];
+      return hits.map(function(h) {
+        var src = h._source || {};
+        return {
+          pmid: null,
+          scielo_id: h._id || "",
+          title: (src.ti && (src.ti.pt || src.ti.en || src.ti.es || Object.values(src.ti)[0])) || "Título indisponível",
+          year: src.publication_year || src.da || "",
+          journal: (src.ta) || (src.source_name) || "SciELO",
+          url: src.ur ? "https://www.scielo.br/article/" + src.ur : null,
+          source: "scielo"
+        };
+      }).filter(function(a) { return a.title !== "Título indisponível"; });
+    } catch(e) { return []; }
+  }
+
   async function ezPubMed(query) {
     try {
       // Traduz a query para inglês antes de buscar
@@ -665,12 +690,21 @@
     if (loaderText) loaderText.textContent = "Consultando PubMed";
     ezScroll();
 
-    // Busca PubMed apenas se não for saudação/mensagem simples
+    // Busca PubMed + SciELO em paralelo se for contexto médico
     var artigos = [];
     if (!ehSaudacao(texto) && temContextoMedico(texto)) {
       var termoBusca = contexto ? contexto + " " + texto : texto;
-      if (loaderText) loaderText.textContent = "Consultando PubMed";
-      artigos = await ezPubMed(termoBusca);
+      if (loaderText) loaderText.textContent = "Consultando PubMed · SciELO";
+      var termoEN = traduzirParaIngles(termoBusca);
+      var termoPT = termoBusca;
+      var results = await Promise.all([
+        ezPubMed(termoBusca),
+        ezSciELO(termoPT)
+      ]);
+      // Mescla resultados: até 2 do PubMed + 2 do SciELO
+      var pubmedArtigos  = (results[0] || []).slice(0, 2);
+      var scieloArtigos  = (results[1] || []).slice(0, 2);
+      artigos = pubmedArtigos.concat(scieloArtigos);
     }
 
     if (loaderText) loaderText.textContent = "Enzo está sintetizando";
@@ -706,14 +740,28 @@
 
       if (data.reply) {
         historico.push({ role: "assistant", content: data.reply });
+        // Atualiza provider no header
+        var statusBar = document.getElementById('ez-status-bar');
+        if (statusBar && data.provider) {
+          var providerLabel = data.provider === 'groq' ? '⚡ Groq' : '🔄 Gemini';
+          statusBar.textContent = '● ' + providerLabel + ' · PubMed';
+        }
         var html = ezFormat(data.reply);
 
         if (artigos.length) {
           html += '<div class="ez-pubmed">'
-            + '<div class="ez-pubmed-label">📚 Evidências PubMed</div>'
+            + '<div class="ez-pubmed-label">📚 Referências Científicas</div>'
             + artigos.map(function (a) {
+              var isScielo = a.source === "scielo";
+              var link = isScielo
+                ? (a.url || "https://search.scielo.org/?q=" + encodeURIComponent(a.title))
+                : "https://pubmed.ncbi.nlm.nih.gov/" + a.pmid + "/";
+              var badge = isScielo
+                ? '<span style="color:#2dd4bf;font-size:9px;font-weight:700;margin-right:3px;">SciELO</span>'
+                : '<span style="color:#34d399;font-size:9px;font-weight:700;margin-right:3px;">PubMed</span>';
               return '<div class="ez-pubmed-item">'
-                + '<a href="https://pubmed.ncbi.nlm.nih.gov/' + a.pmid + '/" target="_blank">PMID ' + a.pmid + '</a>'
+                + badge
+                + '<a href="' + link + '" target="_blank">' + (isScielo ? a.scielo_id || "Ver artigo" : "PMID " + a.pmid) + '</a>'
                 + ' — ' + (a.title.length > 70 ? a.title.substring(0, 70) + "…" : a.title)
                 + ' <span style="color:#475569">· ' + a.year + '</span>'
                 + '</div>';
@@ -859,14 +907,18 @@
     buildHTML();
     initDraggableFab();
 
-    // Personaliza boas-vindas com nome do aluno
+    // Personaliza boas-vindas e header com nome do aluno
     setTimeout(function() {
       var nome = getNomeAluno();
       var el = document.getElementById('ez-welcome-msg');
-      if (el && nome) {
-        el.innerHTML = 'Olá, <strong>' + nome + '</strong>! Sou o <strong>Enzo IA</strong> 🩺<br><br>'
-          + 'O que você precisa agora, Dr(a)?<br><br>'
-          + 'Enquanto você digita, já estou tomando um café para irmos com tudo! ☕';
+      var headerNome = document.getElementById('ez-header-nome');
+      if (nome) {
+        if (el) {
+          el.innerHTML = 'Olá, <strong>' + nome + '</strong>! Sou o <strong>Enzo IA</strong> 🩺<br><br>'
+            + 'O que você precisa agora, Dr(a)?<br><br>'
+            + 'Enquanto você digita, já estou tomando um café para irmos com tudo! ☕';
+        }
+        if (headerNome) headerNome.textContent = '— ' + nome;
       }
     }, 800);
   }
