@@ -60,8 +60,8 @@
       bottom: 24px;
       right: 20px;
       z-index: 9998;
-      width: 52px; height: 52px;
-      border-radius: 16px;
+      width: 56px; height: 56px;
+      border-radius: 50%;
       background: linear-gradient(135deg, #059669, #0d9488);
       border: none; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
@@ -99,12 +99,12 @@
     /* ── PAINEL CHAT ── */
     #ez-panel {
       position: fixed;
-      bottom: 80px;
+      bottom: 140px;
       right: 20px;
       z-index: 9997;
       width: 360px;
-      height: min(520px, calc(100dvh - 100px));
-      max-height: calc(100dvh - 100px);
+      height: min(520px, calc(100dvh - 160px));
+      max-height: calc(100dvh - 160px);
       display: flex;
       flex-direction: column;
       background: var(--ez-surface);
@@ -375,9 +375,7 @@
     fab.title = "Enzo IA — Assistente de Estudos";
     fab.innerHTML = `
       <span id="ez-fab-badge"></span>
-      <svg id="ez-fab-icon-open" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-      </svg>
+      <span id="ez-fab-icon-open" style="font-size:14px;font-weight:800;color:#fff;letter-spacing:-0.5px;font-family:'Poppins',sans-serif;line-height:1;">IA</span>
       <svg id="ez-fab-icon-close" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
         <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
       </svg>
@@ -459,8 +457,7 @@
     document.body.appendChild(fab);
     document.body.appendChild(panel);
 
-    // Evento do FAB
-    fab.addEventListener("click", ezToggle);
+    // Clique tratado pelo initDraggableFab
   }
 
   // ── TOGGLE ────────────────────────────────────────────────────────────────
@@ -637,9 +634,114 @@
     inputEl.focus();
   };
 
+  // ── FAB ARRASTÁVEL ───────────────────────────────────────────────────────────
+  function initDraggableFab() {
+    var fab = document.getElementById('ez-fab');
+    if (!fab) return;
+
+    var isDragging = false;
+    var hasMoved   = false;
+    var startX, startY, startRight, startBottom;
+
+    // Restaura posição salva
+    var saved = localStorage.getItem('ez-fab-pos');
+    if (saved) {
+      try {
+        var pos = JSON.parse(saved);
+        fab.style.right  = pos.right;
+        fab.style.bottom = pos.bottom;
+        fab.style.left   = 'auto';
+        fab.style.top    = 'auto';
+      } catch(e) {}
+    }
+
+    fab.addEventListener('mousedown', onStart);
+    fab.addEventListener('touchstart', onStart, { passive: true });
+
+    function onStart(e) {
+      isDragging = true;
+      hasMoved   = false;
+      fab.style.transition = 'none';
+      fab.style.animation  = 'none';
+
+      var touch = e.touches ? e.touches[0] : e;
+      startX = touch.clientX;
+      startY = touch.clientY;
+      startRight  = parseInt(fab.style.right)  || 20;
+      startBottom = parseInt(fab.style.bottom) || 24;
+
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('touchmove', onMove, { passive: false });
+      document.addEventListener('mouseup',   onEnd);
+      document.addEventListener('touchend',  onEnd);
+    }
+
+    function onMove(e) {
+      if (!isDragging) return;
+      if (e.cancelable) e.preventDefault();
+
+      var touch = e.touches ? e.touches[0] : e;
+      var dx = touch.clientX - startX;
+      var dy = touch.clientY - startY;
+
+      if (Math.abs(dx) > 4 || Math.abs(dy) > 4) hasMoved = true;
+
+      var newRight  = Math.max(8, Math.min(window.innerWidth  - 60, startRight  - dx));
+      var newBottom = Math.max(8, Math.min(window.innerHeight - 60, startBottom + dy));
+
+      fab.style.right  = newRight  + 'px';
+      fab.style.bottom = newBottom + 'px';
+
+      // Move o painel junto se estiver aberto
+      var panel = document.getElementById('ez-panel');
+      if (panel && panel.classList.contains('open')) {
+        panel.style.right  = newRight + 'px';
+        panel.style.bottom = (newBottom + 64) + 'px';
+      }
+    }
+
+    function onEnd(e) {
+      if (!isDragging) return;
+      isDragging = false;
+      fab.style.transition = '';
+
+      // Salva posição
+      localStorage.setItem('ez-fab-pos', JSON.stringify({
+        right:  fab.style.right,
+        bottom: fab.style.bottom
+      }));
+
+      // Se não moveu, abre/fecha normalmente
+      if (!hasMoved) ezToggle();
+
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('touchmove', onMove);
+      document.removeEventListener('mouseup',   onEnd);
+      document.removeEventListener('touchend',  onEnd);
+    }
+  }
+
+  // ── AJUSTE AUTOMÁTICO COM TIMER ─────────────────────────────────────────────
+  // Quando o timer de estudo aparece (só nos resumos), sobe o FAB para não colidir
+  document.addEventListener('authReady', function() {
+    setTimeout(function() {
+      var timer = document.getElementById('stWidget');
+      var fab   = document.getElementById('ez-fab');
+      var panel = document.getElementById('ez-panel');
+      if (timer && fab) {
+        fab.style.bottom   = '80px';
+        if (panel) {
+          panel.style.bottom     = '140px';
+          panel.style.maxHeight  = 'calc(100dvh - 160px)';
+        }
+      }
+    }, 500);
+  });
+
   // ── ENTER ─────────────────────────────────────────────────────────────────
   document.addEventListener("DOMContentLoaded", function () {
     buildHTML();
+    initDraggableFab();
     var inputEl = document.getElementById("ez-input");
     if (inputEl) {
       inputEl.addEventListener("keypress", function (e) {
