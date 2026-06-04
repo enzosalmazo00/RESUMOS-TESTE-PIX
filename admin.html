@@ -307,10 +307,10 @@ function renderAlunos(list){
       "<td style='"+ei.css+";font-size:12px;'>"+ei.str+"</td>"+
       "<td class='date-cell'>"+ll+"</td>"+
       "<td><div class='actions-cell'>"+
-        "<button class='action-btn cyan' onclick='openModal(""+a.id+"")'>&#9998;&#65039; Editar</button>"+
+        "<button class='action-btn cyan' onclick='openModal(this.dataset.id)' data-id='"+a.id+"'>&#9998;&#65039; Editar</button>"+
         (cnt>0
-          ?"<button class='action-btn red' onclick='quickRevoke(""+a.id+"",""+encodeURIComponent(a.email||"")+"")'>&#128683; Revogar</button>"
-          :"<button class='action-btn green' onclick='quickGrantAll(""+a.id+"",""+encodeURIComponent(a.email||"")+"")'>&#9989; Liberar tudo</button>")+
+          ?"<button class='action-btn red' onclick='quickRevoke(this.dataset.id,this.dataset.email)' data-id='"+a.id+"' data-email='"+encodeURIComponent(a.email||"")+"'>&#128683; Revogar</button>"
+          :"<button class='action-btn green' onclick='quickGrantAll(this.dataset.id,this.dataset.email)' data-id='"+a.id+"' data-email='"+encodeURIComponent(a.email||"")+"'>&#9989; Liberar tudo</button>")+
       "</div></td></tr>";
     cds+="<div class='aluno-card'>"+
       "<div class='ac-top'><div class='ac-email'>"+(a.email||"—")+(a.is_admin?" <span class='badge badge-yellow' style='font-size:9px;'>Admin</span>":"")+"</div><div>"+bdg+"</div></div>"+
