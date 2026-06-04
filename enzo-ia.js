@@ -524,6 +524,49 @@
     ezScroll();
   }
 
+  // ── DETECTA SE DEVE BUSCAR NO PUBMED ─────────────────────────────────────
+  function ehSaudacao(texto) {
+    var t = texto.toLowerCase().trim();
+    var saudacoes = ['oi','olá','ola','hey','hi','hello','bom dia','boa tarde','boa noite',
+      'tudo bem','tudo bom','e ai','e aí','opa','salve','fala','o que é isso','quem é você',
+      'quem e voce','você é ia','voce e ia','o que você faz','o que voce faz','me ajuda',
+      'pode me ajudar','obrigado','obrigada','valeu','vlw','até mais','tchau','flw'];
+    if (saudacoes.indexOf(t) !== -1) return true;
+    if (t.length < 15) return true;
+    return false;
+  }
+
+  function temContextoMedico(texto) {
+    var t = texto.toLowerCase();
+    var termos = [
+      // Anatomia e fisiologia
+      'célula','tecido','órgão','sistema','anatomia','fisiologia','histologia',
+      'metabolismo','hormônio','receptor','membrana','núcleo','mitocôndria',
+      // Bioquímica
+      'enzima','proteína','lipídio','carboidrato','glicose','atp','dna','rna',
+      'aminoácido','metabolismo','catálise','substrato','cofator','vitamina',
+      // Farmacologia
+      'fármaco','droga','medicamento','dose','efeito','mecanismo','inibidor',
+      'agonista','antagonista','receptor','biodisponibilidade','antibiótico',
+      // Microbiologia
+      'bactéria','vírus','fungo','parasita','infecção','gram','cultura',
+      'resistência','antibiótico','patógeno','virulência','cepa',
+      // Clínica
+      'doença','síndrome','diagnóstico','tratamento','sintoma','sinal','exame',
+      'laboratório','cirurgia','prognóstico','epidemiologia','patologia',
+      'pressão','frequência','cardíaco','pulmonar','renal','hepático','neural',
+      // Imunologia
+      'imune','anticorpo','antígeno','linfócito','citocina','inflamação','vacina',
+      // Termos gerais médicos
+      'médico','medicina','clínico','paciente','hospital','fisio','bio','micro',
+      'imuno','genética','gene','mutação','herança','cromossomo',
+    ];
+    for (var i = 0; i < termos.length; i++) {
+      if (t.indexOf(termos[i]) !== -1) return true;
+    }
+    return false;
+  }
+
   // ── PUBMED ────────────────────────────────────────────────────────────────
   async function ezPubMed(query) {
     try {
@@ -581,9 +624,13 @@
     if (loaderText) loaderText.textContent = "Consultando PubMed";
     ezScroll();
 
-    // Busca PubMed
-    var termoBusca = contexto ? contexto + " " + texto : texto;
-    var artigos = await ezPubMed(termoBusca);
+    // Busca PubMed apenas se não for saudação/mensagem simples
+    var artigos = [];
+    if (!ehSaudacao(texto) && temContextoMedico(texto)) {
+      var termoBusca = contexto ? contexto + " " + texto : texto;
+      if (loaderText) loaderText.textContent = "Consultando PubMed";
+      artigos = await ezPubMed(termoBusca);
+    }
 
     if (loaderText) loaderText.textContent = "Enzo está sintetizando";
 
