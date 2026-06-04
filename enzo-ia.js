@@ -934,7 +934,7 @@
           "Content-Type": "application/json",
           "Authorization": "Bearer " + SUPABASE_ANON_KEY
         },
-        body: JSON.stringify({ messages: msgs })
+        body: JSON.stringify({ messages: msgs, texto: texto })
       });
 
       var data = await res.json();
@@ -995,6 +995,43 @@
                 + '<span style="color:#f59e0b;font-size:9px;font-weight:700;margin-right:3px;">' + (t.phase||'Trial') + '</span>'
                 + '<a href="' + t.url + '" target="_blank">' + t.nctId + '</a>'
                 + ' — ' + t.title.substring(0,65) + '…'
+                + '</div>';
+            }).join('')
+            + '</div>';
+        }
+
+        // RxNorm
+        if (rxDrug) {
+          html += '<div class="ez-pubmed" style="margin-top:8px;">'
+            + '<div class="ez-pubmed-label">💊 RxNorm — Classe Farmacológica</div>'
+            + '<div class="ez-pubmed-item"><strong style="color:#e2e8f0">' + rxDrug.nome + '</strong>'
+            + (rxDrug.classe ? ' · <span style="color:#34d399">' + rxDrug.classe + '</span>' : '')
+            + ' <a href="https://www.nlm.nih.gov/research/umls/rxnorm/" target="_blank" style="color:#2dd4bf;font-size:10px;margin-left:4px;">Ver RxNorm ↗</a></div>'
+            + '</div>';
+        }
+
+        // MedlinePlus
+        if (medlineItems.length > 0) {
+          html += '<div class="ez-pubmed" style="margin-top:8px;">'
+            + '<div class="ez-pubmed-label">📖 MedlinePlus — NIH</div>'
+            + medlineItems.map(function(m) {
+              return '<div class="ez-pubmed-item">'
+                + '<span style="color:#2dd4bf;font-size:9px;font-weight:700;margin-right:3px;">NIH</span>'
+                + (m.url ? '<a href="' + m.url + '" target="_blank">' + m.title.substring(0,70) + '</a>' : m.title.substring(0,70))
+                + '</div>';
+            }).join('')
+            + '</div>';
+        }
+
+        // ClinicalTrials
+        if (trials.length > 0) {
+          html += '<div class="ez-pubmed" style="margin-top:8px;">'
+            + '<div class="ez-pubmed-label">🔬 ClinicalTrials.gov — Ensaios Ativos</div>'
+            + trials.map(function(t) {
+              return '<div class="ez-pubmed-item">'
+                + '<span style="color:#f59e0b;font-size:9px;font-weight:700;margin-right:3px;">' + (t.phase||'Trial') + '</span>'
+                + '<a href="' + t.url + '" target="_blank">' + t.nctId + '</a>'
+                + ' — ' + t.title.substring(0,60) + '…'
                 + '</div>';
             }).join('')
             + '</div>';
