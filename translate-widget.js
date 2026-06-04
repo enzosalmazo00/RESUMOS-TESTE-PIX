@@ -1,36 +1,19 @@
 /**
- * translate-widget.js — Google Translate estilizado para Resumos do Enzo
- * 
- * Como usar em qualquer página:
- *   <script src="translate-widget.js"></script>
- *
- * O widget injeta automaticamente o botão 🌐 no elemento com id="translateAnchor"
- * Se não existir esse elemento, cria um botão flutuante no canto superior direito.
+ * translate-widget.js — Botão de tradução para Resumos do Enzo
+ * Usa Google Translate via URL — funciona em qualquer hospedagem
  */
 (function () {
   "use strict";
 
-  // ── CSS ──────────────────────────────────────────────────────────────────────
   var style = document.createElement("style");
   style.textContent = [
-    /* Esconde o banner feio do Google Translate */
-    ".goog-te-banner-frame { display:none !important; }",
-    "body { top:0 !important; }",
-    "#goog-te-banner-frame { display:none !important; }",
+    /* Esconde banner do Google Translate */
+    ".goog-te-banner-frame, #goog-te-banner-frame { display:none !important; }",
+    "body { top: 0 !important; }",
     ".skiptranslate { display:none !important; }",
 
-    /* Wrapper do botão */
-    "#translateAnchor { display:inline-flex; align-items:center; }",
-
-    /* Esconde o select nativo e mostra só nosso botão */
-    "#google_translate_element select {",
-    "  position:absolute; opacity:0; width:100%; height:100%;",
-    "  top:0; left:0; cursor:pointer; z-index:2;",
-    "}",
-    "#google_translate_element { position:relative; display:inline-block; }",
-
-    /* Botão visual */
-    ".gt-custom-btn {",
+    /* Botão */
+    ".gt-btn {",
     "  display:inline-flex; align-items:center; gap:7px;",
     "  padding:9px 16px; border-radius:12px;",
     "  border:1px solid rgba(34,211,238,0.25);",
@@ -39,71 +22,124 @@
     "  font-family:'Poppins',sans-serif;",
     "  font-size:13px; font-weight:500;",
     "  cursor:pointer; transition:all .25s;",
-    "  white-space:nowrap; pointer-events:none;",
+    "  white-space:nowrap;",
+    "  position:relative;",
     "}",
-    ".gt-custom-btn .gt-globe { font-size:15px; }",
-    ".gt-custom-btn .gt-label { font-size:12px; }",
-
-    /* Hover no wrapper (que tem o select por cima) */
-    "#google_translate_element:hover .gt-custom-btn {",
+    ".gt-btn:hover {",
     "  background:rgba(34,211,238,0.12);",
     "  border-color:rgba(34,211,238,0.5);",
     "  color:#fff;",
     "}",
 
-    /* Dropdown nativo estilizado — sobrescreve o Google */
-    ".goog-te-menu-value span { display:none; }",
-    ".goog-te-gadget { color:transparent !important; font-size:0 !important; }",
-    ".goog-te-gadget .goog-te-gadget-simple {",
-    "  border:none !important;",
-    "  background:transparent !important;",
+    /* Dropdown */
+    ".gt-dropdown {",
+    "  display:none;",
+    "  position:absolute; top:calc(100% + 8px); right:0;",
+    "  background:rgba(2,13,26,0.97);",
+    "  border:1px solid rgba(34,211,238,0.25);",
+    "  border-radius:12px;",
+    "  overflow:hidden;",
+    "  box-shadow:0 12px 32px rgba(0,0,0,0.5);",
+    "  z-index:9999; min-width:160px;",
     "}",
+    ".gt-btn.open .gt-dropdown { display:block; }",
+    ".gt-option {",
+    "  display:flex; align-items:center; gap:10px;",
+    "  padding:11px 16px;",
+    "  font-family:'Poppins',sans-serif;",
+    "  font-size:13px; color:rgba(125,211,232,0.85);",
+    "  cursor:pointer; transition:background .2s;",
+    "  border:none; background:none; width:100%; text-align:left;",
+    "}",
+    ".gt-option:hover { background:rgba(34,211,238,0.1); color:#fff; }",
+    ".gt-option.active { color:#22d3ee; font-weight:600; }",
   ].join("\n");
   document.head.appendChild(style);
 
-  // ── Callback do Google Translate ─────────────────────────────────────────────
-  window.googleTranslateElementInit = function () {
-    new google.translate.TranslateElement(
-      {
-        pageLanguage: "pt",
-        includedLanguages: "pt,es",
-        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-        autoDisplay: false,
-      },
-      "google_translate_element"
-    );
-  };
-
-  // ── Injeta HTML ───────────────────────────────────────────────────────────────
-  function inject() {
-    var anchor = document.getElementById("translateAnchor");
-
-    // Se não tiver anchor, cria um flutuante no header (fallback)
-    if (!anchor) {
-      anchor = document.createElement("div");
-      anchor.id = "translateAnchor";
-      anchor.style.cssText =
-        "position:fixed;top:16px;right:20px;z-index:8999;";
-      document.body.appendChild(anchor);
-    }
-
-    anchor.innerHTML =
-      '<div id="google_translate_element">' +
-        '<div class="gt-custom-btn">' +
-          '<span class="gt-globe">🌐</span>' +
-          '<span class="gt-label">Idioma</span>' +
-        '</div>' +
-      '</div>';
-
-    // Carrega o script do Google Translate
-    var script = document.createElement("script");
-    script.src =
-      "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-    script.async = true;
-    document.head.appendChild(script);
+  function getCurrentLang() {
+    var hl = new URLSearchParams(window.location.search).get("hl");
+    return hl || "pt";
   }
 
-  // Injeta assim que o DOM estiver pronto
+  function buildButton() {
+    var lang = getCurrentLang();
+    var label = lang === "es" ? "🌐 Español" : "🌐 Idioma";
+
+    var btn = document.createElement("div");
+    btn.className = "gt-btn";
+    btn.setAttribute("tabindex", "0");
+    btn.innerHTML =
+      '<span>' + label + '</span>' +
+      '<svg width="10" height="6" viewBox="0 0 10 6" fill="none" style="opacity:0.6">' +
+        '<path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
+      '</svg>' +
+      '<div class="gt-dropdown">' +
+        '<button class="gt-option' + (lang === "pt" ? " active" : "") + '" data-lang="pt">🇧🇷 Português</button>' +
+        '<button class="gt-option' + (lang === "es" ? " active" : "") + '" data-lang="es">🇵🇾 Español</button>' +
+      '</div>';
+
+    // Abre/fecha dropdown
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      btn.classList.toggle("open");
+    });
+
+    // Clique nas opções
+    btn.querySelectorAll(".gt-option").forEach(function (opt) {
+      opt.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var targetLang = opt.getAttribute("data-lang");
+        btn.classList.remove("open");
+
+        if (targetLang === "pt") {
+          // Remove tradução: recarrega sem parâmetro
+          var url = new URL(window.location.href);
+          url.searchParams.delete("hl");
+          // Se página foi traduzida pelo Google Translate via iframe, recarrega limpa
+          if (window.location.hostname.includes("translate.goog")) {
+            // Está dentro do frame do Google Translate — volta para original
+            window.location.href = window.location.href
+              .replace(/translate\.goog.*?\//, "")
+              .replace(/\?.*$/, "");
+          } else {
+            window.location.reload();
+          }
+        } else {
+          // Abre no Google Translate
+          var pageUrl = encodeURIComponent(window.location.href.split("?")[0]);
+          var translateUrl =
+            "https://translate.google.com/translate?sl=pt&tl=" +
+            targetLang +
+            "&u=" + pageUrl;
+          window.location.href = translateUrl;
+        }
+      });
+    });
+
+    // Fecha ao clicar fora
+    document.addEventListener("click", function () {
+      btn.classList.remove("open");
+    });
+
+    return btn;
+  }
+
+  function inject() {
+    var btn = buildButton();
+    var anchor = document.getElementById("translateAnchor");
+
+    if (anchor) {
+      anchor.appendChild(btn);
+    } else {
+      // Fallback: flutuante no topo direito
+      var wrapper = document.createElement("div");
+      wrapper.style.cssText =
+        "position:fixed;top:16px;right:20px;z-index:8999;";
+      wrapper.appendChild(btn);
+      document.body.appendChild(wrapper);
+    }
+  }
+
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", inject);
   } else {
