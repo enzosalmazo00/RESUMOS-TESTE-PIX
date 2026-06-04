@@ -34,6 +34,16 @@
   var isOpen      = false;
   var isAnimating = false;
 
+  // Nome do aluno — tenta pegar do profile global do dashboard
+  function getNomeAluno() {
+    // Tenta várias fontes onde o nome pode estar disponível
+    if (window.profile && window.profile.nome_preferido) return window.profile.nome_preferido;
+    if (window.authProfile && window.authProfile.nome_preferido) return window.authProfile.nome_preferido;
+    var saved = localStorage.getItem('ez-nome-aluno');
+    if (saved) return saved;
+    return null;
+  }
+
   // ── NÃO mostrar em login/admin/reset ───────────────────────────────────
   var pagina = window.location.pathname.split("/").pop();
   if (["login.html","admin.html","reset-password.html","index.html",""].indexOf(pagina) !== -1) return;
@@ -421,9 +431,9 @@
         <div class="ez-msg enzo">
           <div class="ez-msg-icon">Ez</div>
           <div class="ez-bubble">
-            Olá! Sou o <strong>Enzo IA</strong>, seu assistente de estudos médicos. 🩺<br><br>
+            <span id="ez-welcome-msg">Olá! Sou o <strong>Enzo IA</strong>, seu assistente de estudos médicos. 🩺<br><br>
             O que você precisa agora, Dr(a)?<br><br>
-            Enquanto você digita, já estou tomando um café para irmos com tudo! ☕
+            Enquanto você digita, já estou tomando um café para irmos com tudo! ☕</span>
           </div>
         </div>
         <div id="ez-dynamic"></div>
@@ -585,9 +595,11 @@
       }).join("\n");
     }
 
-    var msgContexto = contexto
-      ? "[Contexto: estudando " + contexto + "]\n" + texto + extra
-      : texto + extra;
+    var nomeAluno = getNomeAluno();
+    var prefixo = "";
+    if (nomeAluno) prefixo += "[Nome do aluno: " + nomeAluno + "] ";
+    if (contexto)  prefixo += "[Contexto: estudando " + contexto + "] ";
+    var msgContexto = prefixo ? prefixo + "\n" + texto + extra : texto + extra;
 
     var msgs = historico.slice(0, -1).concat([{ role: "user", content: msgContexto }]);
 
@@ -755,14 +767,27 @@
   });
 
   // ── INIT IMEDIATO ─────────────────────────────────────────────────────────
-  // Constrói o widget assim que o script carrega (não espera DOMContentLoaded)
-  if (document.body) {
+  function initWidget() {
     buildHTML();
     initDraggableFab();
+
+    // Personaliza boas-vindas com nome do aluno
+    setTimeout(function() {
+      var nome = getNomeAluno();
+      var el = document.getElementById('ez-welcome-msg');
+      if (el && nome) {
+        el.innerHTML = 'Olá, <strong>' + nome + '</strong>! Sou o <strong>Enzo IA</strong> 🩺<br><br>'
+          + 'O que você precisa agora, Dr(a)?<br><br>'
+          + 'Enquanto você digita, já estou tomando um café para irmos com tudo! ☕';
+      }
+    }, 800);
+  }
+
+  if (document.body) {
+    initWidget();
   } else {
     document.addEventListener("DOMContentLoaded", function () {
-      buildHTML();
-      initDraggableFab();
+      initWidget();
     });
   }
 

@@ -794,6 +794,7 @@ function renderExpiryBadge() {
 // ── Boas vindas personalizadas ─────────────────────────────────────────────
 function renderWelcome() {
   var nome = profile.nome_preferido || "";
+  if (nome) localStorage.setItem('ez-nome-aluno', nome);
   var hora = new Date().getHours();
   var saudacao = hora < 12 ? "Bom dia" : hora < 18 ? "Boa tarde" : "Boa noite";
 
@@ -850,6 +851,7 @@ window.salvarNome = async function() {
     .eq("id", session.user.id);
   if (!error) {
     profile.nome_preferido = nome;
+    localStorage.setItem('ez-nome-aluno', nome);
     renderWelcome();
   }
 };
