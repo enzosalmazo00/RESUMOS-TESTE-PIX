@@ -892,24 +892,21 @@
       if (loaderText) loaderText.textContent = "Consultando PubMed · SciELO · FDA · NIH";
 
       var buscaFDA = detectarFarmaco(texto) ? ezOpenFDA(texto) : Promise.resolve(null);
-      var buscaRxNorm = detectarFarmaco(texto) ? ezRxNorm(texto) : Promise.resolve(null);
 
+      // PubMed e OpenFDA têm CORS liberado — as demais ficam para versão futura via Edge Function
       var results = await Promise.all([
         ezPubMed(termoBusca),
         ezSciELO(termoBusca),
-        buscaFDA,
-        buscaRxNorm,
-        ezMedlinePlus(termoBusca),
-        ezClinicalTrials(termoBusca)
+        buscaFDA
       ]);
 
       var pubmedArtigos  = (results[0] || []).slice(0, 2);
       var scieloArtigos  = (results[1] || []).slice(0, 2);
       artigos = pubmedArtigos.concat(scieloArtigos);
       fdaDrug   = results[2] || null;
-      var rxDrug      = results[3] || null;
-      var medlineItems = results[4] || [];
-      var trials       = results[5] || [];
+      var rxDrug       = null;
+      var medlineItems = [];
+      var trials       = [];
     }
 
     if (loaderText) loaderText.textContent = "Enzo está sintetizando";
