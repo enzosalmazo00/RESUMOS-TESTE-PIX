@@ -416,7 +416,7 @@
           <div class="ez-avatar">Ez</div>
           <div>
             <div class="ez-name">Enzo IA <span id="ez-header-nome" style="font-weight:400;font-size:11px;color:var(--ez-dim);"></span></div>
-            <div class="ez-status" id="ez-status-bar">● Groq · Gemini · PubMed · SciELO</div>
+            <div class="ez-status" id="ez-status-bar">● Groq · Gemini · PubMed · SciELO · FDA</div>
             ${contexto ? `<div class="ez-ctx-badge">📖 ${contexto}</div>` : ''}
           </div>
         </div>
@@ -630,6 +630,74 @@
     } catch(e) { return []; }
   }
 
+  // ── OPENFDA ───────────────────────────────────────────────────────────────
+  // Detecta se a pergunta é sobre um medicamento específico
+  function detectarFarmaco(texto) {
+    var t = texto.toLowerCase();
+    var gatilhos = [
+      'fármaco','farmaco','medicamento','droga','remédio','remedio','antibiótico',
+      'antibiotico','dose','dosagem','efeito','indicação','indicacao','contraindicação',
+      'contraindicacao','mecanismo de ação','mecanismo de acao','interação','interacao',
+      'bula','posologia','via de administração','administração'
+    ];
+    for (var i = 0; i < gatilhos.length; i++) {
+      if (t.indexOf(gatilhos[i]) !== -1) return true;
+    }
+    return false;
+  }
+
+  // Extrai nome do fármaco da pergunta
+  function extrairFarmaco(texto) {
+    // Remove palavras comuns e tenta pegar o nome do fármaco
+    var stopwords = ['o','a','os','as','de','da','do','em','que','são','é','um','uma',
+      'me','dizer','pode','quais','qual','como','para','por','com','se','fármaco',
+      'farmaco','medicamento','droga','remédio','remedio','dose','dosagem','efeito',
+      'indicação','bula','posologia','mecanismo','ação','interação'];
+    var palavras = texto.toLowerCase().replace(/[?!.,]/g,'').split(/\s+/);
+    var candidatos = palavras.filter(function(p) {
+      return p.length > 3 && stopwords.indexOf(p) === -1;
+    });
+    return candidatos.slice(0, 2).join(' ');
+  }
+
+  async function ezOpenFDA(query) {
+    try {
+      var farmaco = extrairFarmaco(query);
+      if (!farmaco || farmaco.length < 3) return null;
+
+      // Busca na base de bulas da FDA
+      var url = "https://api.fda.gov/drug/label.json?search=openfda.brand_name:"
+        + encodeURIComponent('"' + farmaco + '"')
+        + "+openfda.generic_name:"
+        + encodeURIComponent('"' + farmaco + '"')
+        + "&limit=1";
+
+      var r = await fetch(url);
+      if (!r.ok) {
+        // Tenta busca mais ampla
+        url = "https://api.fda.gov/drug/label.json?search="
+          + encodeURIComponent(farmaco) + "&limit=1";
+        r = await fetch(url);
+        if (!r.ok) return null;
+      }
+
+      var d = await r.json();
+      if (!d.results || !d.results.length) return null;
+
+      var drug = d.results[0];
+      var openfda = drug.openfda || {};
+
+      return {
+        nome: (openfda.brand_name && openfda.brand_name[0]) || farmaco,
+        generico: (openfda.generic_name && openfda.generic_name[0]) || "",
+        fabricante: (openfda.manufacturer_name && openfda.manufacturer_name[0]) || "",
+        indicacoes: drug.indications_and_usage ? drug.indications_and_usage[0].substring(0, 200) + "…" : null,
+        contraindicacoes: drug.contraindications ? drug.contraindications[0].substring(0, 150) + "…" : null,
+        url: "https://labels.fda.gov/",
+      };
+    } catch(e) { return null; }
+  }
+
   async function ezPubMed(query) {
     try {
       // Traduz a query para inglês antes de buscar
@@ -690,21 +758,25 @@
     if (loaderText) loaderText.textContent = "Consultando PubMed";
     ezScroll();
 
-    // Busca PubMed + SciELO em paralelo se for contexto médico
+    // Busca PubMed + SciELO + OpenFDA em paralelo se for contexto médico
     var artigos = [];
+    var fdaDrug = null;
     if (!ehSaudacao(texto) && temContextoMedico(texto)) {
       var termoBusca = contexto ? contexto + " " + texto : texto;
-      if (loaderText) loaderText.textContent = "Consultando PubMed · SciELO";
-      var termoEN = traduzirParaIngles(termoBusca);
-      var termoPT = termoBusca;
+      if (loaderText) loaderText.textContent = "Consultando PubMed · SciELO · FDA";
+
+      var buscaFDA = detectarFarmaco(texto) ? ezOpenFDA(texto) : Promise.resolve(null);
+
       var results = await Promise.all([
         ezPubMed(termoBusca),
-        ezSciELO(termoPT)
+        ezSciELO(termoBusca),
+        buscaFDA
       ]);
-      // Mescla resultados: até 2 do PubMed + 2 do SciELO
-      var pubmedArtigos  = (results[0] || []).slice(0, 2);
-      var scieloArtigos  = (results[1] || []).slice(0, 2);
+
+      var pubmedArtigos = (results[0] || []).slice(0, 2);
+      var scieloArtigos = (results[1] || []).slice(0, 2);
       artigos = pubmedArtigos.concat(scieloArtigos);
+      fdaDrug = results[2] || null;
     }
 
     if (loaderText) loaderText.textContent = "Enzo está sintetizando";
@@ -747,6 +819,19 @@
           statusBar.textContent = '● ' + providerLabel + ' · PubMed';
         }
         var html = ezFormat(data.reply);
+
+        // Bloco OpenFDA — dados do medicamento
+        if (fdaDrug) {
+          html += '<div class="ez-pubmed" style="margin-top:8px;">'
+            + '<div class="ez-pubmed-label">💊 OpenFDA — Dados do Medicamento</div>'
+            + '<div class="ez-pubmed-item"><strong style="color:#e2e8f0">' + fdaDrug.nome + '</strong>'
+            + (fdaDrug.generico ? ' <span style="color:#64748b">(' + fdaDrug.generico + ')</span>' : '')
+            + (fdaDrug.fabricante ? ' · ' + fdaDrug.fabricante : '') + '</div>'
+            + (fdaDrug.indicacoes ? '<div class="ez-pubmed-item"><span style="color:#34d399">Indicações:</span> ' + fdaDrug.indicacoes + '</div>' : '')
+            + (fdaDrug.contraindicacoes ? '<div class="ez-pubmed-item"><span style="color:#f87171">Contraindicações:</span> ' + fdaDrug.contraindicacoes + '</div>' : '')
+            + '<div class="ez-pubmed-item"><a href="https://www.accessdata.fda.gov/scripts/cder/daf/" target="_blank">Ver bula completa no FDA ↗</a></div>'
+            + '</div>';
+        }
 
         if (artigos.length) {
           html += '<div class="ez-pubmed">'
