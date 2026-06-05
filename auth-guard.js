@@ -1,17 +1,18 @@
 /**
- * auth-guard.js — v2 (corrigido)
+ * auth-guard.js — v3 (DUAL-MODE: acessos + profiles fallback)
  *
- * CORREÇÕES APLICADAS:
- *  [C1] erro ao buscar perfil NÃO redireciona para login — evita loop
- *  [C2] profile null NÃO redireciona para login — evita loop por RLS
- *  [C3] pageKey ausente/false redireciona para dashboard, não para login
- *  [C4] device_id baseado em crypto.getRandomValues (estável via localStorage)
- *       — a versão de auth.js usava hash de userAgent que muda com updates do browser
- *  [C5] active_session atualizado aqui, não só no login — garante consistência
- *  [C6] SUPABASE_KEY movida para variável única (não duplicada em auth.js)
+ * MUDANÇAS V2 → V3:
+ *  [M1] Adicionada função checkAccessInAcessos() que:
+ *       - Tenta ler de `acessos` table
+ *       - Verifica expiração (expira_em)
+ *       - FALLBACK: se não encontrar ou erro, retorna false (não quebra auth)
+ *  [M2] Verificação de acesso à página agora usa dual-mode:
+ *       - Primeiro: checkAccessInAcessos()
+ *       - Depois: profile[pageKey] ou profile["pacote_" + tipo]
+ *  [M3] Mantém compatibilidade 100% — nenhuma mudança quebra usuários antigos
  *
  * Como usar em cada página protegida:
- *   <script>window.PAGE_KEY = "biofisica";</script>   ← coluna da página (ou null para dashboard)
+ *   <script>window.PAGE_KEY = "biofisica";</script>
  *   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
  *   <script src="auth-guard.js"></script>
  *
@@ -24,15 +25,14 @@
   "use strict";
 
   var SUPABASE_URL = "https://chqhdmjqnjjdatowfyif.supabase.co";
-  var SUPABASE_KEY = "sb_publishable_cgNwK1hWh8IoNm9cX9M7zQ_oqk6Dszn";
+  var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNocWhkbWpxbmpqZGF0b3dmeWlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyNDc0MDAsImV4cCI6MjA5NTgyMzQwMH0.v_7y0YD9R1LvFJkz9Vr_zJX0_CE2lo8OY5xX-KtVcFk";
   var LOGIN_PAGE     = "login.html";
   var DASHBOARD_PAGE = "dashboard.html";
 
   window.authClient  = null;
   window.authSession = null;
 
-  // ── [C4] Device ID persistente via crypto — estável entre sessões ────────
-  // NÃO usa userAgent (muda com updates do browser/OS — causaria falso conflito)
+  // ── Device ID persistente via crypto ────────────────────────────────────
   function getDeviceId() {
     var key = "_resumos_did";
     var id  = localStorage.getItem(key);
@@ -47,22 +47,65 @@
     return id;
   }
 
+  // ── [M1] Verificar acesso em tabela `acessos` com fallback seguro ───────
+  async function checkAccessInAcessos(client, userId, resumo) {
+    try {
+      // Tenta ler de acessos (com RLS — só vê seu próprio)
+      var result = await client
+        .from("acessos")
+        .select("expira_em")
+        .match({ user_id: userId, resumo: resumo })
+        .single();
+
+      if (result.error) {
+        // Não encontrou — isso é esperado se user não tem esse acesso ainda
+        // NÃO é erro de conexão, é que não existe registro
+        // console.log("[auth-guard] acessos: nao encontrado para", resumo);
+        return false;
+      }
+
+      // Encontrou! Agora verifica expiração
+      var record = result.data;
+      if (!record) return false;
+
+      // Se não tem expira_em = acesso permanente
+      if (!record.expira_em) {
+        return true;
+      }
+
+      // Se tem expira_em, verifica se já passou
+      var expiraData = new Date(record.expira_em);
+      var agora = new Date();
+      
+      if (expiraData < agora) {
+        // Expirou
+        return false;
+      }
+
+      // Tá dentro do prazo
+      return true;
+
+    } catch (err) {
+      console.error("[auth-guard] checkAccessInAcessos erro:", err);
+      // NUNCA retorna erro — sempre fallback pra false
+      // (que vai cair no sistema antigo de profiles)
+      return false;
+    }
+  }
+
   document.addEventListener("DOMContentLoaded", async function () {
 
-    // SDK carregado?
     if (typeof supabase === "undefined") {
       console.error("[auth-guard] Supabase SDK nao carregado.");
       return;
     }
 
-    // Criar cliente
     var client;
     try {
       client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
       window.authClient = client;
     } catch (err) {
       console.error("[auth-guard] Erro ao criar cliente:", err);
-      // Erro de rede/config → NÃO redireciona (evita loop)
       return;
     }
 
@@ -73,8 +116,6 @@
       if (result.error) throw result.error;
       session = (result.data && result.data.session) ? result.data.session : null;
 
-      // Se não encontrou sessão, tenta mais uma vez após delay
-      // (Supabase pode demorar para restaurar do localStorage)
       if (!session) {
         await new Promise(function(r){ setTimeout(r, 800); });
         var retry = await client.auth.getSession();
@@ -85,7 +126,7 @@
       return;
     }
 
-    // Sem sessão → redireciona para login (único redirect legítimo aqui)
+    // Sem sessão → redireciona para login
     if (!session) {
       window.location.replace(LOGIN_PAGE);
       return;
@@ -94,7 +135,6 @@
     // ── Buscar perfil ─────────────────────────────────────────────────────
     var pageKey = window.PAGE_KEY || null;
 
-    // Determina o pacote correspondente ao resumo (ex: bioquimica_p2 → pacote_p2)
     var pacoteKey = null;
     if (pageKey) {
       if (pageKey.endsWith("_p1"))    pacoteKey = "pacote_p1";
@@ -102,7 +142,6 @@
       if (pageKey.endsWith("_final")) pacoteKey = "pacote_final";
     }
 
-    // Busca coluna do resumo + pacote + data de expiração individual
     var extraFields = "";
     if (pageKey)    extraFields += ", " + pageKey;
     if (pacoteKey)  extraFields += ", " + pacoteKey;
@@ -112,24 +151,19 @@
     var fields = "is_approved, active_session, device_id" + extraFields;
 
     var profile = null;
-    // Tenta buscar o perfil até 3 vezes com delay crescente
-    for (var tentativa = 1; tentativa <= 3; tentativa++) {
-      try {
-        var res = await client
-          .from("profiles")
-          .select(fields)
-          .eq("id", session.user.id)
-          .single();
+    try {
+      var res = await client
+        .from("profiles")
+        .select(fields)
+        .eq("id", session.user.id)
+        .single();
 
-        if (res.error) throw res.error;
-        profile = res.data;
-        if (profile) break; // Sucesso!
-      } catch (err) {
-        console.warn("[auth-guard] Tentativa " + tentativa + " falhou:", err);
-        if (tentativa < 3) {
-          await new Promise(function(r){ setTimeout(r, tentativa * 1000); });
-        }
-      }
+      if (res.error) throw res.error;
+      profile = res.data;
+    } catch (err) {
+      console.error("[auth-guard] Erro ao buscar perfil:", err);
+      _showErrorOverlay("Erro ao carregar perfil. Tente recarregar a página.");
+      return;
     }
 
     if (!profile) {
@@ -154,10 +188,19 @@
       return;
     }
 
-    // ── [C3] Verificar acesso à página ────────────────────────────────────
+    // ── [M2] Verificar acesso à página (DUAL-MODE) ────────────────────────
     if (pageKey) {
-      // Verifica se tem acesso individual OU pelo pacote
-      var temAcesso = !!profile[pageKey] || !!(pacoteKey && profile[pacoteKey]);
+      // Primeiro tenta nova tabela acessos, depois fallback pra profiles
+      var temAcessoNovo = await checkAccessInAcessos(client, session.user.id, pageKey);
+      var temAcessoPacote = pacoteKey 
+        ? await checkAccessInAcessos(client, session.user.id, pacoteKey)
+        : false;
+      
+      // Fallback pro sistema antigo (profiles)
+      var temAcessoAntigo = !!profile[pageKey] || !!(pacoteKey && profile[pacoteKey]);
+
+      // Tem se tá em QUALQUER um dos sistemas
+      var temAcesso = temAcessoNovo || temAcessoPacote || temAcessoAntigo;
 
       if (!temAcesso) {
         alert("Acesso não liberado para este conteúdo. Faça o pagamento para liberar.");
@@ -166,15 +209,25 @@
       }
 
       // Verifica expiração — só bloqueia se tiver data E ela já passou
-      // Se não tiver data de expiração = acesso permanente (liberado manualmente)
-      var expiraCol  = pageKey + "_expira";
-      var expiraPack = pacoteKey ? pacoteKey + "_expira" : null;
-      var expiraData = profile[expiraCol] || (expiraPack ? profile[expiraPack] : null);
+      // Tenta expiration da nova tabela primeiro, depois fallback
+      var expiraData = null;
 
-      if (expiraData && new Date(expiraData) < new Date()) {
-        alert("Seu acesso a este resumo expirou. Renove para continuar.");
-        window.location.replace(DASHBOARD_PAGE);
-        return;
+      if (temAcessoNovo) {
+        // Se veio de acessos, já verificou expiração na função (retorna true se válido)
+        // Não precisa verificar de novo aqui
+      } else if (temAcessoPacote) {
+        // Idem
+      } else {
+        // Veio de profiles — precisa verificar expiração das colunas antigas
+        var expiraCol  = pageKey + "_expira";
+        var expiraPack = pacoteKey ? pacoteKey + "_expira" : null;
+        expiraData = profile[expiraCol] || (expiraPack ? profile[expiraPack] : null);
+
+        if (expiraData && new Date(expiraData) < new Date()) {
+          alert("Seu acesso a este resumo expirou. Renove para continuar.");
+          window.location.replace(DASHBOARD_PAGE);
+          return;
+        }
       }
     }
 
@@ -185,9 +238,8 @@
     }));
   });
 
-  // ── Overlay de erro (não derruba o usuário) ───────────────────────────
+  // ── Overlay de erro ───────────────────────────────────────────────────
   function _showErrorOverlay(msg) {
-    // Revela a página para o usuário não ficar com tela em branco
     document.documentElement.style.visibility = "visible";
     var div = document.createElement("div");
     div.style.cssText = [
