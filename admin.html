@@ -435,12 +435,17 @@ window.saveAluno=async function(){
   var expiraIso=ev?new Date(ev).toISOString():null;
   u.acesso_expira_em=expiraIso;
   RESUMOS_COLS.forEach(function(r){
-    u[r.key]=!!currentToggles[r.key];
-    if(!!currentToggles[r.key]&&expiraIso){
+    var antes=!!currentAluno[r.key];
+    var agora=!!currentToggles[r.key];
+    u[r.key]=agora;
+    if(agora && !antes && expiraIso){
+      // Acabou de ser ativado → grava nova data
       u[r.key+"_expira"]=expiraIso;
-    }else if(!currentToggles[r.key]){
+    } else if(!agora){
+      // Desativado → limpa data
       u[r.key+"_expira"]=null;
     }
+    // Se já estava ativado → NÃO altera a data individual (preserva)
   });
   u.resumos_presente=currentAluno.resumos_presente||[];
   var res=await client.from("profiles").update(u).eq("id",currentAluno.id);
