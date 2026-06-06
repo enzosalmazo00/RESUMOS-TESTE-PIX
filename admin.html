@@ -450,7 +450,7 @@ window.grantAccessInAcessos=async function(userId,resumo,expiraData){
 
 window.revokeAccessInAcessos=async function(userId,resumo){
   try{
-    var res=await client.from("acessos").delete().match({user_id:userId,resumo:resumo});
+    var res=await client.from("acessos").delete().eq("user_id",userId).eq("resumo",resumo);
     if(res.error){
       console.error("[admin] Erro ao revoke em acessos:",res.error);
       return false;
