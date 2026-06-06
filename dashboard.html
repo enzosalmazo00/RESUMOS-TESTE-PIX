@@ -414,75 +414,56 @@
     .prova-label-line { flex:1; height:1px; background:rgba(34,211,238,0.08); }
 
     /* ── PASTAS DE MATÉRIA ── */
-    .materias-list { display:flex; flex-direction:column; gap:10px; }
-    .materia-card {
+    .materias-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:12px; padding:4px 0 8px; }
+
+    .folder-card {
+      border-radius:16px; padding:18px 14px;
       border:1px solid rgba(34,211,238,0.12);
-      border-radius:14px;
-      background:rgba(34,211,238,0.02);
-      overflow:hidden;
-      transition:border-color .25s;
+      background:rgba(34,211,238,0.03);
+      cursor:pointer; transition:all .25s;
+      display:flex; flex-direction:column; gap:6px;
     }
-    .materia-card:hover { border-color:rgba(34,211,238,0.22); }
-    .materia-header {
-      display:flex; align-items:center; justify-content:space-between;
-      padding:14px 18px; cursor:pointer;
-      user-select:none; transition:background .2s;
+    .folder-card:hover {
+      border-color:rgba(34,211,238,0.3);
+      background:rgba(34,211,238,0.08);
+      transform:translateY(-3px);
+      box-shadow:0 8px 24px rgba(0,0,0,0.3);
     }
-    .materia-header:hover { background:rgba(34,211,238,0.04); }
-    .materia-header-left { display:flex; align-items:center; gap:12px; }
-    .materia-emoji { font-size:20px; }
-    .materia-title { font-size:14px; font-weight:600; color:#e2f8fc; }
-    .materia-info { font-size:11px; color:rgba(125,211,232,0.45); margin-top:2px; }
-    .materia-chevron {
-      font-size:11px; color:rgba(34,211,238,0.4);
-      transition:transform .3s; flex-shrink:0;
+    .folder-emoji { font-size:28px; margin-bottom:4px; }
+    .folder-name { font-size:14px; font-weight:600; color:#e2f8fc; }
+    .folder-status { font-size:11px; color:rgba(125,211,232,0.45); display:flex; flex-direction:column; gap:3px; }
+    .folder-status-item { display:flex; align-items:center; gap:5px; }
+
+    /* Breadcrumb */
+    .materia-breadcrumb {
+      display:none; align-items:center; gap:8px;
+      margin-bottom:20px; flex-wrap:wrap;
     }
-    .materia-card.open .materia-chevron { transform:rotate(180deg); }
-    .materia-body { max-height:0; overflow:hidden; transition:max-height .4s ease; }
-    .materia-card.open .materia-body { max-height:600px; overflow:visible; }
-    .materia-body-inner {
-      padding:0 16px 16px;
-      display:flex; flex-direction:column; gap:8px;
+    .materia-breadcrumb.visible { display:flex; }
+    .breadcrumb-back {
+      display:flex; align-items:center; gap:6px;
+      padding:7px 14px; border-radius:10px; cursor:pointer;
+      border:1px solid rgba(34,211,238,0.2); background:transparent;
+      color:rgba(125,211,232,0.7); font-size:12px; font-weight:500;
+      font-family:'Poppins',sans-serif; transition:all .2s;
     }
-    .materia-prova-row {
-      display:flex; align-items:center; justify-content:space-between;
-      padding:12px 16px; border-radius:10px;
-      border:1px solid rgba(34,211,238,0.08);
-      background:rgba(34,211,238,0.02);
-      transition:all .2s;
+    .breadcrumb-back:hover { background:rgba(34,211,238,0.08); color:#fff; }
+    .breadcrumb-sep { color:rgba(125,211,232,0.3); font-size:12px; }
+    .breadcrumb-root { font-size:12px; color:rgba(125,211,232,0.4); cursor:pointer; }
+    .breadcrumb-root:hover { color:rgba(125,211,232,0.8); }
+    .breadcrumb-current { font-size:12px; font-weight:600; color:#e2f8fc; }
+
+    /* Vista interna: grade de cards da matéria */
+    .materia-cards-view { display:none; }
+    .materia-cards-view.visible { display:block; }
+    .materia-view-title {
+      font-size:20px; font-weight:700; color:#e2f8fc;
+      margin-bottom:20px; display:flex; align-items:center; gap:10px; letter-spacing:-0.5px;
     }
-    .materia-prova-row.active { cursor:pointer; }
-    .materia-prova-row.active:hover {
-      border-color:rgba(34,211,238,0.25);
-      background:rgba(34,211,238,0.06);
-      transform:translateX(3px);
-    }
-    .materia-prova-left { display:flex; align-items:center; gap:10px; }
-    .materia-prova-label { font-size:13px; font-weight:500; color:#e2f8fc; }
-    .materia-prova-days { font-size:11px; color:rgba(125,211,232,0.45); margin-top:2px; }
-    .materia-prova-badge {
-      font-size:10px; font-weight:600; padding:3px 10px;
-      border-radius:20px; letter-spacing:0.05em; flex-shrink:0;
-    }
-    .badge-encerrado {
-      background:rgba(248,113,113,0.08); border:1px solid rgba(248,113,113,0.2);
-      color:rgba(248,113,113,0.6);
-    }
-    .badge-breve {
-      background:rgba(251,191,36,0.08); border:1px solid rgba(251,191,36,0.2);
-      color:rgba(251,191,36,0.6);
-    }
-    .badge-liberado {
-      background:rgba(34,211,238,0.1); border:1px solid rgba(34,211,238,0.3);
-      color:#22d3ee;
-    }
-    .badge-bloqueado {
-      background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1);
-      color:rgba(125,211,232,0.4);
-    }
-    .badge-comprar {
-      background:rgba(34,211,238,0.15); border:1px solid rgba(34,211,238,0.4);
-      color:#22d3ee; cursor:pointer;
+    .resumos-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fill, minmax(200px,1fr));
+      gap:16px;
     }
 
     /* ── BOAS VINDAS ── */
@@ -641,8 +622,46 @@
     <!-- TAB: MEUS RESUMOS -->
     <div class="tab-panel active" id="tab-resumos">
 
-      <!-- ══ ACORDEÃO DE SEMESTRES ══ -->
-      <div class="semestres-wrap" id="semestresWrap"></div>
+      <!-- BARRA DE PESQUISA -->
+      <div id="searchBarWrap" style="margin-bottom:20px;">
+        <div style="position:relative;">
+          <span style="position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:15px;opacity:0.4;">🔍</span>
+          <input
+            id="searchInput"
+            type="text"
+            placeholder="Pesquise um resumo..."
+            oninput="filterMaterias(this.value)"
+            style="
+              width:100%; padding:13px 16px 13px 44px;
+              border-radius:14px; border:1px solid rgba(34,211,238,0.15);
+              background:rgba(255,255,255,0.04);
+              color:rgba(255,255,255,0.8); font-size:14px;
+              font-family:'Poppins',sans-serif;
+              outline:none; transition:border-color .2s;
+            "
+            onfocus="this.style.borderColor='rgba(34,211,238,0.4)'"
+            onblur="this.style.borderColor='rgba(34,211,238,0.15)'"
+          >
+        </div>
+      </div>
+
+      <!-- BREADCRUMB (aparece quando dentro de uma matéria) -->
+      <div class="materia-breadcrumb" id="materiaBreadcrumb">
+        <button class="breadcrumb-back" onclick="closeMateria()">← Voltar</button>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-root" onclick="closeMateria()">Meus Resumos</span>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current" id="breadcrumbNome"></span>
+      </div>
+
+      <!-- VISTA DE PASTAS (semestres + matérias) -->
+      <div id="semestresWrap"></div>
+
+      <!-- VISTA INTERNA DA MATÉRIA -->
+      <div class="materia-cards-view" id="materiaCardsView">
+        <div class="materia-view-title" id="materiaViewTitle"></div>
+        <div class="resumos-grid" id="materiaCardsGrid"></div>
+      </div>
 
     </div>
 
@@ -869,6 +888,9 @@ var PRECO_UNIT = 15.00;
 var PRECO_COMBO3 = 12.00; // 3+ itens = 20% off
 var PRECO_PACK = 69.90;   // 7 itens = 33% off
 
+// ── Navegação estilo Google Drive ─────────────────────────────────────────────
+var currentMateria = null; // null = vista pastas | "bioquimica" = vista interna
+
 // ── Elementos ─────────────────────────────────────────────────────────────────
 var statusArea   = document.getElementById("statusArea");
 var mainContent  = document.getElementById("mainContent");
@@ -1046,95 +1068,72 @@ window.salvarNome = async function() {
   }
 };
 function renderResumosGrid() {
+  if (currentMateria) {
+    renderMateriaInterna(currentMateria);
+  } else {
+    renderPastas();
+  }
+}
+
+window.openMateria = function(key) {
+  currentMateria = key;
+  var searchBar = document.getElementById("searchBarWrap");
+  if (searchBar) searchBar.style.display = "none";
+  renderResumosGrid();
+};
+
+window.closeMateria = function() {
+  currentMateria = null;
+  var searchBar = document.getElementById("searchBarWrap");
+  if (searchBar) searchBar.style.display = "block";
+  renderResumosGrid();
+};
+
+window.filterMaterias = function(query) {
+  query = query.toLowerCase().trim();
+  var cards = document.querySelectorAll(".folder-card");
+  cards.forEach(function(card) {
+    var nome = card.querySelector(".folder-name").textContent.toLowerCase();
+    card.style.display = (!query || nome.includes(query)) ? "" : "none";
+  });
+  // Abre semestres se há pesquisa ativa
+  if (query) {
+    document.querySelectorAll(".semestre-card").forEach(function(s){ s.classList.add("open"); });
+  }
+};
+
+// ── Vista de PASTAS (semestres + matérias) ────────────────────────────────────
+function renderPastas() {
   var wrap = document.getElementById("semestresWrap");
-  if (!wrap) return;
+  var breadcrumb = document.getElementById("materiaBreadcrumb");
+  var cardsView = document.getElementById("materiaCardsView");
+  wrap.style.display = "block";
+  breadcrumb.classList.remove("visible");
+  cardsView.classList.remove("visible");
   wrap.innerHTML = "";
 
-  // ── 3º SEMESTRE ──────────────────────────────────────────────────────────
-  var sem3 = document.createElement("div");
-  sem3.className = "semestre-card open";
+  var liberados = MATERIAS.filter(function(m){ return hasAccess(m,"p2"); }).length;
 
-  var liberados = MATERIAS.filter(function(m) { return hasAccess(m, "p2"); }).length;
+  // 3º Semestre
+  var sem3 = document.createElement("div");
+  sem3.className = "semestre-card"; // começa fechado
 
   var materiasHtml = '<div class="materias-list">';
   MATERIAS.forEach(function(m) {
-    var acP1 = hasAccess(m, "p1");
-    var acP2 = hasAccess(m, "p2");
-    var acFinal = hasAccess(m, "final");
-    var diasP2 = daysLeftForResumo(m, "p2");
-
-    // Linha P1
-    var rowP1 =
-      '<div class="materia-prova-row" style="opacity:0.45;">' +
-        '<div class="materia-prova-left">' +
-          '<span style="font-size:14px">📝</span>' +
-          '<div>' +
-            '<div class="materia-prova-label" style="color:rgba(248,113,113,0.7);">' + m.label + ' — P1</div>' +
-            '<div class="materia-prova-days">Período encerrado</div>' +
-          '</div>' +
-        '</div>' +
-        '<span class="materia-prova-badge badge-encerrado">⏰ Encerrado</span>' +
-      '</div>';
-
-    // Linha P2
-    var rowP2;
-    if (acP2) {
-      rowP2 =
-        '<div class="materia-prova-row active" onclick="window.location.href=\'' + m.file_p2 + '\'">' +
-          '<div class="materia-prova-left">' +
-            '<span style="font-size:14px">✅</span>' +
-            '<div>' +
-              '<div class="materia-prova-label">' + m.label + ' — P2</div>' +
-              (diasP2 !== null ? '<div class="materia-prova-days">⏳ ' + diasP2 + ' dia' + (diasP2===1?'':'s') + ' restantes</div>' : '<div class="materia-prova-days">Acesso permanente</div>') +
-            '</div>' +
-          '</div>' +
-          '<span class="materia-prova-badge badge-liberado">✓ Liberado</span>' +
-        '</div>';
-    } else {
-      rowP2 =
-        '<div class="materia-prova-row active" onclick="goToStore()" style="cursor:pointer;">' +
-          '<div class="materia-prova-left">' +
-            '<span style="font-size:14px">🔒</span>' +
-            '<div>' +
-              '<div class="materia-prova-label" style="color:rgba(125,211,232,0.5);">' + m.label + ' — P2</div>' +
-              '<div class="materia-prova-days">Clique para comprar acesso</div>' +
-            '</div>' +
-          '</div>' +
-          '<span class="materia-prova-badge badge-comprar">🛒 Comprar</span>' +
-        '</div>';
-    }
-
-    // Linha Final
-    var rowFinal =
-      '<div class="materia-prova-row" style="opacity:0.45;">' +
-        '<div class="materia-prova-left">' +
-          '<span style="font-size:14px">🎓</span>' +
-          '<div>' +
-            '<div class="materia-prova-label" style="color:rgba(251,191,36,0.7);">' + m.label + ' — Final</div>' +
-            '<div class="materia-prova-days">Em preparação</div>' +
-          '</div>' +
-        '</div>' +
-        '<span class="materia-prova-badge badge-breve">🔜 Em breve</span>' +
-      '</div>';
-
-    var liberadosMateria = (acP2 ? 1 : 0);
+    var acP2    = hasAccess(m, "p2");
+    var diasP2  = daysLeftForResumo(m, "p2");
+    var diasStr = diasP2 !== null ? diasP2 + " dias restantes" : "Acesso permanente";
 
     materiasHtml +=
-      '<div class="materia-card' + (acP2 ? ' open' : '') + '">' +
-        '<div class="materia-header" onclick="toggleMateria(this)">' +
-          '<div class="materia-header-left">' +
-            '<span class="materia-emoji">' + m.emoji + '</span>' +
-            '<div>' +
-              '<div class="materia-title">' + m.label + '</div>' +
-              '<div class="materia-info">' + (acP2 ? '✓ P2 liberado' : 'P2 não liberado') + ' · P1 encerrado · Final em breve</div>' +
-            '</div>' +
-          '</div>' +
-          '<span class="materia-chevron">▼</span>' +
-        '</div>' +
-        '<div class="materia-body">' +
-          '<div class="materia-body-inner">' +
-            rowP1 + rowP2 + rowFinal +
-          '</div>' +
+      '<div class="folder-card" onclick="openMateria(\'' + m.key + '\')">' +
+        '<span class="folder-emoji">' + m.emoji + '</span>' +
+        '<div class="folder-name">' + m.label + '</div>' +
+        '<div class="folder-status">' +
+          '<div class="folder-status-item" style="color:rgba(248,113,113,0.5);">⏰ P1 encerrado</div>' +
+          (acP2
+            ? '<div class="folder-status-item" style="color:#22d3ee;">✓ P2 · ' + diasStr + '</div>'
+            : '<div class="folder-status-item" style="color:rgba(125,211,232,0.35);">🔒 P2 bloqueado</div>') +
+          '<div class="folder-status-item" style="color:rgba(251,191,36,0.5);">🔜 Final em breve</div>' +
         '</div>' +
       '</div>';
   });
@@ -1160,7 +1159,7 @@ function renderResumosGrid() {
 
   wrap.appendChild(sem3);
 
-  // ── 4º SEMESTRE ──────────────────────────────────────────────────────────
+  // 4º Semestre (em breve)
   var sem4 = document.createElement("div");
   sem4.className = "semestre-card soon";
   sem4.innerHTML =
@@ -1190,12 +1189,83 @@ function renderResumosGrid() {
   wrap.appendChild(sem4);
 }
 
-window.toggleSemestre = function(header) {
-  var card = header.parentElement;
-  card.classList.toggle("open");
-};
+// ── Vista INTERNA de uma matéria (cards P1, P2, Final) ────────────────────────
+function renderMateriaInterna(key) {
+  var m = MATERIAS.find(function(x){ return x.key === key; });
+  if (!m) return;
 
-window.toggleMateria = function(header) {
+  var wrap = document.getElementById("semestresWrap");
+  var breadcrumb = document.getElementById("materiaBreadcrumb");
+  var cardsView = document.getElementById("materiaCardsView");
+  var grid = document.getElementById("materiaCardsGrid");
+  var title = document.getElementById("materiaViewTitle");
+  var breadcrumbNome = document.getElementById("breadcrumbNome");
+
+  wrap.style.display = "none";
+  breadcrumb.classList.add("visible");
+  cardsView.classList.add("visible");
+
+  breadcrumbNome.textContent = m.label;
+  title.innerHTML = '<span>' + m.emoji + '</span> ' + m.label;
+  grid.innerHTML = "";
+
+  // Card P1 — Encerrado
+  var p1 = document.createElement("div");
+  p1.className = "resumo-card soon";
+  p1.style.cssText = "border-color:rgba(248,113,113,0.15);background:rgba(248,113,113,0.02);";
+  p1.innerHTML =
+    '<span class="card-emoji" style="filter:grayscale(1);opacity:0.5;">' + m.emoji + '</span>' +
+    '<div class="card-title" style="color:rgba(248,113,113,0.6);">' + m.label + ' — P1</div>' +
+    '<div class="card-desc">' + m.desc + '</div>' +
+    '<div style="display:inline-flex;align-items:center;gap:5px;margin-top:12px;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:600;background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);color:rgba(248,113,113,0.6);">⏰ Período encerrado</div>';
+  grid.appendChild(p1);
+
+  // Card P2 — Liberado ou Bloqueado
+  var acP2 = hasAccess(m, "p2");
+  var diasP2 = daysLeftForResumo(m, "p2");
+
+  if (acP2) {
+    var expiryHtml = diasP2 !== null
+      ? '<div style="font-size:11px;color:' + (diasP2 <= 7 ? '#fbbf24' : 'rgba(125,211,232,0.4)') + ';margin-top:6px;">' +
+          (diasP2 <= 7 ? '⚠️ Expira em ' : '⏱️ ') + diasP2 + ' dia' + (diasP2===1?'':'s') + (diasP2 > 7 ? ' restantes' : '') +
+        '</div>'
+      : '<div style="font-size:11px;color:rgba(125,211,232,0.4);margin-top:6px;">✓ Acesso permanente</div>';
+
+    var p2 = document.createElement("a");
+    p2.className = "resumo-card unlocked";
+    p2.href = m.file_p2;
+    var presentes = profile.resumos_presente || [];
+    if (presentes.includes(m.key + "_p2")) {
+      p2.innerHTML = '<div class="presente-btn" onclick="showPresenteMsg(event)">🎁</div>';
+    }
+    p2.innerHTML +=
+      '<span class="card-emoji">' + m.emoji + '</span>' +
+      '<div class="card-title">' + m.label + ' — P2</div>' +
+      '<div class="card-desc">' + m.desc + '</div>' + expiryHtml;
+    grid.appendChild(p2);
+  } else {
+    var p2locked = document.createElement("div");
+    p2locked.className = "resumo-card locked";
+    p2locked.innerHTML =
+      '<span class="card-emoji">' + m.emoji + '</span>' +
+      '<div class="card-title">' + m.label + ' — P2</div>' +
+      '<div class="card-desc">' + m.desc + '</div>' +
+      '<div class="lock-badge" onclick="goToStore()">🔒 Comprar acesso</div>';
+    grid.appendChild(p2locked);
+  }
+
+  // Card Final — Em breve
+  var final = document.createElement("div");
+  final.className = "resumo-card soon";
+  final.innerHTML =
+    '<span class="card-emoji">' + m.emoji + '</span>' +
+    '<div class="card-title" style="color:rgba(251,191,36,0.6);">' + m.label + ' — Final</div>' +
+    '<div class="card-desc">' + m.desc + '</div>' +
+    '<div class="soon-badge"><span class="soon-dot"></span> Em breve</div>';
+  grid.appendChild(final);
+}
+
+window.toggleSemestre = function(header) {
   var card = header.parentElement;
   card.classList.toggle("open");
 };
