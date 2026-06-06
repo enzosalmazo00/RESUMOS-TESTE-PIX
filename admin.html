@@ -427,6 +427,41 @@ window.set50Days=function(){
   document.getElementById("expiryInput").value=d.toISOString().substring(0,10);
 };
 window.closeModal=function(){document.getElementById("modalAluno").classList.remove("open");currentAluno=null;};
+
+// ── [M1] Funções de dual-write: gravar em acessos ─────────────────────────────
+window.grantAccessInAcessos=async function(userId,resumo,expiraData){
+  try{
+    var upsert={
+      user_id:userId,
+      resumo:resumo,
+      expira_em:expiraData
+    };
+    var res=await client.from("acessos").upsert([upsert],{onConflict:"user_id,resumo"});
+    if(res.error){
+      console.error("[admin] Erro ao grant em acessos:",res.error);
+      return false;
+    }
+    return true;
+  }catch(err){
+    console.error("[admin] Exception em grantAccessInAcessos:",err);
+    return false;
+  }
+};
+
+window.revokeAccessInAcessos=async function(userId,resumo){
+  try{
+    var res=await client.from("acessos").delete().eq("user_id",userId).eq("resumo",resumo);
+    if(res.error){
+      console.error("[admin] Erro ao revoke em acessos:",res.error);
+      return false;
+    }
+    return true;
+  }catch(err){
+    console.error("[admin] Exception em revokeAccessInAcessos:",err);
+    return false;
+  }
+};
+
 window.saveAluno=async function(){
   if(!currentAluno)return;
   var btn=document.getElementById("saveBtn");btn.disabled=true;btn.textContent="Salvando...";
@@ -434,9 +469,48 @@ window.saveAluno=async function(){
   var ev=document.getElementById("expiryInput").value;
   u.acesso_expira_em=ev?new Date(ev).toISOString():null;
   u.resumos_presente=currentAluno.resumos_presente||[];
+  
+  // [M2] Salva em profiles (mantém)
   var res=await client.from("profiles").update(u).eq("id",currentAluno.id);
-  if(res.error)showToast("Erro ao salvar!","error");
-  else{showToast("&#9989; Salvo com sucesso!","success");closeModal();await loadAlunos();}
+  if(res.error){
+    showToast("Erro ao salvar!","error");
+    btn.disabled=false;btn.textContent="&#128190; Salvar alteracoes";
+    return;
+  }
+  
+  // [M2] NOVO: Dual-write em acessos
+  var expiraIso=ev?new Date(ev).toISOString():null;
+  var asyncTasks=[];
+  
+  RESUMOS_COLS.forEach(function(r){
+    var resumoKey=r.key;
+    var agora=!!currentToggles[resumoKey];
+    var antes=!!currentAluno[resumoKey];
+    
+    // Se ativou agora (antes era false, agora é true)
+    if(agora && !antes){
+      asyncTasks.push(window.grantAccessInAcessos(currentAluno.id,resumoKey,expiraIso));
+    }
+    // Se desativou agora (antes era true, agora é false)
+    else if(!agora && antes){
+      asyncTasks.push(window.revokeAccessInAcessos(currentAluno.id,resumoKey));
+    }
+    // Se mantém ativado e expira mudou
+    else if(agora && antes && expiraIso){
+      asyncTasks.push(window.grantAccessInAcessos(currentAluno.id,resumoKey,expiraIso));
+    }
+  });
+  
+  // Espera todas as operações de acessos terminarem
+  if(asyncTasks.length>0){
+    var results=await Promise.all(asyncTasks);
+    var hasError=results.some(function(r){return r===false;});
+    if(hasError){
+      console.warn("[admin] Alguns acessos tiveram erro, mas profiles foi salvo");
+    }
+  }
+  
+  showToast("&#9989; Salvo com sucesso!","success");closeModal();await loadAlunos();
   btn.disabled=false;btn.textContent="&#128190; Salvar alteracoes";
 };
 window.revokeAll=async function(){
@@ -451,16 +525,46 @@ window.quickRevoke=async function(id,emailEnc){
   if(!confirm("Revogar todos os acessos de "+email+"?"))return;
   var u={};RESUMOS_COLS.forEach(function(r){u[r.key]=false;});u.acesso_expira_em=null;
   var res=await client.from("profiles").update(u).eq("id",id);
-  if(res.error)showToast("Erro!","error");
-  else{showToast("&#9989; Acessos revogados!","success");await loadAlunos();}
+  if(res.error){
+    showToast("Erro!","error");
+    return;
+  }
+  
+  // [M2] NOVO: Revoga todos em acessos também
+  var asyncTasks=[];
+  RESUMOS_COLS.forEach(function(r){
+    asyncTasks.push(window.revokeAccessInAcessos(id,r.key));
+  });
+  if(asyncTasks.length>0){
+    var results=await Promise.all(asyncTasks);
+    var hasError=results.some(function(r){return r===false;});
+    if(hasError) console.warn("[admin] Alguns acessos tiveram erro em quickRevoke");
+  }
+  
+  showToast("&#9989; Acessos revogados!","success");await loadAlunos();
 };
 window.quickGrantAll=async function(id,emailEnc){
   var email=decodeURIComponent(emailEnc);
   if(!confirm("Liberar TODOS os resumos para "+email+"?"))return;
   var u={};RESUMOS_COLS.forEach(function(r){u[r.key]=true;});u.acesso_expira_em=null;
   var res=await client.from("profiles").update(u).eq("id",id);
-  if(res.error)showToast("Erro!","error");
-  else{showToast("&#9989; Acessos liberados!","success");await loadAlunos();}
+  if(res.error){
+    showToast("Erro!","error");
+    return;
+  }
+  
+  // [M2] NOVO: Libera todos em acessos também (sem expiração)
+  var asyncTasks=[];
+  RESUMOS_COLS.forEach(function(r){
+    asyncTasks.push(window.grantAccessInAcessos(id,r.key,null));
+  });
+  if(asyncTasks.length>0){
+    var results=await Promise.all(asyncTasks);
+    var hasError=results.some(function(r){return r===false;});
+    if(hasError) console.warn("[admin] Alguns acessos tiveram erro em quickGrantAll");
+  }
+  
+  showToast("&#9989; Acessos liberados!","success");await loadAlunos();
 };
 function showToast(msg,type){
   var t=document.createElement("div");t.className="toast "+type;t.innerHTML=msg;
