@@ -525,6 +525,101 @@
       cursor:pointer; transition:all .2s;
     }
     .presente-close:hover { background:rgba(251,191,36,0.18); }
+    /* ── RESPONSIVIDADE ── */
+
+    /* Tablet (≤ 768px) */
+    @media (max-width: 768px) {
+      .container { padding:24px 16px 60px; }
+
+      .header { flex-direction:column; align-items:flex-start; gap:12px; }
+      .header-right { width:100%; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+      .user-email { font-size:11px; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+      .admin-btn { font-size:11px; padding:8px 12px; }
+      .logout-btn { font-size:11px; padding:8px 12px; }
+
+      .tabs { gap:6px; }
+      .tab-btn { font-size:12px; padding:9px 14px; }
+
+      .semestre-title { font-size:15px; }
+      .semestre-subtitle { font-size:10px; }
+      .semestre-body-inner { padding:0 14px 14px; }
+
+      .materias-list { grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:10px; }
+      .folder-card { padding:14px 12px; }
+      .folder-emoji { font-size:24px; }
+      .folder-name { font-size:13px; }
+
+      .resumos-grid { grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; }
+
+      .store-grid { grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:10px; }
+      .combo-header { flex-direction:column; gap:8px; }
+      .combo-preco-box { text-align:left; }
+
+      .cart-drawer { width:100%; right:-100%; }
+
+      .modal { padding:24px 20px; }
+    }
+
+    /* Mobile (≤ 480px) */
+    @media (max-width: 480px) {
+      .container { padding:16px 12px 80px; }
+
+      .logo { font-size:16px; }
+      .header-right { gap:6px; }
+      .user-email { font-size:10px; }
+      .admin-btn, .logout-btn { font-size:11px; padding:7px 10px; }
+      .expiry-badge { font-size:10px; padding:4px 10px; }
+
+      .tabs { gap:4px; }
+      .tab-btn { font-size:11px; padding:8px 10px; }
+
+      .welcome-box { padding:16px 14px; }
+      .welcome-msg { font-size:14px; }
+
+      .semestre-header { padding:14px 14px; }
+      .semestre-title { font-size:14px; }
+      .semestre-subtitle { display:none; }
+      .semestre-badge { font-size:10px; padding:3px 8px; }
+      .semestre-body-inner { padding:0 10px 10px; }
+
+      .materias-list { grid-template-columns:repeat(2,1fr); gap:8px; }
+      .folder-card { padding:12px 10px; }
+      .folder-emoji { font-size:22px; }
+      .folder-name { font-size:12px; }
+      .folder-status { font-size:10px; }
+
+      .materia-view-title { font-size:17px; }
+      .resumos-grid { grid-template-columns:1fr; gap:10px; }
+      .resumo-card { padding:18px; }
+      .card-emoji { font-size:22px; }
+      .card-title { font-size:14px; }
+      .card-desc { font-size:12px; }
+
+      .store-grid { grid-template-columns:repeat(2,1fr); gap:8px; }
+      .produto-card { padding:14px 10px; }
+      .produto-emoji { font-size:22px; }
+      .produto-nome { font-size:11px; }
+      .combo-card { padding:16px; }
+
+      .cart-fab { bottom:16px; right:16px; width:48px; height:48px; font-size:18px; }
+      .cart-drawer { width:100%; right:-100%; }
+
+      .modal { padding:20px 16px; }
+      .modal-product-name { font-size:14px; }
+
+      .breadcrumb-back { font-size:11px; padding:6px 12px; }
+
+      #searchInput { font-size:13px; }
+    }
+
+    /* Telas muito pequenas (≤ 360px) */
+    @media (max-width: 360px) {
+      .materias-list { grid-template-columns:1fr 1fr; }
+      .store-grid { grid-template-columns:1fr 1fr; }
+      .tabs { flex-direction:column; }
+      .tab-btn { width:100%; text-align:center; }
+    }
+
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
