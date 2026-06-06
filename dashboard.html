@@ -181,89 +181,88 @@
     .soon-dot { width:5px; height:5px; border-radius:50%; background:rgba(251,191,36,0.6); }
 
     /* ── LOJA ── */
-    .store-intro {
-      text-align:center; margin-bottom:36px;
-      padding:28px; border-radius:20px;
-      background:linear-gradient(135deg,rgba(34,211,238,0.06),rgba(6,182,212,0.03));
-      border:1px solid rgba(34,211,238,0.18);
-    }
-    .store-intro h2 { font-size:20px; font-weight:700; margin-bottom:8px; letter-spacing:-0.5px; }
+    /* ── LOJA PREMIUM ── */
+    .store-intro { margin-bottom:28px; }
+    .store-intro h2 { font-size:20px; font-weight:700; margin-bottom:6px; letter-spacing:-0.5px; }
     .store-intro p  { font-size:13px; color:rgba(125,211,232,0.65); line-height:1.6; }
 
-    .store-section { margin-bottom:40px; }
-    .store-section-title {
-      font-size:12px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase;
-      color:rgba(34,211,238,0.55); margin-bottom:16px;
-      display:flex; align-items:center; gap:10px;
-    }
+    .store-section { margin-bottom:36px; }
+    .store-section-title { display:flex; align-items:center; gap:10px; font-size:11px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:rgba(34,211,238,0.6); margin-bottom:16px; }
     .store-section-title::after { content:''; flex:1; height:1px; background:rgba(34,211,238,0.12); }
 
-    .store-grid {
-      display:grid;
-      grid-template-columns:repeat(auto-fill, minmax(260px,1fr));
-      gap:14px;
-    }
+    .store-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(148px,1fr)); gap:12px; }
 
-    .store-card {
-      border-radius:16px; padding:22px;
-      background:rgba(255,255,255,0.03);
-      border:1px solid rgba(34,211,238,0.12);
-      transition:all .25s;
-    }
-    .store-card:hover { border-color:rgba(34,211,238,0.30); background:rgba(34,211,238,0.06); }
-    .store-card.package {
-      background:linear-gradient(135deg,rgba(34,211,238,0.08),rgba(6,182,212,0.04));
-      border-color:rgba(34,211,238,0.30);
-    }
-    .store-card.package:hover { border-color:rgba(34,211,238,0.55); }
+    .produto-card { position:relative; border-radius:16px; padding:18px 14px; border:1px solid rgba(34,211,238,0.12); background:linear-gradient(160deg,rgba(34,211,238,0.04),rgba(6,182,212,0.02)); transition:all .25s; display:flex; flex-direction:column; gap:8px; }
+    .produto-card:hover { border-color:rgba(34,211,238,0.28); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.3); }
+    .produto-card.owned { opacity:0.5; }
+    .produto-card.in-cart { border-color:rgba(34,211,238,0.5); background:rgba(34,211,238,0.07); }
+    .produto-emoji { font-size:26px; }
+    .produto-nome { font-size:12px; font-weight:600; color:#e2f8fc; line-height:1.3; }
+    .produto-sub { font-size:10px; color:rgba(125,211,232,0.4); }
+    .produto-preco { font-size:15px; font-weight:700; color:#22d3ee; margin-top:auto; }
+    .produto-preco span { font-size:10px; font-weight:400; color:rgba(125,211,232,0.4); }
+    .add-btn { width:100%; padding:8px; border-radius:9px; border:1px solid rgba(34,211,238,0.25); cursor:pointer; font-size:11px; font-weight:600; font-family:'Poppins',sans-serif; transition:all .2s; background:rgba(34,211,238,0.12); color:#22d3ee; }
+    .add-btn:hover { background:rgba(34,211,238,0.22); border-color:rgba(34,211,238,0.5); }
+    .add-btn.in-cart { background:rgba(34,211,238,0.2); border-color:#22d3ee; }
+    .add-btn.owned { background:rgba(74,222,128,0.1); border-color:rgba(74,222,128,0.3); color:#4ade80; cursor:default; }
+    .tag-popular { position:absolute; top:-8px; right:10px; background:linear-gradient(135deg,#f59e0b,#d97706); color:#fff; font-size:9px; font-weight:700; letter-spacing:0.08em; padding:3px 8px; border-radius:20px; text-transform:uppercase; }
 
-    .store-card-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; }
-    .store-card-name { font-size:14px; font-weight:600; color:#e2f8fc; }
-    .store-card-sub  { font-size:11px; color:rgba(125,211,232,0.5); margin-top:2px; }
-    .store-card-price {
-      font-size:18px; font-weight:700; color:var(--cyan);
-      font-variant-numeric:tabular-nums; white-space:nowrap;
-    }
-    .store-card-price span { font-size:11px; font-weight:400; color:rgba(125,211,232,0.5); }
+    /* Combo card */
+    .combo-card { position:relative; border-radius:20px; padding:24px; border:1px solid rgba(34,211,238,0.3); background:linear-gradient(135deg,rgba(34,211,238,0.08),rgba(6,182,212,0.04)); }
+    .combo-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; flex-wrap:wrap; gap:12px; }
+    .combo-title { font-size:15px; font-weight:700; color:#e2f8fc; margin-bottom:4px; }
+    .combo-sub { font-size:12px; color:rgba(125,211,232,0.5); }
+    .combo-preco-box { text-align:right; }
+    .combo-preco-old { font-size:12px; color:rgba(125,211,232,0.3); text-decoration:line-through; }
+    .combo-preco-new { font-size:22px; font-weight:800; color:#22d3ee; }
+    .combo-desconto { display:inline-block; padding:3px 10px; border-radius:20px; font-size:10px; font-weight:700; margin-top:4px; background:rgba(74,222,128,0.15); border:1px solid rgba(74,222,128,0.3); color:#4ade80; }
+    .combo-materias { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; }
+    .combo-tag { padding:3px 10px; border-radius:20px; font-size:11px; background:rgba(34,211,238,0.08); border:1px solid rgba(34,211,238,0.2); color:rgba(125,211,232,0.7); }
+    .combo-btn { width:100%; padding:13px; border-radius:12px; border:none; cursor:pointer; font-size:14px; font-weight:700; font-family:'Poppins',sans-serif; transition:all .25s; background:linear-gradient(135deg,#22d3ee,#0891b2); color:#fff; box-shadow:0 4px 20px rgba(34,211,238,0.3); }
+    .combo-btn:hover { transform:translateY(-2px); box-shadow:0 8px 32px rgba(34,211,238,0.45); }
+    .combo-btn:disabled { opacity:0.5; cursor:default; transform:none; }
 
-    .store-card-desc { font-size:12px; color:rgba(125,211,232,0.55); line-height:1.55; margin-bottom:14px; }
+    /* Carrinho FAB */
+    .cart-fab { position:fixed; bottom:90px; right:20px; z-index:8000; width:52px; height:52px; border-radius:50%; border:none; cursor:pointer; background:linear-gradient(135deg,#22d3ee,#0891b2); box-shadow:0 4px 20px rgba(34,211,238,0.5); font-size:20px; transition:all .3s; display:flex; align-items:center; justify-content:center; }
+    .cart-fab:hover { transform:scale(1.1); }
+    .cart-fab.hidden { opacity:0; pointer-events:none; transform:scale(0.8); }
+    .cart-badge { position:absolute; top:-4px; right:-4px; width:20px; height:20px; border-radius:50%; background:#f43f5e; color:#fff; font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center; border:2px solid #020d1a; }
 
-    .store-discount {
-      display:inline-block; margin-bottom:10px;
-      font-size:10.5px; font-weight:700; padding:3px 9px;
-      border-radius:20px; background:rgba(74,222,128,0.12);
-      border:1px solid rgba(74,222,128,0.25); color:#4ade80;
-    }
-
-    .buy-btn {
-      width:100%; padding:11px; border:none; border-radius:12px;
-      background:linear-gradient(135deg,#22d3ee,#0891b2);
-      color:#fff; font-size:13px; font-weight:600;
-      font-family:'Poppins',sans-serif; cursor:pointer;
-      transition:all .25s;
-      box-shadow:0 4px 16px rgba(34,211,238,0.25);
-    }
-    .buy-btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(34,211,238,0.35); }
-    .buy-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
-
-    /* já tem acesso */
-    .store-card.owned { opacity:0.55; }
-    .store-card.owned .buy-btn {
-      background:rgba(74,222,128,0.15); color:#4ade80;
-      box-shadow:none; cursor:default;
-      border:1px solid rgba(74,222,128,0.25);
-    }
+    /* Drawer do carrinho */
+    .cart-drawer { position:fixed; top:0; right:-440px; width:400px; max-width:100vw; height:100vh; z-index:9000; background:#020d1a; border-left:1px solid rgba(34,211,238,0.18); box-shadow:-20px 0 60px rgba(0,0,0,0.6); transition:right .35s cubic-bezier(.4,0,.2,1); display:flex; flex-direction:column; }
+    .cart-drawer.open { right:0; }
+    .cart-overlay { position:fixed; inset:0; z-index:8999; background:rgba(2,8,16,0.7); backdrop-filter:blur(4px); opacity:0; pointer-events:none; transition:opacity .35s; }
+    .cart-overlay.open { opacity:1; pointer-events:all; }
+    .cart-header { padding:22px 24px; border-bottom:1px solid rgba(34,211,238,0.1); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+    .cart-header-title { font-size:17px; font-weight:700; color:#e2f8fc; display:flex; align-items:center; gap:10px; }
+    .cart-count-badge { background:rgba(34,211,238,0.15); border:1px solid rgba(34,211,238,0.3); color:#22d3ee; font-size:11px; font-weight:600; padding:2px 10px; border-radius:20px; }
+    .cart-close { width:34px; height:34px; border-radius:50%; border:1px solid rgba(34,211,238,0.2); background:transparent; color:rgba(125,211,232,0.6); font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s; }
+    .cart-close:hover { background:rgba(34,211,238,0.1); color:#fff; }
+    .cart-items { flex:1; overflow-y:auto; padding:16px 20px; display:flex; flex-direction:column; gap:8px; }
+    .cart-empty { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; color:rgba(125,211,232,0.3); text-align:center; padding:40px; }
+    .cart-empty-icon { font-size:48px; opacity:0.35; }
+    .cart-item { display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:12px; background:rgba(34,211,238,0.04); border:1px solid rgba(34,211,238,0.1); }
+    .cart-item-emoji { font-size:20px; flex-shrink:0; }
+    .cart-item-info { flex:1; min-width:0; }
+    .cart-item-name { font-size:13px; font-weight:600; color:#e2f8fc; }
+    .cart-item-sub { font-size:11px; color:rgba(125,211,232,0.4); margin-top:1px; }
+    .cart-item-price { font-size:14px; font-weight:700; color:#22d3ee; flex-shrink:0; }
+    .cart-item-remove { width:26px; height:26px; border-radius:50%; border:1px solid rgba(248,113,113,0.2); background:transparent; color:rgba(248,113,113,0.5); font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all .2s; }
+    .cart-item-remove:hover { background:rgba(248,113,113,0.12); color:#f87171; }
+    .cart-combo-hint { padding:12px 14px; border-radius:12px; background:rgba(74,222,128,0.06); border:1px solid rgba(74,222,128,0.2); font-size:12px; color:rgba(74,222,128,0.8); line-height:1.5; display:none; }
+    .cart-combo-hint.visible { display:block; }
+    .cart-footer { padding:18px 20px; border-top:1px solid rgba(34,211,238,0.1); flex-shrink:0; }
+    .cart-summary { margin-bottom:14px; display:flex; flex-direction:column; gap:7px; }
+    .cart-summary-row { display:flex; justify-content:space-between; font-size:13px; color:rgba(125,211,232,0.5); }
+    .cart-summary-row.total { font-size:16px; font-weight:700; color:#e2f8fc; padding-top:8px; border-top:1px solid rgba(34,211,238,0.1); }
+    .cart-summary-row.desconto { color:#4ade80; }
+    .cart-checkout-btn { width:100%; padding:14px; border-radius:13px; border:none; cursor:pointer; font-size:14px; font-weight:700; font-family:'Poppins',sans-serif; background:linear-gradient(135deg,#22d3ee,#0891b2); color:#fff; box-shadow:0 4px 20px rgba(34,211,238,0.3); transition:all .25s; display:flex; align-items:center; justify-content:center; gap:8px; }
+    .cart-checkout-btn:hover { transform:translateY(-2px); box-shadow:0 8px 32px rgba(34,211,238,0.5); }
+    .cart-checkout-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
 
     /* ── TERMOS DA LOJA ── */
-    .store-terms {
-      margin-top:36px; padding:20px 22px;
-      border-radius:16px; border:1px solid rgba(251,191,36,0.18);
-      background:rgba(251,191,36,0.04);
-    }
-    .store-terms-title {
-      font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase;
-      color:rgba(251,191,36,0.7); margin-bottom:12px;
-    }
+    .store-terms { margin-top:36px; padding:20px 22px; border-radius:16px; border:1px solid rgba(251,191,36,0.18); background:rgba(251,191,36,0.04); }
+    .store-terms-title { font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:rgba(251,191,36,0.7); margin-bottom:12px; }
     .store-terms ul { list-style:none; display:flex; flex-direction:column; gap:7px; }
     .store-terms li { font-size:12px; color:rgba(125,211,232,0.55); line-height:1.6; }
     .store-terms li strong { color:rgba(125,211,232,0.85); }
@@ -413,6 +412,78 @@
       text-transform:uppercase; margin-bottom:12px;
     }
     .prova-label-line { flex:1; height:1px; background:rgba(34,211,238,0.08); }
+
+    /* ── PASTAS DE MATÉRIA ── */
+    .materias-list { display:flex; flex-direction:column; gap:10px; }
+    .materia-card {
+      border:1px solid rgba(34,211,238,0.12);
+      border-radius:14px;
+      background:rgba(34,211,238,0.02);
+      overflow:hidden;
+      transition:border-color .25s;
+    }
+    .materia-card:hover { border-color:rgba(34,211,238,0.22); }
+    .materia-header {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 18px; cursor:pointer;
+      user-select:none; transition:background .2s;
+    }
+    .materia-header:hover { background:rgba(34,211,238,0.04); }
+    .materia-header-left { display:flex; align-items:center; gap:12px; }
+    .materia-emoji { font-size:20px; }
+    .materia-title { font-size:14px; font-weight:600; color:#e2f8fc; }
+    .materia-info { font-size:11px; color:rgba(125,211,232,0.45); margin-top:2px; }
+    .materia-chevron {
+      font-size:11px; color:rgba(34,211,238,0.4);
+      transition:transform .3s; flex-shrink:0;
+    }
+    .materia-card.open .materia-chevron { transform:rotate(180deg); }
+    .materia-body { max-height:0; overflow:hidden; transition:max-height .4s ease; }
+    .materia-card.open .materia-body { max-height:600px; overflow:visible; }
+    .materia-body-inner {
+      padding:0 16px 16px;
+      display:flex; flex-direction:column; gap:8px;
+    }
+    .materia-prova-row {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:12px 16px; border-radius:10px;
+      border:1px solid rgba(34,211,238,0.08);
+      background:rgba(34,211,238,0.02);
+      transition:all .2s;
+    }
+    .materia-prova-row.active { cursor:pointer; }
+    .materia-prova-row.active:hover {
+      border-color:rgba(34,211,238,0.25);
+      background:rgba(34,211,238,0.06);
+      transform:translateX(3px);
+    }
+    .materia-prova-left { display:flex; align-items:center; gap:10px; }
+    .materia-prova-label { font-size:13px; font-weight:500; color:#e2f8fc; }
+    .materia-prova-days { font-size:11px; color:rgba(125,211,232,0.45); margin-top:2px; }
+    .materia-prova-badge {
+      font-size:10px; font-weight:600; padding:3px 10px;
+      border-radius:20px; letter-spacing:0.05em; flex-shrink:0;
+    }
+    .badge-encerrado {
+      background:rgba(248,113,113,0.08); border:1px solid rgba(248,113,113,0.2);
+      color:rgba(248,113,113,0.6);
+    }
+    .badge-breve {
+      background:rgba(251,191,36,0.08); border:1px solid rgba(251,191,36,0.2);
+      color:rgba(251,191,36,0.6);
+    }
+    .badge-liberado {
+      background:rgba(34,211,238,0.1); border:1px solid rgba(34,211,238,0.3);
+      color:#22d3ee;
+    }
+    .badge-bloqueado {
+      background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1);
+      color:rgba(125,211,232,0.4);
+    }
+    .badge-comprar {
+      background:rgba(34,211,238,0.15); border:1px solid rgba(34,211,238,0.4);
+      color:#22d3ee; cursor:pointer;
+    }
 
     /* ── BOAS VINDAS ── */
     .welcome-box {
@@ -577,39 +648,78 @@
 
     <!-- TAB: LOJA -->
     <div class="tab-panel" id="tab-loja">
-
       <div class="store-intro">
-        <h2>🛒 Comprar Resumos</h2>
-        <p>Acesso imediato após confirmação do PIX. Disponível por <strong style="color:#7dd3e8;">50 dias</strong> a partir do pagamento.</p>
+        <h2>🛍️ Loja de Resumos</h2>
+        <p>Adicione ao carrinho e pague tudo de uma vez com PIX. Acesso liberado automaticamente após confirmação.</p>
       </div>
 
-      <!-- RESUMOS INDIVIDUAIS P1 — EXPIRADOS -->
+      <!-- P1 ENCERRADOS -->
       <div class="store-section">
-        <div class="store-section-title" style="color:rgba(248,113,113,0.4);">⏰ Resumos de P1 — Período encerrado</div>
-        <div style="padding:16px 20px;border-radius:14px;border:1px solid rgba(248,113,113,0.1);background:rgba(248,113,113,0.03);font-size:13px;color:rgba(248,113,113,0.5);text-align:center;">
-          Os resumos de P1 não estão mais disponíveis para compra. O período de provas foi encerrado.
+        <div class="store-section-title" style="color:rgba(248,113,113,0.4);">⏰ P1 — Período encerrado</div>
+        <div style="padding:16px 20px;border-radius:14px;border:1px solid rgba(248,113,113,0.1);background:rgba(248,113,113,0.03);font-size:13px;color:rgba(248,113,113,0.45);text-align:center;">
+          Os resumos de P1 não estão mais disponíveis para compra.
         </div>
       </div>
 
-      <!-- RESUMOS INDIVIDUAIS P2 -->
+      <!-- COMBO DESTAQUE -->
       <div class="store-section">
-        <div class="store-section-title">📝 Resumos individuais — P2 &nbsp;<span style="color:rgba(125,211,232,0.4);font-weight:400;text-transform:none;letter-spacing:0;">R$ 15,00 cada</span></div>
-        <div class="store-grid" id="store-individual-p2"></div>
+        <div class="store-section-title">🔥 Melhor negócio</div>
+        <div class="combo-card" id="combo-p2-card">
+          <div class="combo-header">
+            <div>
+              <div class="combo-title">📦 Pacote Completo P2</div>
+              <div class="combo-sub">Todos os 7 resumos de P2 — 3º Semestre</div>
+            </div>
+            <div class="combo-preco-box">
+              <div class="combo-preco-old">R$ 105,00</div>
+              <div class="combo-preco-new">R$ 69,90</div>
+              <div class="combo-desconto">🏷️ 33% off</div>
+            </div>
+          </div>
+          <div class="combo-materias">
+            <span class="combo-tag">📚 Bioquímica</span>
+            <span class="combo-tag">⚡ Biofísica</span>
+            <span class="combo-tag">🧬 Genética</span>
+            <span class="combo-tag">❤️ Fisiologia</span>
+            <span class="combo-tag">🦠 Microbiologia</span>
+            <span class="combo-tag">🧫 Micro Prática</span>
+            <span class="combo-tag">🛡️ Imunologia</span>
+          </div>
+          <button class="combo-btn" id="combo-p2-btn" onclick="addComboToCart()">
+            🛒 Adicionar pacote ao carrinho — R$ 69,90
+          </button>
+        </div>
       </div>
 
-      <!-- PACOTE P2 -->
+      <!-- INDIVIDUAIS P2 -->
       <div class="store-section">
-        <div class="store-section-title">📦 Pacote completo — P2</div>
-        <div class="store-grid" id="store-package-p2"></div>
+        <div class="store-section-title">📝 Resumos individuais P2
+          <span style="color:rgba(125,211,232,0.4);font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;">
+            R$ 15,00 unit · <span style="color:#4ade80;">R$ 12,00 com 3+</span>
+          </span>
+        </div>
+        <div class="store-grid" id="store-grid-p2"></div>
       </div>
 
-      <!-- RESUMOS FINAIS — EM BREVE -->
+      <!-- FINAIS EM BREVE -->
       <div class="store-section">
-        <div class="store-section-title" style="color:rgba(251,191,36,0.5);">🎓 Resumos de Provas Finais — Em breve</div>
+        <div class="store-section-title" style="color:rgba(251,191,36,0.45);">🎓 Final — Em breve</div>
         <div style="padding:16px 20px;border-radius:14px;border:1px solid rgba(251,191,36,0.15);background:rgba(251,191,36,0.04);font-size:13px;color:rgba(251,191,36,0.5);text-align:center;">
-          Os resumos das provas finais serão disponibilizados em breve. Fique atento!
+          Os resumos das provas finais serão disponibilizados em breve.
         </div>
       </div>
+
+      <!-- TERMOS -->
+      <div class="store-terms" id="store-terms-section">
+        <div class="store-terms-title">⚠️ Informações importantes</div>
+        <ul>
+          <li>⏳ <strong>50 dias de acesso</strong> a partir da confirmação do pagamento.</li>
+          <li>✅ <strong>Liberação automática</strong> após a confirmação do PIX.</li>
+          <li>📱 <strong>Um dispositivo por vez</strong> — segurança da sua conta.</li>
+          <li>🔄 <strong>Conteúdo atualizado</strong> conforme o semestre.</li>
+        </ul>
+      </div>
+    </div>
 
       <!-- TERMOS -->
       <div class="store-terms">
@@ -624,6 +734,55 @@
       </div>
 
     </div>
+  </div>
+</div>
+
+<!-- CARRINHO FAB -->
+<button class="cart-fab hidden" id="cartFab" onclick="openCart()">
+  🛒
+  <span class="cart-badge" id="cartBadge">0</span>
+</button>
+
+<!-- OVERLAY DO CARRINHO -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+
+<!-- DRAWER DO CARRINHO -->
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <div class="cart-header-title">
+      🛒 Carrinho
+      <span class="cart-count-badge" id="cartCountBadge">0 itens</span>
+    </div>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+
+  <div class="cart-items" id="cartItemsList">
+    <div class="cart-empty">
+      <div class="cart-empty-icon">🛒</div>
+      <div style="font-size:14px;font-weight:600;color:rgba(125,211,232,0.4);">Carrinho vazio</div>
+      <div style="font-size:12px;">Adicione resumos da loja para começar</div>
+    </div>
+  </div>
+
+  <div class="cart-footer" id="cartFooter" style="display:none;">
+    <div class="cart-combo-hint" id="cartComboHint"></div>
+    <div class="cart-summary" id="cartSummary">
+      <div class="cart-summary-row">
+        <span>Subtotal</span>
+        <span id="cartSubtotal">R$ 0,00</span>
+      </div>
+      <div class="cart-summary-row desconto" id="cartDescontoRow" style="display:none;">
+        <span>🏷️ Desconto pacote</span>
+        <span id="cartDesconto">- R$ 0,00</span>
+      </div>
+      <div class="cart-summary-row total">
+        <span>Total</span>
+        <span id="cartTotal">R$ 0,00</span>
+      </div>
+    </div>
+    <button class="cart-checkout-btn" id="cartCheckoutBtn" onclick="checkoutCart()">
+      ⚡ Pagar com PIX
+    </button>
   </div>
 </div>
 
@@ -703,6 +862,12 @@ var currentPaymentId = null;
 // ── [M1] Cache de acessos (carregado na init) ──────────────────────────────────
 // Estrutura: { "resumo_name": { expira_em: "2026-07-23", ... } }
 var acessosCache = {};
+
+// ── Carrinho ──────────────────────────────────────────────────────────────────
+var cart = []; // [{key, label, emoji, preco, tipo}]
+var PRECO_UNIT = 15.00;
+var PRECO_COMBO3 = 12.00; // 3+ itens = 20% off
+var PRECO_PACK = 69.90;   // 7 itens = 33% off
 
 // ── Elementos ─────────────────────────────────────────────────────────────────
 var statusArea   = document.getElementById("statusArea");
@@ -801,10 +966,6 @@ function daysLeft() {
   return minDays;
 }
 
-function formatPrice(v) {
-  return "R$ " + v.toFixed(2).replace(".", ",");
-}
-
 // ── Renderiza badge de expiração ──────────────────────────────────────────────
 function renderExpiryBadge() {
   var d = daysLeft();
@@ -891,10 +1052,93 @@ function renderResumosGrid() {
 
   // ── 3º SEMESTRE ──────────────────────────────────────────────────────────
   var sem3 = document.createElement("div");
-  sem3.className = "semestre-card open"; // começa aberto
+  sem3.className = "semestre-card open";
 
-  // Conta resumos liberados
   var liberados = MATERIAS.filter(function(m) { return hasAccess(m, "p2"); }).length;
+
+  var materiasHtml = '<div class="materias-list">';
+  MATERIAS.forEach(function(m) {
+    var acP1 = hasAccess(m, "p1");
+    var acP2 = hasAccess(m, "p2");
+    var acFinal = hasAccess(m, "final");
+    var diasP2 = daysLeftForResumo(m, "p2");
+
+    // Linha P1
+    var rowP1 =
+      '<div class="materia-prova-row" style="opacity:0.45;">' +
+        '<div class="materia-prova-left">' +
+          '<span style="font-size:14px">📝</span>' +
+          '<div>' +
+            '<div class="materia-prova-label" style="color:rgba(248,113,113,0.7);">' + m.label + ' — P1</div>' +
+            '<div class="materia-prova-days">Período encerrado</div>' +
+          '</div>' +
+        '</div>' +
+        '<span class="materia-prova-badge badge-encerrado">⏰ Encerrado</span>' +
+      '</div>';
+
+    // Linha P2
+    var rowP2;
+    if (acP2) {
+      rowP2 =
+        '<div class="materia-prova-row active" onclick="window.location.href=\'' + m.file_p2 + '\'">' +
+          '<div class="materia-prova-left">' +
+            '<span style="font-size:14px">✅</span>' +
+            '<div>' +
+              '<div class="materia-prova-label">' + m.label + ' — P2</div>' +
+              (diasP2 !== null ? '<div class="materia-prova-days">⏳ ' + diasP2 + ' dia' + (diasP2===1?'':'s') + ' restantes</div>' : '<div class="materia-prova-days">Acesso permanente</div>') +
+            '</div>' +
+          '</div>' +
+          '<span class="materia-prova-badge badge-liberado">✓ Liberado</span>' +
+        '</div>';
+    } else {
+      rowP2 =
+        '<div class="materia-prova-row active" onclick="goToStore()" style="cursor:pointer;">' +
+          '<div class="materia-prova-left">' +
+            '<span style="font-size:14px">🔒</span>' +
+            '<div>' +
+              '<div class="materia-prova-label" style="color:rgba(125,211,232,0.5);">' + m.label + ' — P2</div>' +
+              '<div class="materia-prova-days">Clique para comprar acesso</div>' +
+            '</div>' +
+          '</div>' +
+          '<span class="materia-prova-badge badge-comprar">🛒 Comprar</span>' +
+        '</div>';
+    }
+
+    // Linha Final
+    var rowFinal =
+      '<div class="materia-prova-row" style="opacity:0.45;">' +
+        '<div class="materia-prova-left">' +
+          '<span style="font-size:14px">🎓</span>' +
+          '<div>' +
+            '<div class="materia-prova-label" style="color:rgba(251,191,36,0.7);">' + m.label + ' — Final</div>' +
+            '<div class="materia-prova-days">Em preparação</div>' +
+          '</div>' +
+        '</div>' +
+        '<span class="materia-prova-badge badge-breve">🔜 Em breve</span>' +
+      '</div>';
+
+    var liberadosMateria = (acP2 ? 1 : 0);
+
+    materiasHtml +=
+      '<div class="materia-card' + (acP2 ? ' open' : '') + '">' +
+        '<div class="materia-header" onclick="toggleMateria(this)">' +
+          '<div class="materia-header-left">' +
+            '<span class="materia-emoji">' + m.emoji + '</span>' +
+            '<div>' +
+              '<div class="materia-title">' + m.label + '</div>' +
+              '<div class="materia-info">' + (acP2 ? '✓ P2 liberado' : 'P2 não liberado') + ' · P1 encerrado · Final em breve</div>' +
+            '</div>' +
+          '</div>' +
+          '<span class="materia-chevron">▼</span>' +
+        '</div>' +
+        '<div class="materia-body">' +
+          '<div class="materia-body-inner">' +
+            rowP1 + rowP2 + rowFinal +
+          '</div>' +
+        '</div>' +
+      '</div>';
+  });
+  materiasHtml += '</div>';
 
   sem3.innerHTML =
     '<div class="semestre-header" onclick="toggleSemestre(this)">' +
@@ -911,36 +1155,7 @@ function renderResumosGrid() {
       '</div>' +
     '</div>' +
     '<div class="semestre-body">' +
-      '<div class="semestre-body-inner">' +
-
-        // P1 — Período encerrado
-        '<div class="prova-section">' +
-          '<div class="prova-label" style="color:rgba(248,113,113,0.5);">' +
-            '⏰ P1 — Período encerrado' +
-            '<span class="prova-label-line"></span>' +
-          '</div>' +
-          '<div class="resumos-grid" id="grid-p1"></div>' +
-        '</div>' +
-
-        // P2 — Disponível
-        '<div class="prova-section">' +
-          '<div class="prova-label" style="color:rgba(34,211,238,0.6);">' +
-            '📝 P2 — Disponível' +
-            '<span class="prova-label-line"></span>' +
-          '</div>' +
-          '<div class="resumos-grid" id="grid-p2"></div>' +
-        '</div>' +
-
-        // Final — Em breve
-        '<div class="prova-section">' +
-          '<div class="prova-label" style="color:rgba(251,191,36,0.5);">' +
-            '🎓 Final — Em breve' +
-            '<span class="prova-label-line"></span>' +
-          '</div>' +
-          '<div class="resumos-grid" id="grid-final"></div>' +
-        '</div>' +
-
-      '</div>' +
+      '<div class="semestre-body-inner">' + materiasHtml + '</div>' +
     '</div>';
 
   wrap.appendChild(sem3);
@@ -973,9 +1188,6 @@ function renderResumosGrid() {
     '</div>';
 
   wrap.appendChild(sem4);
-
-  // Renderiza cards nas grids
-  renderGridCards();
 }
 
 window.toggleSemestre = function(header) {
@@ -983,84 +1195,10 @@ window.toggleSemestre = function(header) {
   card.classList.toggle("open");
 };
 
-function renderGridCards() {
-  // P1 — sempre "Período encerrado"
-  var gridP1 = document.getElementById("grid-p1");
-  if (gridP1) {
-    gridP1.innerHTML = "";
-    MATERIAS.forEach(function(m) {
-      var div = document.createElement("div");
-      div.className = "resumo-card soon";
-      div.style.cssText = "opacity:0.4;border-color:rgba(248,113,113,0.12);background:rgba(248,113,113,0.02);";
-      div.innerHTML =
-        '<span class="card-emoji">' + m.emoji + '</span>' +
-        '<div class="card-title" style="color:rgba(248,113,113,0.6);">' + m.label + ' — P1</div>' +
-        '<div class="card-desc">' + m.desc + '</div>' +
-        '<div style="display:inline-flex;align-items:center;gap:5px;margin-top:10px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);color:rgba(248,113,113,0.6);">⏰ Período encerrado</div>';
-      gridP1.appendChild(div);
-    });
-  }
-
-  // P2 — lógica normal
-  var gridP2 = document.getElementById("grid-p2");
-  if (gridP2) {
-    gridP2.innerHTML = "";
-    MATERIAS.forEach(function(m) {
-      var acesso = hasAccess(m, "p2");
-      var presentes = profile.resumos_presente || [];
-      var ehPresente = presentes.includes(m.key + "_p2");
-
-      if (acesso) {
-        var dias = daysLeftForResumo(m, "p2");
-        var expiryInfo = dias !== null
-          ? (dias <= 7
-            ? '<div style="font-size:10px;color:#fbbf24;margin-top:6px;">⚠️ Expira em ' + dias + ' dia' + (dias===1?'':'s') + '</div>'
-            : '<div style="font-size:10px;color:rgba(125,211,232,0.4);margin-top:6px;">⏱️ ' + dias + ' dias restantes</div>')
-          : '';
-
-        var presenteBtn = ehPresente
-          ? '<div class="presente-btn" onclick="showPresenteMsg(event)">🎁</div>'
-          : '';
-
-        var a = document.createElement("a");
-        a.className = "resumo-card unlocked";
-        a.href = m.file_p2;
-        a.style.position = "relative";
-        a.innerHTML =
-          presenteBtn +
-          '<span class="card-emoji">' + m.emoji + '</span>' +
-          '<div class="card-title">' + m.label + ' — P2</div>' +
-          '<div class="card-desc">' + m.desc + '</div>' + expiryInfo;
-        gridP2.appendChild(a);
-      } else {
-        var div = document.createElement("div");
-        div.className = "resumo-card locked";
-        div.innerHTML =
-          '<span class="card-emoji">' + m.emoji + '</span>' +
-          '<div class="card-title">' + m.label + ' — P2</div>' +
-          '<div class="card-desc">' + m.desc + '</div>' +
-          '<div class="lock-badge" onclick="goToStore()">🔒 Comprar acesso</div>';
-        gridP2.appendChild(div);
-      }
-    });
-  }
-
-  // Final — sempre "Em breve"
-  var gridFinal = document.getElementById("grid-final");
-  if (gridFinal) {
-    gridFinal.innerHTML = "";
-    MATERIAS.forEach(function(m) {
-      var div = document.createElement("div");
-      div.className = "resumo-card soon";
-      div.innerHTML =
-        '<span class="card-emoji">' + m.emoji + '</span>' +
-        '<div class="card-title">' + m.label + ' — Final</div>' +
-        '<div class="card-desc">' + m.desc + '</div>' +
-        '<div class="soon-badge"><span class="soon-dot"></span> Em breve</div>';
-      gridFinal.appendChild(div);
-    });
-  }
-}
+window.toggleMateria = function(header) {
+  var card = header.parentElement;
+  card.classList.toggle("open");
+};
 
 window.showPresenteMsg = function(e) {
   e.preventDefault();
@@ -1080,59 +1218,291 @@ window.closePresenteModal = function() {
 
 window.goToStore = function() { switchTab("loja"); };
 
+// ── CARRINHO ──────────────────────────────────────────────────────────────────
+function cartKey(m) { return m.key + "_p2"; }
+
+window.addToCart = function(key) {
+  var m = MATERIAS.find(function(x){ return x.key+"_p2" === key; });
+  if (!m) return;
+  if (cart.find(function(c){ return c.key === key; })) {
+    removeFromCart(key); return;
+  }
+  cart.push({ key: key, label: m.label + " — P2", emoji: m.emoji, preco: PRECO_UNIT });
+  updateCartUI();
+  renderStoreGrid();
+};
+
+window.addComboToCart = function() {
+  // Limpa carrinho e adiciona todos os P2 não adquiridos
+  var naoAdquiridos = MATERIAS.filter(function(m){ return !hasAccess(m,"p2"); });
+  if (naoAdquiridos.length === 0) { alert("Você já possui todos os resumos de P2!"); return; }
+
+  cart = [];
+  naoAdquiridos.forEach(function(m) {
+    cart.push({ key: m.key+"_p2", label: m.label+" — P2", emoji: m.emoji, preco: PRECO_UNIT, isCombo: true });
+  });
+  updateCartUI();
+  renderStoreGrid();
+  openCart();
+};
+
+window.removeFromCart = function(key) {
+  cart = cart.filter(function(c){ return c.key !== key; });
+  updateCartUI();
+  renderStoreGrid();
+};
+
+window.openCart = function() {
+  document.getElementById("cartDrawer").classList.add("open");
+  document.getElementById("cartOverlay").classList.add("open");
+};
+
+window.closeCart = function() {
+  document.getElementById("cartDrawer").classList.remove("open");
+  document.getElementById("cartOverlay").classList.remove("open");
+};
+
+function calcCartTotal() {
+  var n = cart.length;
+  var subtotal = n * PRECO_UNIT;
+  var total, desconto, descLabel;
+
+  // Opção C: 1-2 = R$15, 3-6 = R$12 (20% off), 7 = R$69,90 (33% off)
+  var p2NaoAdquiridos = MATERIAS.filter(function(m){ return !hasAccess(m,"p2"); });
+  var todasNoCarrinho = p2NaoAdquiridos.length === MATERIAS.length &&
+    MATERIAS.every(function(m){ return cart.find(function(c){ return c.key === m.key+"_p2"; }); });
+
+  if (todasNoCarrinho) {
+    // Pacote completo (7 itens)
+    total = PRECO_PACK;
+    desconto = subtotal - total;
+    descLabel = "🏷️ Pacote completo (33% off)";
+  } else if (n >= 3) {
+    // 3+ itens: 20% de desconto
+    total = n * PRECO_COMBO3;
+    desconto = subtotal - total;
+    descLabel = "🏷️ Desconto 3+ itens (20% off)";
+  } else {
+    // 1-2 itens: sem desconto
+    total = subtotal;
+    desconto = 0;
+    descLabel = "";
+  }
+
+  return { subtotal, desconto, total, descLabel };
+}
+
+function formatPrice(v) {
+  return "R$ " + v.toFixed(2).replace(".", ",");
+}
+
+function updateCartUI() {
+  var n = cart.length;
+  var fab = document.getElementById("cartFab");
+  var badge = document.getElementById("cartBadge");
+  var countBadge = document.getElementById("cartCountBadge");
+  var footer = document.getElementById("cartFooter");
+  var lista = document.getElementById("cartItemsList");
+  var comboHint = document.getElementById("cartComboHint");
+
+  // FAB
+  if (n > 0) fab.classList.remove("hidden");
+  else fab.classList.add("hidden");
+  badge.textContent = n;
+  countBadge.textContent = n + (n === 1 ? " item" : " itens");
+
+  // Lista
+  if (n === 0) {
+    lista.innerHTML = '<div class="cart-empty"><div class="cart-empty-icon">🛒</div><div style="font-size:14px;font-weight:600;color:rgba(125,211,232,0.4);">Carrinho vazio</div><div style="font-size:12px;">Adicione resumos da loja para começar</div></div>';
+    footer.style.display = "none";
+    return;
+  }
+
+  lista.innerHTML = cart.map(function(c) {
+    return '<div class="cart-item">' +
+      '<span class="cart-item-emoji">' + c.emoji + '</span>' +
+      '<div class="cart-item-info">' +
+        '<div class="cart-item-name">' + c.label + '</div>' +
+        '<div class="cart-item-sub">3º Semestre · 50 dias de acesso</div>' +
+      '</div>' +
+      '<span class="cart-item-price">' + formatPrice(c.preco) + '</span>' +
+      '<button class="cart-item-remove" onclick="removeFromCart(\'' + c.key + '\')">✕</button>' +
+    '</div>';
+  }).join("");
+
+  // Cálculo
+  var calc = calcCartTotal();
+  footer.style.display = "block";
+
+  // Dica inteligente baseada na Opção C
+  var p2NaoAdquiridos = MATERIAS.filter(function(m){ return !hasAccess(m,"p2"); });
+  var faltamParaPacote = p2NaoAdquiridos.filter(function(m){ return !cart.find(function(c){ return c.key === m.key+"_p2"; }); }).length;
+  var faltamPara3 = Math.max(0, 3 - n);
+
+  if (faltamPara3 > 0) {
+    comboHint.textContent = "💡 Adicione mais " + faltamPara3 + " item" + (faltamPara3>1?"s":"") + " para ganhar 20% de desconto!";
+    comboHint.classList.add("visible");
+  } else if (n >= 3 && faltamParaPacote > 0 && p2NaoAdquiridos.length === MATERIAS.length) {
+    comboHint.textContent = "🔥 Faltam " + faltamParaPacote + " matéria" + (faltamParaPacote>1?"s":"") + " para o pacote completo com 33% off!";
+    comboHint.classList.add("visible");
+  } else {
+    comboHint.classList.remove("visible");
+  }
+
+  // Resumo
+  var calc = calcCartTotal();
+  document.getElementById("cartSubtotal").textContent = formatPrice(calc.subtotal);
+  var descontoRow = document.getElementById("cartDescontoRow");
+  if (calc.desconto > 0) {
+    descontoRow.style.display = "flex";
+    descontoRow.querySelector("span:first-child").textContent = calc.descLabel;
+    document.getElementById("cartDesconto").textContent = "- " + formatPrice(calc.desconto);
+  } else {
+    descontoRow.style.display = "none";
+  }
+  document.getElementById("cartTotal").textContent = formatPrice(calc.total);
+}
+
+window.checkoutCart = function() {
+  if (cart.length === 0) return;
+  var calc = calcCartTotal();
+  var nomes = cart.map(function(c){ return c.label; }).join(", ");
+  var keys = cart.map(function(c){ return c.key; });
+
+  // Se for 1 item só, usa fluxo normal
+  if (keys.length === 1) {
+    var item = cart[0];
+    initPayment(item.key, item.label, item.preco);
+    closeCart();
+    return;
+  }
+
+  // Múltiplos: manda lista completa
+  initPaymentMultiple(keys, nomes, calc.total);
+  closeCart();
+};
+
+// ── Pagamento múltiplo ────────────────────────────────────────────────────────
+window.initPaymentMultiple = async function(productKeys, productName, totalPrice) {
+  document.getElementById("modalProductName").textContent = productName.length > 60 ? productName.substring(0,57)+"..." : productName;
+  document.getElementById("modalProductPrice").textContent = formatPrice(totalPrice);
+  document.getElementById("pixCode").textContent = "Gerando...";
+  document.getElementById("qrcode-modal").innerHTML = "";
+  document.getElementById("modalStatus").className = "modal-status";
+  document.getElementById("modalStatus").innerHTML = '<span class="spinner"></span> Gerando QR Code…';
+  document.getElementById("modalExpiry").textContent = "";
+  document.getElementById("pixModal").classList.add("open");
+
+  try {
+    var session = window.authSession;
+    var res = await fetch(
+      "https://chqhdmjqnjjdatowfyif.supabase.co/functions/v1/create-payment",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + session.access_token },
+        body: JSON.stringify({
+          produto_key:  productKeys.join(","),
+          produto_nome: productName,
+          valor:        totalPrice,
+          user_id:      session.user.id,
+          user_email:   session.user.email,
+        }),
+      }
+    );
+
+    var data = await res.json();
+    if (!res.ok || !data.qr_code) {
+      document.getElementById("modalStatus").innerHTML = "❌ Erro ao gerar pagamento. Tente novamente.";
+      return;
+    }
+
+    document.getElementById("pixCode").textContent = data.qr_code;
+    var qrEl = document.getElementById("qrcode-modal");
+    qrEl.innerHTML = "";
+    if (data.qr_code_base64) {
+      var img = document.createElement("img");
+      img.src = "data:image/png;base64," + data.qr_code_base64;
+      img.width = 180; img.height = 180; qrEl.appendChild(img);
+    } else {
+      new QRCode(qrEl, { text: data.qr_code, width:180, height:180, correctLevel: QRCode.CorrectLevel.M });
+    }
+
+    document.getElementById("modalStatus").innerHTML = '<span class="spinner"></span> Aguardando pagamento…';
+    document.getElementById("modalExpiry").textContent = "O acesso será liberado automaticamente após a confirmação.";
+
+    currentPaymentId = data.payment_id;
+    var cartItemsForPolling = [...productKeys];
+
+    if (pollingTimer) clearInterval(pollingTimer);
+    pollingTimer = setInterval(async function() {
+      try {
+        var fields = cartItemsForPolling.join(",");
+        var pr = await window.authClient.from("profiles").select(fields).eq("id", session.user.id).single();
+        if (pr.data) {
+          var allReleased = cartItemsForPolling.every(function(k){ return pr.data[k] === true; });
+          if (allReleased) {
+            clearInterval(pollingTimer); pollingTimer = null;
+            cartItemsForPolling.forEach(function(k){ profile[k] = true; });
+            cart = [];
+            updateCartUI();
+            document.getElementById("modalStatus").className = "modal-status success";
+            document.getElementById("modalStatus").innerHTML = "✅ Pagamento confirmado! Acesso liberado.";
+            document.getElementById("modalExpiry").textContent = "Atualizando seus resumos...";
+            setTimeout(function() { closeModal(); renderResumosGrid(); renderStore(); }, 2000);
+          }
+        }
+      } catch(e) { console.warn("polling error:", e); }
+    }, 5000);
+  } catch(err) {
+    console.error(err);
+    document.getElementById("modalStatus").innerHTML = "❌ Erro de conexão. Tente novamente.";
+  }
+};
+
 // ── Renderiza loja ────────────────────────────────────────────────────────────
 function renderStore() {
-  PROVAS.forEach(function(prova) {
+  renderStoreGrid();
+}
 
-    // Individuais
-    var gridInd = document.getElementById("store-individual-" + prova.tipo);
-    if (gridInd) {
-      gridInd.innerHTML = "";
-      MATERIAS.forEach(function(m) {
-        var owned = hasAccess(m, prova.tipo);
-        var card = document.createElement("div");
-        card.className = "store-card" + (owned ? " owned" : "");
-        card.innerHTML =
-          '<div class="store-card-top">' +
-            '<div>' +
-              '<div class="store-card-name">' + m.emoji + ' ' + m.label + '</div>' +
-              '<div class="store-card-sub">' + prova.label + ' · 3º Semestre</div>' +
-            '</div>' +
-            '<div class="store-card-price">' + formatPrice(prova.preco_unit) + '<span>/resumo</span></div>' +
-          '</div>' +
-          '<div class="store-card-desc">' + m.desc + '</div>' +
-          '<button class="buy-btn" ' + (owned ? 'disabled' : '') + ' onclick="initPayment(\'' + colKey(m,prova.tipo) + '\',\'' + m.label + ' — ' + prova.label + '\',' + prova.preco_unit + ')">' +
-            (owned ? '✅ Acesso liberado' : 'Comprar — ' + formatPrice(prova.preco_unit)) +
-          '</button>';
-        gridInd.appendChild(card);
-      });
-    }
+function renderStoreGrid() {
+  var grid = document.getElementById("store-grid-p2");
+  if (!grid) return;
+  grid.innerHTML = "";
 
-    // Pacote
-    var gridPack = document.getElementById("store-package-" + prova.tipo);
-    if (gridPack) {
-      gridPack.innerHTML = "";
-      var ownedCount = MATERIAS.filter(function(m){ return hasAccess(m,prova.tipo); }).length;
-      var allOwned   = ownedCount === MATERIAS.length;
-      var economia   = (MATERIAS.length * prova.preco_unit) - prova.preco_pack;
-      var card = document.createElement("div");
-      card.className = "store-card package" + (allOwned ? " owned" : "");
-      card.innerHTML =
-        '<div class="store-card-top">' +
-          '<div>' +
-            '<div class="store-card-name">📦 Pacote Completo — ' + prova.label + '</div>' +
-            '<div class="store-card-sub">Todas as 7 matérias · 3º Semestre</div>' +
-          '</div>' +
-          '<div class="store-card-price">' + formatPrice(prova.preco_pack) + '</div>' +
-        '</div>' +
-        '<div class="store-discount">Economia de ' + formatPrice(economia) + ' vs. individual</div>' +
-        '<div class="store-card-desc">Bioquímica, Biofísica, Genética, Fisiologia, Microbiologia, Micro Prática e Imunologia.</div>' +
-        '<button class="buy-btn" ' + (allOwned ? 'disabled' : '') + ' onclick="initPayment(\'pacote_' + prova.tipo + '\',\'Pacote ' + prova.label + ' Completo\',' + prova.preco_pack + ')">' +
-          (allOwned ? '✅ Acesso liberado' : 'Comprar pacote — ' + formatPrice(prova.preco_pack)) +
-        '</button>';
-      gridPack.appendChild(card);
-    }
+  MATERIAS.forEach(function(m) {
+    var key = m.key + "_p2";
+    var owned = hasAccess(m, "p2");
+    var inCart = !!cart.find(function(c){ return c.key === key; });
+
+    var card = document.createElement("div");
+    card.className = "produto-card" + (owned ? " owned" : "") + (inCart ? " in-cart" : "");
+
+    var btnLabel = owned ? "✅ Já adquirido" : (inCart ? "✓ No carrinho" : "+ Adicionar");
+    var btnClass = "add-btn" + (owned ? " owned" : "") + (inCart ? " in-cart" : "");
+
+    card.innerHTML =
+      (m.label === "Bioquímica" ? '<span class="tag-popular">Popular</span>' : '') +
+      '<span class="produto-emoji">' + m.emoji + '</span>' +
+      '<div class="produto-nome">' + m.label + '</div>' +
+      '<div class="produto-sub">P2 · 3º Semestre · 50 dias</div>' +
+      '<div class="produto-preco">R$ 15,00<span>/resumo</span></div>' +
+      '<button class="' + btnClass + '"' + (owned ? ' disabled' : ' onclick="addToCart(\'' + key + '\')"') + '>' + btnLabel + '</button>';
+
+    grid.appendChild(card);
   });
+
+  // Combo btn
+  var comboBtn = document.getElementById("combo-p2-btn");
+  if (comboBtn) {
+    var naoAdquiridos = MATERIAS.filter(function(m){ return !hasAccess(m,"p2"); });
+    if (naoAdquiridos.length === 0) {
+      comboBtn.textContent = "✅ Você já possui todos os resumos de P2";
+      comboBtn.disabled = true;
+    } else {
+      comboBtn.textContent = "🛒 Adicionar pacote ao carrinho — R$ 69,90";
+      comboBtn.disabled = false;
+    }
+  }
 }
 
 // ── Inicia pagamento via Edge Function ────────────────────────────────────────
