@@ -485,19 +485,13 @@ window.saveAluno=async function(){
   RESUMOS_COLS.forEach(function(r){
     var resumoKey=r.key;
     var agora=!!currentToggles[resumoKey];
-    var antes=!!currentAluno[resumoKey];
     
-    // Se ativou agora (antes era false, agora é true)
-    if(agora && !antes){
+    if(agora){
+      // Ativado → garante que existe em acessos
       asyncTasks.push(window.grantAccessInAcessos(currentAluno.id,resumoKey,expiraIso));
-    }
-    // Se desativou agora (antes era true, agora é false)
-    else if(!agora && antes){
+    } else {
+      // Desativado → garante que NÃO existe em acessos
       asyncTasks.push(window.revokeAccessInAcessos(currentAluno.id,resumoKey));
-    }
-    // Se mantém ativado e expira mudou
-    else if(agora && antes && expiraIso){
-      asyncTasks.push(window.grantAccessInAcessos(currentAluno.id,resumoKey,expiraIso));
     }
   });
   
