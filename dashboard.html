@@ -1650,7 +1650,8 @@ window.switchTab = function(tab) {
 
     // Icon (PNG personalizado com fallback para emoji)
     // ⚡ VARIAÇÃO: tamanho/rotação/glow do ícone mudam a cada clique
-    var iconImg = SK_ICONS[opts.tema];
+    // 🏅 ÍCONE FIXO pelo tier do streak (não muda com o tema sorteado do card)
+    var iconImg = SK_ICONS[opts.tierTema] || SK_ICONS[opts.tema];
     if (iconImg && iconImg.complete && iconImg.naturalWidth > 0) {
       var iconSizeBase = 200;
       var iconSize = iconSizeBase + Math.floor(skRand(50) * 30); // 200-230
@@ -1793,11 +1794,16 @@ window.switchTab = function(tab) {
       }
     } catch(e) { best = streak; }
 
-    // 3. Tier (label) baseado no streak real - usado no HERO
+    // 3. Tier (label) baseado no streak real - usado no HERO e ÍCONE do card
     var t = skTierFor(streak);
 
-    // ⚡ TEMA: agora é SORTEADO entre os 5 a cada clique (não trava no streak)
+    // ⚡ TEMA: SORTEADO entre os 5 a cada clique (visual do card)
     var temaSorteado = skRandomTema();
+
+    // 🏅 TIER TEMA: FIXO baseado no streak (define o ÍCONE que aparece no card)
+    // Iniciante=fogo · Constante=aurora · Dedicado=cosmos · Veterano=matrix · Lendário=premium
+    var tierToTema = { "Iniciante":"fogo", "Constante":"aurora", "Dedicado":"cosmos", "Veterano":"matrix", "Lendário":"premium" };
+    var tierTema = tierToTema[t.label] || "fogo";
 
     // 4. Minutos: do Supabase
     var minutos = (todayData && todayData.minutos) || 0;
@@ -1818,7 +1824,9 @@ window.switchTab = function(tab) {
     }
 
     skState = {
-      streak: streak, best: best, tier: t, tema: temaSorteado,
+      streak: streak, best: best, tier: t,
+      tema: temaSorteado,       // visual do card (sorteado)
+      tierTema: tierTema,       // ícone do tier (fixo pelo streak)
       name: name, subj: subj, hrs: hrs, mins: mins,
       phrase: SK_FR[skFI],
       hasData: !!(todayData && todayData.minutos > 0)
@@ -1963,9 +1971,12 @@ window.switchTab = function(tab) {
     var rt = document.getElementById("sk-result-tier");
     if(rt) {
       var temaLabel = SK_TM[opts.tema] ? SK_TM[opts.tema].label : "";
-      var tierImgTag = '<img src="'+SK_TM[opts.tema].iconImg+'" style="width:18px;height:18px;vertical-align:middle;margin-right:4px;object-fit:contain" alt="">';
-      rt.innerHTML = "Visual " + tierImgTag + "<strong>" + temaLabel +
-        "</strong> · Streak de <strong>" + opts.streak + " dia"+(opts.streak===1?"":"s")+"</strong>" +
+      // Ícone é do TIER (fixo pelo streak), não do tema sorteado
+      var tierIconSrc = SK_TM[opts.tierTema] ? SK_TM[opts.tierTema].iconImg : SK_TM[opts.tema].iconImg;
+      var tierImgTag = '<img src="'+tierIconSrc+'" style="width:18px;height:18px;vertical-align:middle;margin-right:4px;object-fit:contain" alt="">';
+      rt.innerHTML = tierImgTag + "<strong>" + opts.tier.label + "</strong>" +
+        " · Visual <strong>" + temaLabel + "</strong>" +
+        " · Streak de <strong>" + opts.streak + " dia"+(opts.streak===1?"":"s")+"</strong>" +
         " · <strong>" + opts.hrs + "h " + (opts.mins<10?"0":"") + opts.mins + "min</strong> hoje";
     }
   };
