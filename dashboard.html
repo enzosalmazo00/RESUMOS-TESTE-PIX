@@ -2258,6 +2258,19 @@ document.addEventListener("authReady", async function(e) {
   renderWelcome();
   renderResumosGrid();
   renderStore();
+
+  // ── Streak card: preenche nome e contadores após profile carregado ───────────
+  var skNomeInput = document.getElementById("sk-nome");
+  if (skNomeInput && profile && profile.nome_preferido) {
+    skNomeInput.value = profile.nome_preferido;
+  }
+  var skNumEl  = document.getElementById("sk-num");
+  var skBestEl = document.getElementById("sk-best");
+  var skCnt  = parseInt(localStorage.getItem("ez-sk-cnt"))  || 1;
+  var skBest = parseInt(localStorage.getItem("ez-sk-best")) || 1;
+  if (skNumEl)  skNumEl.textContent  = skCnt;
+  if (skBestEl) skBestEl.textContent = skBest;
+  if (typeof window.skDraw === "function") setTimeout(window.skDraw, 80);
 });
 
 })();
