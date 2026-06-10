@@ -1252,40 +1252,40 @@ window.switchTab = function(tab) {
     return                  { tema:"fogo",    label:"Iniciante", icon:"🔥" };
   }
 
-  // ── Tempo estudado hoje (via study-timer.js) ───────────────────
-  function skTodayMinutes(){
-    var min = 0;
+  // ── Tempo estudado hoje (lê do Supabase) ───────────────────────
+  // Retorna { h, m, subj, streakFromDB } ou null se não tem dados
+  async function skLoadTodayData(){
     try {
-      var raw = localStorage.getItem("ez-timer-today-" + skToday());
-      if (raw) min = parseInt(raw) || 0;
-      if (!min) {
-        var raw2 = localStorage.getItem("ez-study-today");
-        if (raw2) {
-          var d = JSON.parse(raw2);
-          if (d && d.date === skToday() && d.minutes) min = parseInt(d.minutes) || 0;
-        }
+      var client = window.authClient;
+      var session = window.authSession;
+      if (!client || !session) return null;
+      var today = skToday();
+      var res = await client.from("estudo_diario")
+        .select("minutos,ultima_materia,streak_dias")
+        .eq("user_id", session.user.id)
+        .eq("data", today)
+        .maybeSingle();
+      if (res.data) {
+        return {
+          minutos: res.data.minutos || 0,
+          subj: res.data.ultima_materia || "",
+          streak: res.data.streak_dias || 1
+        };
       }
-      if (!min) {
-        var raw3 = localStorage.getItem("study-timer-today");
-        if (raw3) min = parseInt(raw3) || 0;
-      }
-    } catch(e) {}
-    if (!min) min = 30; // fallback: 30 min mínimo se nada registrado
-    return min;
-  }
-  function skTodayHM(){
-    var m = skTodayMinutes();
-    return { h: Math.floor(m/60), m: m % 60 };
+    } catch(e) { console.warn("[streak] load error:", e); }
+    return null;
   }
 
-  // ── Última matéria estudada ─────────────────────────────────────
-  function skLastSubject(){
-    try {
-      var s = localStorage.getItem("ez-last-materia");
-      if (s) return s;
-    } catch(e) {}
-    var hr = new Date().getHours();
-    return hr < 12 ? "Estudo Matutino" : hr < 18 ? "Estudo Vespertino" : "Estudo Noturno";
+  // Converte slug ("imunologia_p2") para label legível ("Imunologia P2")
+  function skFormatSubj(slug){
+    if (!slug) return "";
+    var parts = slug.split("_");
+    return parts.map(function(p){
+      if (p.toLowerCase() === "p1") return "P1";
+      if (p.toLowerCase() === "p2") return "P2";
+      if (p.toLowerCase() === "final") return "Final";
+      return p.charAt(0).toUpperCase() + p.slice(1);
+    }).join(" ");
   }
 
   // ── 35 Frases ──────────────────────────────────────────────────
@@ -1655,28 +1655,119 @@ window.switchTab = function(tab) {
   }
 
   // ── Estado e dados ─────────────────────────────────────────────
-  var skState = { streak:1, best:1, tier:null, tema:"fogo", name:"", subj:"", hrs:0, mins:30 };
+  var skState = { streak:1, best:1, tier:null, tema:"fogo", name:"", subj:"", hrs:0, mins:0 };
 
-  function skBuildOpts(){
-    var s   = skInitStreak();
-    var t   = skTierFor(s.cnt);
-    var hm  = skTodayHM();
+  // Frase determinística por usuário+dia (hash simples)
+  function skHashStr(s){
+    var h = 0;
+    for (var i = 0; i < s.length; i++) {
+      h = ((h << 5) - h) + s.charCodeAt(i);
+      h |= 0;
+    }
+    return Math.abs(h);
+  }
+  function skDailyPhraseIndex(){
+    var session = window.authSession;
+    var uid = (session && session.user && session.user.id) || "anon";
+    var seed = uid + ":" + skToday();
+    return skHashStr(seed) % SK_FR.length;
+  }
+
+  // Inicializa a frase do dia (ou usa a seed se ainda não foi regenerada)
+  if (typeof skFI === "undefined" || skFI === null) {
+    try { skFI = skDailyPhraseIndex(); } catch(e) { skFI = 0; }
+  }
+
+  async function skBuildOpts(){
+    // 1. Carrega dados reais do Supabase
+    var todayData = await skLoadTodayData();
+
+    // 2. Streak: prioriza o do Supabase (calculado pelo study-timer.js)
+    var streak = 1, best = 1;
+    if (todayData && todayData.streak) {
+      streak = todayData.streak;
+    } else {
+      // Aluno ainda não estudou hoje
+      var prev = await skLoadPreviousStreak();
+      streak = prev;
+    }
+
+    // Best: pega do localStorage como referência adicional (não é crítico)
+    try {
+      best = parseInt(localStorage.getItem("ez-sk-best")) || streak;
+      if (streak > best) {
+        best = streak;
+        localStorage.setItem("ez-sk-best", best);
+      }
+    } catch(e) { best = streak; }
+
+    // 3. Tier baseado no streak real
+    var t = skTierFor(streak);
+
+    // 4. Minutos: do Supabase
+    var minutos = (todayData && todayData.minutos) || 0;
+    var hrs = Math.floor(minutos / 60);
+    var mins = minutos % 60;
+
+    // 5. Nome do perfil
     var name = (window.profile && window.profile.nome_preferido) ||
                localStorage.getItem("ez-nome-aluno") ||
                "Aluno";
-    var subj = skLastSubject();
+
+    // 6. Matéria do Supabase, ou fallback
+    var subj = "";
+    if (todayData && todayData.subj) {
+      subj = skFormatSubj(todayData.subj);
+    } else {
+      subj = "Estudo do dia";
+    }
+
     skState = {
-      streak: s.cnt, best: s.best, tier: t, tema: t.tema,
-      name: name, subj: subj, hrs: hm.h, mins: hm.m,
-      phrase: skCurrentFrase()
+      streak: streak, best: best, tier: t, tema: t.tema,
+      name: name, subj: subj, hrs: hrs, mins: mins,
+      phrase: SK_FR[skFI],
+      hasData: !!(todayData && todayData.minutos > 0)
     };
     return skState;
   }
 
+  // Carrega o streak mais recente para alunos que não estudaram hoje ainda
+  async function skLoadPreviousStreak(){
+    try {
+      var client = window.authClient;
+      var session = window.authSession;
+      if (!client || !session) return 1;
+      var yest = new Date(); yest.setDate(yest.getDate()-1);
+      var yestStr = yest.toISOString().slice(0,10);
+      var res = await client.from("estudo_diario")
+        .select("data,streak_dias")
+        .eq("user_id", session.user.id)
+        .lt("data", skToday())
+        .order("data", { ascending: false })
+        .limit(1);
+      if (res.data && res.data.length > 0) {
+        var last = res.data[0];
+        if (last.data === yestStr) return last.streak_dias || 1;
+      }
+    } catch(e) {}
+    return 1;
+  }
+
   // ── Atualiza HERO (números + tier badge) ───────────────────────
-  function skUpdateHero(){
-    var s = skInitStreak();
-    var t = skTierFor(s.cnt);
+  async function skUpdateHero(){
+    var todayData = await skLoadTodayData();
+    var streak = 1;
+    if (todayData && todayData.streak) {
+      streak = todayData.streak;
+    } else {
+      streak = await skLoadPreviousStreak();
+    }
+    var best = parseInt(localStorage.getItem("ez-sk-best")) || streak;
+    if (streak > best) { best = streak; localStorage.setItem("ez-sk-best", best); }
+    var t = skTierFor(streak);
+    var minutos = (todayData && todayData.minutos) || 0;
+    var hrs = Math.floor(minutos / 60), mins = minutos % 60;
+
     var n = document.getElementById("sk-num");
     var b = document.getElementById("sk-best");
     var ti = document.getElementById("sk-tier-icon");
@@ -1684,21 +1775,36 @@ window.switchTab = function(tab) {
     var h2 = document.getElementById("sk-hero-h2");
     var sub = document.getElementById("sk-hero-sub");
     var meta = document.getElementById("sk-empty-meta");
-    if(n) n.textContent = s.cnt;
-    if(b) b.textContent = s.best;
+    var genBtn = document.querySelector(".sk-generate-btn");
+
+    if(n) n.textContent = streak;
+    if(b) b.textContent = best;
     if(ti) ti.textContent = t.icon;
     if(tl) tl.textContent = t.label;
     if(h2) {
-      if (s.cnt === 1) h2.textContent = "Sua jornada começa hoje";
-      else if (s.cnt < 7) h2.textContent = "Você está pegando o ritmo";
-      else if (s.cnt < 15) h2.textContent = "Consistência impressionante";
-      else if (s.cnt < 30) h2.textContent = "Você está entre os melhores";
+      if (streak === 1) h2.textContent = "Sua jornada começa hoje";
+      else if (streak < 7) h2.textContent = "Você está pegando o ritmo";
+      else if (streak < 15) h2.textContent = "Consistência impressionante";
+      else if (streak < 30) h2.textContent = "Você está entre os melhores";
       else h2.textContent = "Você é uma lenda viva 👑";
     }
     if(sub) sub.textContent = "Tema atual: " + t.icon + " " + t.label + " — desbloqueado pelo seu streak";
-    if(meta) {
-      var hm = skTodayHM();
-      meta.innerHTML = "Hoje você estudou <strong style='color:#22d3ee'>"+hm.h+"h "+(hm.m<10?"0":"")+hm.m+"min</strong> · Tema desbloqueado: <strong style='color:#22d3ee'>"+t.label+"</strong>";
+
+    // Estado: precisa estudar antes de gerar
+    if (minutos < 5) {
+      if (meta) meta.innerHTML = '<span style="color:#fbbf24">⚠️ Você precisa estudar pelo menos <strong>5 minutos</strong> hoje para gerar seu card.</span><br>Abra um resumo para começar — o timer registra automaticamente.';
+      if (genBtn) {
+        genBtn.disabled = true;
+        genBtn.style.opacity = "0.5";
+        genBtn.style.cursor = "not-allowed";
+      }
+    } else {
+      if (meta) meta.innerHTML = "Hoje você estudou <strong style='color:#22d3ee'>"+hrs+"h "+(mins<10?"0":"")+mins+"min</strong> · Tema desbloqueado: <strong style='color:#22d3ee'>"+t.label+"</strong>";
+      if (genBtn) {
+        genBtn.disabled = false;
+        genBtn.style.opacity = "";
+        genBtn.style.cursor = "";
+      }
     }
   }
 
@@ -1708,13 +1814,37 @@ window.switchTab = function(tab) {
   };
 
   // ── Botão GERAR ────────────────────────────────────────────────
-  window.skGenerate = function(){
+  window.skGenerate = async function(){
     skCV = document.getElementById("streakCanvas");
     if(!skCV) return;
     skCX = skCV.getContext("2d");
 
-    var opts = skBuildOpts();
+    // Mostra loading
+    var btn = document.querySelector(".sk-generate-btn");
+    var originalContent = btn ? btn.innerHTML : "";
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<span class="sk-gen-spark">⏳</span> Carregando seus dados...';
+    }
+
+    var opts = await skBuildOpts();
+
+    // Validação: precisa ter estudado
+    if (!opts.hasData || opts.hrs*60 + opts.mins < 5) {
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = originalContent;
+      }
+      alert("⚠️ Você precisa estudar pelo menos 5 minutos hoje para gerar seu card.\n\nAbra um resumo e o timer registra automaticamente!");
+      return;
+    }
+
     skRender(opts);
+
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = originalContent;
+    }
 
     // Esconde empty, mostra result
     var empty = document.getElementById("sk-empty-state");
@@ -1732,9 +1862,9 @@ window.switchTab = function(tab) {
   };
 
   // ── Regenerar com outra frase ──────────────────────────────────
-  window.skRegenerate = function(){
+  window.skRegenerate = async function(){
     skNextFraseIndex();
-    var opts = skBuildOpts();
+    var opts = await skBuildOpts();
     skRender(opts);
   };
 
@@ -1769,7 +1899,9 @@ window.switchTab = function(tab) {
 
   // ── Init ao authReady ──────────────────────────────────────────
   document.addEventListener("authReady", function(){
-    skInitStreak();
+    // Inicializa a frase do dia (determinística por usuário+data)
+    try { skFI = skDailyPhraseIndex(); } catch(e) {}
+    // Atualiza hero com dados reais do Supabase
     skUpdateHero();
   });
 
