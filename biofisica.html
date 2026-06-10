@@ -450,14 +450,12 @@ li { margin:5px 0; }
   <button onclick="showSection('propriedades',this)">⚙️ Propriedades</button>
   <button onclick="showSection('automatismo',this)">⭐ Automatismo</button>
   <button onclick="showSection('potenciais',this)">⚡ Potenciais</button>
-  <button onclick="showSection('refratario',this)">🔴 Refratário</button>
   <button onclick="showSection('conducao',this)">📡 Condução</button>
   <button onclick="showSection('calcio',this)">🧪 Cálcio</button>
   <button onclick="showSection('hemodinamica',this)">💉 Hemodinâmica</button>
   <button onclick="showSection('frankstarling',this)">📏 Frank-Starling</button>
   <button onclick="showSection('bainbridge',this)">🔄 Bainbridge</button>
   <button onclick="showSection('ruidos',this)">🔊 Ruídos</button>
-  <button onclick="showSection('transporte',this)">🔬 Transporte</button>
   <button onclick="showSection('ecgondas',this)">📈 ECG Ondas</button>
   <button onclick="showSection('ecgeleto',this)">🔌 ECG Eletrodos</button>
   <button onclick="showSection('pegadinhas',this)">⚠️ Pegadinhas</button>
@@ -474,7 +472,7 @@ li { margin:5px 0; }
 <div class="info-block">
   <div class="label">Visão Geral</div>
   <h4>Sobre este material</h4>
-  <p>Este resumo cobre o conteúdo de P2 de Biofísica Cardíaca organizado em 14 blocos temáticos: <strong>estrutura e função cardíaca</strong>, <strong>5 propriedades</strong>, <strong>automatismo</strong>, <strong>potenciais de ação</strong>, <strong>período refratário</strong>, <strong>sistema de condução</strong>, <strong>cálcio cardíaco</strong>, <strong>hemodinâmica</strong>, <strong>Lei de Frank-Starling</strong>, <strong>Reflexo de Bainbridge</strong>, <strong>ruídos cardíacos</strong> e <strong>ECG</strong>. Inclui 49 flashcards interativos, 5 questões de completar e simulado com <strong>112 questões</strong> (gabaritado com questões reais de prova + V/F comentado), 50 flashcards e seção de pegadinhas de prova.</p>
+  <p>Este resumo cobre o conteúdo de P2 de Biofísica Cardíaca organizado em 14 blocos temáticos: <strong>estrutura e função cardíaca</strong>, <strong>5 propriedades</strong>, <strong>automatismo</strong>, <strong>potenciais de ação</strong>, <strong>período refratário</strong>, <strong>sistema de condução</strong>, <strong>cálcio cardíaco</strong>, <strong>hemodinâmica</strong>, <strong>Lei de Frank-Starling</strong>, <strong>Reflexo de Bainbridge</strong>, <strong>ruídos cardíacos</strong> e <strong>ECG</strong>. Inclui 49 flashcards interativos, 5 questões de completar e simulado com <strong>90 questões</strong> (gabaritado com questões reais de prova + V/F comentado), 50 flashcards e seção de pegadinhas de prova.</p>
 </div>
 
 <div class="info-block success">
@@ -498,7 +496,6 @@ li { margin:5px 0; }
   <div class="gloss-card" onclick="toggleGloss(this)"><div class="term">Batmotropismo</div><div class="def" style="display:none">Capacidade de <strong>responder/gerar estímulos</strong> (excitabilidade). ↑ = célula mais reativa → ectopias e arritmias. Própria das células automáticas.</div></div>
   <div class="gloss-card" onclick="toggleGloss(this)"><div class="term">Lusitropismo</div><div class="def" style="display:none">Capacidade de <strong>relaxar</strong> após contração. ↓ Lusitropismo → disfunção diastólica (IC com FE preservada).</div></div>
   <div class="gloss-card" onclick="toggleGloss(this)"><div class="term">Meseta (Fase 2)</div><div class="def" style="display:none">Platô do potencial de ação cardíaco — duração ~200ms. Mantida pelo equilíbrio K⁺ saindo ≈ Ca²⁺ entrando. <strong>Exclusiva do coração</strong> — nenhum outro tecido possui meseta!</div></div>
-  <div class="gloss-card" onclick="toggleGloss(this)"><div class="term">Período Refratário Absoluto (PRA)</div><div class="def" style="display:none">Célula completamente incapaz de responder — independente da intensidade. Fases 0+1+2 (toda a meseta). Protege contra tetania cardíaca!</div></div>
   <div class="gloss-card" onclick="toggleGloss(this)"><div class="term">Lei de Frank-Starling</div><div class="def" style="display:none">Dentro dos limites fisiológicos, quanto maior o volume de sangue na diástole → maior estiramento → maior força de contração → maior volume ejetado.</div></div>
   <div class="gloss-card" onclick="toggleGloss(this)"><div class="term">Reflexo de Bainbridge</div><div class="def" style="display:none">Reflexo aurículo-cardíaco: ↑ retorno venoso na aurícula DIREITA → mecanorreceptores de estiramento → ↑ FC. Complementa Frank-Starling: F-S ajusta força, Bainbridge ajusta frequência.</div></div>
   <div class="gloss-card" onclick="toggleGloss(this)"><div class="term">Débito Cardíaco (DC)</div><div class="def" style="display:none">DC = VS × FC = 70 mL × 80 bpm = ~5,6 L/min. VS = VTD − VTS = 120 − 50 = 70 mL. Fração de ejeção normal ≈ 60%.</div></div>
@@ -677,46 +674,6 @@ li { margin:5px 0; }
       <tr><td><strong>Hiperpolarização</strong></td><td>Sim</td><td>Sim</td><td><strong>Não (coração não tem)</strong></td></tr>
     </tbody>
   </table>
-</div>
-</div></div>
-
-<!-- ===== REFRATÁRIO ===== -->
-<div id="refratario" class="section">
-<div class="container">
-<div class="chapter-title"><span class="chap-icon">🔴</span> Módulo 5 — Período Refratário</div>
-
-<div class="info-block blue">
-  <div class="label">💡 Definição</div>
-  <h4>Quando as células não conseguem responder a novos estímulos</h4>
-  <p>PRA = total e independente da intensidade. PRR = exige estímulos de maior intensidade.</p>
-</div>
-
-<div class="sec-divider"><h3>Visualização</h3></div>
-
-<div class="rbar">
-  <div class="rabs">PRA — Absoluto<br><span style="font-size:.62rem;opacity:.7;">Fases 0, 1, 2 (incluindo toda a Meseta)</span></div>
-  <div class="rrel">PRR — Relativo<br><span style="font-size:.62rem;opacity:.7;">Fase 3</span></div>
-  <div class="rnrm">Normal<br><span style="font-size:.62rem;opacity:.7;">Fase 4</span></div>
-</div>
-
-<div class="t2c">
-  <div class="card-item">
-    <div class="card-t" style="color:#e74c3c;">🔴 PRA — Período Refratário Absoluto</div>
-    <div class="card-b" style="margin-top:10px;">Célula <strong>completamente incapaz</strong> — <strong>independente da intensidade</strong>.<br><br><strong>Quando:</strong> Fases 0 + 1 + 2 (toda a meseta) · Duração: ~200ms<br><strong>Causa:</strong> Canais de Na⁺ e Ca²⁺ inativados<br><em style="color:var(--muted)">Nem estímulos máximos conseguem ativar. Protege contra tetania!</em></div>
-  </div>
-  <div class="card-item">
-    <div class="card-t" style="color:#f9c94f;">🟡 PRR — Período Refratário Relativo</div>
-    <div class="card-b" style="margin-top:10px;">Célula responde com estímulos de <strong>MAIOR INTENSIDADE</strong>.<br><br><strong>Quando:</strong> Fase 3<br><strong>Risco:</strong> Fenômeno "R sobre T" → arritmias<br><em style="color:var(--muted)">Estímulo forte consegue ativar.</em></div>
-  </div>
-</div>
-
-<div class="info-block success">
-  <div class="label">✓ Importância Clínica</div>
-  <ul>
-    <li>Protege contra <strong>tetania cardíaca</strong> — seria imediatamente fatal</li>
-    <li>Garante <strong>relaxamento completo</strong> entre batimentos (diástole + enchimento)</li>
-    <li><strong>Antiarrítmicos</strong> atuam modificando a duração do período refratário</li>
-  </ul>
 </div>
 </div></div>
 
@@ -991,142 +948,6 @@ li { margin:5px 0; }
 </div>
 </div></div>
 
-<!-- ===== TRANSPORTE E MEMBRANA ===== -->
-<div id="transporte" class="section">
-<div class="container">
-<div class="chapter-title"><span class="chap-icon">🔬</span> Módulo — Transporte de Membrana e Fisiologia Muscular</div>
-
-<div class="info-block blue">
-  <div class="label">💡 Conceitos Frequentes em Prova</div>
-  <p>Este módulo reúne conceitos de <strong>transporte de membrana</strong> (potencial de Nernst, difusão, transporte ativo/passivo, osmose, lipossolubilidade) e <strong>fisiologia muscular</strong> (músculo esquelético, liso unitário/multiunitário, titina, contração). Aparecem frequentemente nas questões de biofísica!</p>
-</div>
-
-<div class="sec-divider"><h3>Mapa de Conceitos de Transporte</h3></div>
-
-<div class="compare-table" style="border-radius:14px;overflow:hidden;margin-bottom:20px;">
-  <table style="width:100%;border-collapse:collapse;">
-    <thead><tr><th>Conceito</th><th>Definição</th><th>Gasta ATP?</th><th>Exemplo</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Difusão simples</strong></td><td>Energia cinética — movimento a favor do gradiente</td><td>Não</td><td>O₂, CO₂ pela membrana</td></tr>
-      <tr><td><strong>Difusão facilitada</strong></td><td>Via proteína transportadora, a favor do gradiente. Tem Vmax (saturação)</td><td>Não</td><td>Glicose (GLUT), íons via canais</td></tr>
-      <tr><td><strong>Transporte ativo</strong></td><td>Proteína transportadora CONTRA gradiente — necessita energia</td><td>Sim</td><td>Bomba Na⁺/K⁺ ATPase</td></tr>
-      <tr><td><strong>Osmose</strong></td><td>Difusão de água pelo gradiente osmótico. Pressão osmótica é a pressão que impede a osmose</td><td>Não</td><td>Água do hipotônico → hipertônico</td></tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="cg2">
-  <div class="card-item">
-    <span class="card-ico">⚡</span>
-    <div class="card-t">Potencial de Nernst</div>
-    <div class="card-b">Nível de potencial elétrico através da membrana que <strong>impede a difusão líquida de um íon específico</strong>. É o equilíbrio entre a força elétrica e o gradiente químico daquele íon. Ex: K⁺ ≈ −86 mV, Na⁺ ≈ +61 mV.</div>
-  </div>
-  <div class="card-item">
-    <span class="card-ico">🧴</span>
-    <div class="card-t">Lipossolubilidade</div>
-    <div class="card-b">Fator que determina a <strong>rapidez com que uma substância atravessa a membrana lipídica</strong>. Quanto maior a lipossolubilidade, mais fácil e rápida a passagem pela bicamada. Gases e hormônios esteroidais são altamente lipossolúveis.</div>
-  </div>
-  <div class="card-item">
-    <span class="card-ico">🔁</span>
-    <div class="card-t">Retroalimentação Negativa</div>
-    <div class="card-b">Mecanismo de <strong>homeostase</strong>: quando um fator aumenta ou diminui, surgem mudanças que o fazem <strong>retornar ao valor médio</strong>. Corrije desvios. Ex: controle de pressão arterial, temperatura corporal.</div>
-  </div>
-  <div class="card-item">
-    <span class="card-ico">📈</span>
-    <div class="card-t">Retroalimentação Positiva</div>
-    <div class="card-b">Processo que <strong>amplifica o estímulo inicial</strong>. Ex: abertura de canais de Na⁺ no potencial de ação — mais Na⁺ entra → mais canais abrem → ainda mais Na⁺ entra (explosivo). Não é homeostático!</div>
-  </div>
-  <div class="card-item">
-    <span class="card-ico">🚀</span>
-    <div class="card-t">Vmax na Difusão Facilitada</div>
-    <div class="card-b">Como a difusão facilitada depende de proteínas transportadoras, há <strong>saturação</strong>. Quando todos os transportadores estão ocupados, o fluxo se aproxima de um <strong>máximo (Vmax)</strong>. A difusão simples NÃO tem esse limite.</div>
-  </div>
-  <div class="card-item">
-    <span class="card-ico">🌊</span>
-    <div class="card-t">Pressão Osmótica</div>
-    <div class="card-b">Pressão necessária para <strong>deter a osmose</strong> — impede que a água continue passando pelo gradiente osmótico. Quanto maior a concentração de solutos, maior a pressão osmótica. Determina o movimento de fluidos corporais.</div>
-  </div>
-</div>
-
-<div class="info-block danger">
-  <div class="label">❗ Armadilha Clássica — Pareamento de Colunas</div>
-  <ul>
-    <li><strong>Potencial de Nernst</strong> = nível de potencial que impede difusão líquida de um íon (NÃO é osmose)</li>
-    <li><strong>Lipossolubilidade</strong> = rapidez com que substância atravessa membrana (NÃO é transporte ativo)</li>
-    <li><strong>Difusão</strong> = energia cinética que gera movimento das moléculas (NÃO é contra gradiente)</li>
-    <li><strong>Transporte ativo</strong> = proteína transportadora CONTRA gradiente (NÃO é difusão)</li>
-    <li><strong>Pressão osmótica</strong> = pressão necessária para DETER osmose (NÃO é Nernst)</li>
-  </ul>
-</div>
-
-<div class="sec-divider"><h3>Fisiologia Muscular — Pontos de Prova</h3></div>
-
-<div class="t2c">
-  <div class="card-item">
-    <span class="card-ico">🦴</span>
-    <div class="card-t">Músculo Esquelético — Contração</div>
-    <div class="card-b">
-      <strong>Junção neuromuscular:</strong><br>
-      Potencial de ação no nervo → canais de <strong>Ca²⁺</strong> abrem no terminal nervoso → Ca²⁺ entra → fusão de vesículas → libera <strong>Acetilcolina (ACh)</strong> → despolarização muscular → contração.<br><br>
-      <em style="color:var(--muted)">⚠️ É o Ca²⁺ que desencadeia a liberação de ACh — NÃO o Na⁺ ou K⁺!</em>
-    </div>
-  </div>
-  <div class="card-item">
-    <span class="card-ico">🧬</span>
-    <div class="card-t">Titina — Proteína do Sarcômero</div>
-    <div class="card-b">
-      Proteína elástica gigante que <strong>mantém os filamentos de actina e miosina em posição</strong> no sarcômero. Funciona como mola molecular — garante elasticidade e alinhamento dos filamentos grossos.<br><br>
-      <em style="color:var(--muted)">Cuidado com nomes parecidos: <strong>Titina</strong> (correta) ≠ Tinina, Fibronina, Cistina.</em>
-    </div>
-  </div>
-</div>
-
-<div class="compare-table" style="border-radius:14px;overflow:hidden;margin-top:20px;">
-  <table style="width:100%;border-collapse:collapse;">
-    <thead><tr><th>Tipo Muscular</th><th>Funcionamento</th><th>Localização</th><th>Fibras independentes?</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Unitário (Liso)</strong></td><td>Muitas células contraem <strong>juntas como uma massa</strong> — acopladas eletricamente</td><td>Paredes da maioria das vísceras (intestino, útero, vasos)</td><td><strong>NÃO</strong> — contraem em conjunto</td></tr>
-      <tr><td><strong>Multiunitário (Liso)</strong></td><td>Cada fibra contrai <strong>independentemente</strong></td><td>Íris, músculos ciliares, vasos grandes</td><td><strong>SIM</strong> — independentes</td></tr>
-      <tr><td><strong>Esquelético</strong></td><td>Controlado por unidades motoras</td><td>Músculos voluntários</td><td>Sim (unidade motora)</td></tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="info-block warn">
-  <div class="label">⚠️ Músculo Liso Unitário — Característica Principal</div>
-  <p>O músculo liso <strong>unitário</strong> contrai como uma massa única — NÃO cada fibra independentemente! Independência de cada fibra = <strong>multiunitário</strong>. A contração no músculo liso é iniciada pela <strong>miosina quinase de cadeia leve</strong> (ativada por Ca²⁺-calmodulina) — NÃO a miosina fosfatase (que favorece relaxamento).</p>
-</div>
-
-<div class="sec-divider"><h3>Temperatura e Função Cardíaca</h3></div>
-
-<div class="compare-table" style="border-radius:14px;overflow:hidden;">
-  <table style="width:100%;border-collapse:collapse;">
-    <thead><tr><th>Condição</th><th>Efeito na FC</th><th>Mecanismo</th><th>Observação Clínica</th></tr></thead>
-    <tbody>
-      <tr><td><strong>↑ Temperatura (febre)</strong></td><td>↑↑ FC (taquicardia)</td><td>Permeabilidade iônica aumenta → rampa diastólica mais íngreme</td><td>Febre aumenta muito a FC</td></tr>
-      <tr><td><strong>↓ Temperatura (hipotermia)</strong></td><td>↓ FC (bradicardia)</td><td>Metabolismo reduzido → rampa mais lenta</td><td>Hipotermia induzida na cirurgia</td></tr>
-      <tr><td><strong>↑↑ Temperatura prolongada</strong></td><td>↑ FC + ↓ força</td><td>Desnaturação proteica, depleção metabólica</td><td>Pode debilitar/lesar o coração</td></tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="info-block danger">
-  <div class="label">❗ Pegadinha Clássica — Temperatura e Permeabilidade</div>
-  <p>O calor <strong>AUMENTA</strong> a permeabilidade iônica (não reduz). Afirmativas dizendo "calor reduz permeabilidade iônica" são <strong>FALSAS</strong>. Temperatura ↑ = metabolismo ↑ = permeabilidade ↑ = FC ↑.</p>
-</div>
-
-<div class="sec-divider"><h3>Pressão Aórtica e Ciclo Cardíaco</h3></div>
-
-<div class="formula">
-  Pressão do VE para abrir válvula aórtica ≈ <strong>120 mmHg</strong> (pressão sistólica)<br>
-  Pós-carga = resistência aórtica + resistência vascular periférica<br><br>
-  Pré-carga → diástole → enchimento → VTD<br>
-  Pós-carga → sístole → ejeção → tensão nas paredes ventriculares<br><br>
-  Retorno venoso (veias cavas + seio coronário) → define PRECARGA (NÃO pós-carga!)
-</div>
-
-</div></div>
-
 <!-- ===== ECG ONDAS ===== -->
 <div id="ecgondas" class="section">
 <div class="container">
@@ -1199,58 +1020,295 @@ li { margin:5px 0; }
     <li><strong>Repolarização atrial</strong> = existe, mas NUNCA aparece no ECG (encoberta pelo QRS)</li>
   </ul>
 </div>
+
+<div class="sec-divider"><h3>⏱️ Intervalos e Durações Normais — Decorar!</h3></div>
+
+<div class="compare-table" style="border-radius:14px;overflow:hidden;margin-bottom:20px;">
+  <table style="width:100%;border-collapse:collapse;">
+    <thead><tr><th>Componente</th><th>Duração Normal</th><th>Se Alterado</th><th>Macete</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Onda P</strong></td><td>&lt; 120 ms (3 quadradinhos)</td><td>&gt;120ms = sobrecarga atrial</td><td>P normal = pequena e arredondada</td></tr>
+      <tr><td><strong>Intervalo PR</strong></td><td>120–200 ms (3–5 quadradinhos)</td><td>&gt;200ms = Bloqueio AV 1° grau</td><td>De P ao início do QRS</td></tr>
+      <tr><td><strong>Complexo QRS</strong></td><td>&lt; 120 ms (3 quadradinhos)</td><td>&gt;120ms = Bloqueio de ramo</td><td>QRS largo = ventrículo lento</td></tr>
+      <tr><td><strong>Intervalo QT</strong></td><td>~350–440 ms (varia com FC)</td><td>QT longo → risco de arritmia</td><td>De Q ao fim de T</td></tr>
+      <tr><td><strong>Segmento ST</strong></td><td>Isoelétrico</td><td>Supra → IAM · Infra → isquemia</td><td>ST = meseta (fase 2)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="sec-divider"><h3>🔍 Como Calcular a FC no ECG</h3></div>
+
+<div class="cg2">
+  <div class="card-item">
+    <span class="card-ico">⚡</span>
+    <div class="card-t">Método Rápido (ritmo regular)</div>
+    <div class="card-b">
+      Conte os <strong>quadrados grandes</strong> entre dois picos R consecutivos (intervalo R-R).<br><br>
+      <strong>FC = 300 ÷ nº de quadrados grandes</strong><br><br>
+      1 quadrado = 300 bpm · 2 = 150 · 3 = 100 · 4 = 75 · 5 = 60 · 6 = 50<br><br>
+      <em style="color:var(--accent2)">Macete: "300-150-100-75-60-50" — memorize essa sequência!</em>
+    </div>
+  </div>
+  <div class="card-item">
+    <span class="card-ico">📏</span>
+    <div class="card-t">Método Preciso (qualquer ritmo)</div>
+    <div class="card-b">
+      <strong>FC = 1500 ÷ nº de quadradinhos</strong> no intervalo R-R<br><br>
+      Ou: marque 6 segundos de traçado (30 quadrados grandes) → conte quantos QRS aparecem → multiplique por 10.<br><br>
+      <em style="color:var(--accent2)">Usado quando o ritmo é irregular (ex: FA)</em>
+    </div>
+  </div>
+</div>
+
+<div class="sec-divider"><h3>🎯 Macetes de Prova — Cada Onda Decorada</h3></div>
+
+<div class="info-block danger">
+  <div class="label">❗ QRS — O Complexo Mais Cobrado</div>
+  <h4>O que é cada letra dentro do QRS?</h4>
+  <p>
+    <strong>Q</strong> = primeira deflexão <em>negativa</em> antes do R. Representa despolarização do <strong>septo interventricular</strong> (esquerda → direita).<br>
+    <strong>R</strong> = primeira deflexão <em>positiva</em>. Representa despolarização da <strong>parede livre do VE</strong> (a maior massa muscular).<br>
+    <strong>S</strong> = deflexão <em>negativa</em> após R. Representa despolarização das <strong>regiões basais e do VD</strong>.<br><br>
+    ⚠️ <strong>Nem todo QRS tem Q, R e S!</strong> Se não tem deflexão negativa antes do R = sem onda Q. Se é tudo negativo = QS. Isso é normal dependendo da derivação.
+  </p>
+</div>
+
+<div class="info-block blue">
+  <div class="label">💡 Onda T — Macetes Importantes</div>
+  <p>
+    <strong>T normal:</strong> mesma direção do QRS (concordante). Se QRS positivo → T positiva. Se QRS negativo → T negativa.<br><br>
+    <strong>T em aVR:</strong> SEMPRE negativa — normal. (aVR é o "avesso" do coração)<br>
+    <strong>T em V1:</strong> pode ser negativa — normal.<br>
+    <strong>T invertida em V4-V6 ou DII:</strong> sinal de alerta — investigar isquemia.<br>
+    <strong>T apiculada e simétrica:</strong> hipercalemia.<br>
+    <strong>T achatada:</strong> hipocalemia.
+  </p>
+</div>
+
+<div class="info-block success">
+  <div class="label">✓ Onda P — O que olhar</div>
+  <p>
+    <strong>P normal em DII:</strong> positiva, arredondada, &lt;120ms, &lt;2,5mm.<br>
+    <strong>P bifásica em V1:</strong> normal — componente positivo (AD) + negativo (AE).<br>
+    <strong>P mitrale:</strong> P larga e entalhada — sobrecarga de AE (ex: estenose mitral).<br>
+    <strong>P pulmonale:</strong> P alta e pontiaguda — sobrecarga de AD (ex: DPOC, TEP).<br><br>
+    <em style="color:var(--muted)">Macete: "P normal em DII = sempre boa referência de ritmo sinusal"</em>
+  </p>
+</div>
+
 </div></div>
 
 <!-- ===== ECG ELETRODOS ===== -->
 <div id="ecgeleto" class="section">
 <div class="container">
-<div class="chapter-title"><span class="chap-icon">🔌</span> Módulo 13 — ECG — Eletrodos e Derivações</div>
+<div class="chapter-title"><span class="chap-icon">🔌</span> Módulo 13 — ECG — Eletrodos, Derivações e Macetes</div>
 
 <div class="info-block">
   <div class="label">Configuração</div>
   <h4>ECG padrão: 10 eletrodos → 12 derivações</h4>
-  <p>9 eletrodos ativos + 1 neutro (perna direita) → 12 derivações: <strong>3 bipolares</strong> (D1, D2, D3) + <strong>3 ampliadas</strong> (aVR, aVL, aVF) + <strong>6 precordiais</strong> (V1–V6).</p>
+  <p>9 eletrodos ativos + 1 neutro (perna direita) → 12 derivações: <strong>3 bipolares</strong> (DI, DII, DIII) + <strong>3 ampliadas</strong> (aVR, aVL, aVF) + <strong>6 precordiais</strong> (V1–V6).</p>
 </div>
 
-<div class="compare-table" style="border-radius:14px;overflow:hidden;">
+<div class="sec-divider"><h3>📍 Posicionamento dos Eletrodos de Membros</h3></div>
+
+<div class="compare-table" style="border-radius:14px;overflow:hidden;margin-bottom:20px;">
   <table style="width:100%;border-collapse:collapse;">
-    <thead><tr><th>Tipo</th><th>Derivações</th><th>Característica</th></tr></thead>
+    <thead><tr><th>Eletrodo</th><th>Posição</th><th>Cor (padrão)</th><th>Derivações que influencia</th></tr></thead>
     <tbody>
-      <tr><td><strong>Bipolares</strong></td><td>D1, D2, D3</td><td>Triângulo de Einthoven — usam 2 eletrodos cada</td></tr>
-      <tr><td><strong>Unipolares Ampliadas</strong></td><td>aVR, aVL, aVF</td><td>O eletrodo específico SEMPRE tem polaridade positiva</td></tr>
-      <tr><td><strong>Unipolares Precordiais</strong></td><td>V1–V6</td><td>Medem atividade elétrica diretamente sobre o coração</td></tr>
+      <tr><td><strong>RA</strong> (Braço Direito)</td><td>Pulso/braço direito</td><td style="color:#e74c3c;">Vermelho</td><td>DI (−), DII (−), aVR (+)</td></tr>
+      <tr><td><strong>LA</strong> (Braço Esquerdo)</td><td>Pulso/braço esquerdo</td><td style="color:#f9c94f;">Amarelo</td><td>DI (+), DIII (−), aVL (+)</td></tr>
+      <tr><td><strong>LL</strong> (Perna Esquerda)</td><td>Tornozelo esquerdo</td><td style="color:var(--green);">Verde</td><td>DII (+), DIII (+), aVF (+)</td></tr>
+      <tr><td><strong>RL</strong> (Perna Direita)</td><td>Tornozelo direito</td><td style="color:#8892b0;">Preto</td><td>Eletrodo NEUTRO/terra — não gera derivação</td></tr>
     </tbody>
   </table>
 </div>
 
 <div class="info-block danger">
-  <div class="label">❗ Armadilha — V1, V2, V3</div>
-  <p>"V1, V2 e V3 são derivações bipolares." → <strong>FALSO!</strong> São UNIPOLARES PRECORDIAIS. As bipolares são D1, D2 e D3 (Triângulo de Einthoven).</p>
+  <div class="label">❗ Macete — Se alterar DI, DII e aVL → qual eletrodo?</div>
+  <p>Alteração simultânea em <strong>DI + DII + aVL</strong> → suspeitar do eletrodo do <strong>Braço Direito (RA)</strong>. Porque RA participa negativamente de DI e DII e é o positivo de aVR. Cada eletrodo com problema afeta um grupo específico de derivações.</p>
 </div>
 
-<div class="sec-divider"><h3>Eixo Elétrico Cardíaco</h3></div>
+<div class="sec-divider"><h3>⚡ Derivações Bipolares — Triângulo de Einthoven</h3></div>
 
-<div class="compare-table" style="border-radius:14px;overflow:hidden;">
+<div class="compare-table" style="border-radius:14px;overflow:hidden;margin-bottom:20px;">
   <table style="width:100%;border-collapse:collapse;">
-    <thead><tr><th>Eixo</th><th>Faixa</th><th>Interpretação</th></tr></thead>
+    <thead><tr><th>Derivação</th><th>Eletrodo (−)</th><th>Eletrodo (+)</th><th>O que "enxerga"</th><th>QRS normal</th></tr></thead>
     <tbody>
-      <tr><td><strong style="color:var(--green);">Normal</strong></td><td>−30° a +90°</td><td>D1 e aVF ambos positivos = normal!</td></tr>
-      <tr><td><strong style="color:#f9c94f;">Desvio esquerdo</strong></td><td>−30° a −90°</td><td>Sugere HVE, bloqueio de ramo esquerdo</td></tr>
-      <tr><td><strong style="color:#e74c3c;">Desvio direito</strong></td><td>+90° a +180°</td><td>Sugere HVD, TEP, bloqueio de ramo direito</td></tr>
-      <tr><td><strong style="color:var(--muted);">Extremo</strong></td><td>−90° a ±180°</td><td>Padrão raro, patológico</td></tr>
+      <tr><td><strong>DI</strong></td><td>Braço Direito</td><td>Braço Esquerdo</td><td>Parede lateral — vetor esquerda→direita</td><td style="color:var(--green);">Positivo ✓</td></tr>
+      <tr><td><strong>DII</strong></td><td>Braço Direito</td><td>Perna Esquerda</td><td>Parede inferior + ritmo (melhor derivação p/ ritmo)</td><td style="color:var(--green);">Positivo ✓</td></tr>
+      <tr><td><strong>DIII</strong></td><td><strong style="color:#e74c3c;">Braço Esquerdo</strong></td><td>Perna Esquerda</td><td>Parede inferior</td><td>Variável</td></tr>
     </tbody>
   </table>
 </div>
 
-<div class="info-block success">
-  <div class="label">✓ Técnica das Isodifásicas</div>
-  <p>Encontrar derivação com ondas isodifásicas → o eixo está a <strong>90°</strong> dessa derivação. Para saber qual dos dois lados: verificar D2. Se D2 positivo → sentido horário. Se negativo → anti-horário.</p>
+<div class="info-block warn">
+  <div class="label">⚠️ PEGADINHA DIII — O mais cobrado das bipolares</div>
+  <p>Em DIII o eletrodo negativo é o <strong>BRAÇO ESQUERDO</strong> — não o direito! Diferente de DI e DII onde o negativo sempre é o braço direito. Essa inversão é armadilha clássica de prova.</p>
+</div>
+
+<div class="sec-divider"><h3>🎯 Derivações Ampliadas (aVR, aVL, aVF) — Macetes Definitivos</h3></div>
+
+<div class="cg3">
+  <div class="card-item" style="border-color:rgba(231,76,60,0.5);">
+    <span class="card-ico">🔴</span>
+    <div class="card-t" style="color:#e74c3c;">aVR — Braço Direito</div>
+    <div class="card-b">
+      <strong>SEMPRE invertido</strong> — P negativa, QRS negativo, T negativa.<br><br>
+      Por quê? aVR olha o coração "de costas" — de dentro para fora. O vetor elétrico médio aponta <em>se afastando</em> do eletrodo.<br><br>
+      <strong style="color:#e74c3c;">Macete: "aVR é o avesso — tudo de cabeça para baixo"</strong><br><br>
+      <em style="color:var(--muted)">Se aVR estiver positivo → inverter os outros eletrodos ou dextrocardia</em>
+    </div>
+  </div>
+  <div class="card-item" style="border-color:rgba(249,201,79,0.5);">
+    <span class="card-ico">🟡</span>
+    <div class="card-t" style="color:#f9c94f;">aVL — Braço Esquerdo</div>
+    <div class="card-b">
+      <strong>Variável</strong> — pode ser positivo, negativo ou <strong>isodifásico</strong> dependendo do eixo elétrico.<br><br>
+      Olha a parede <strong>lateral alta</strong> do coração. Em eixo normal (~+60°), aVL tende a ser isodifásico.<br><br>
+      <strong style="color:#f9c94f;">Macete: "aVL é o curinga — pode ser qualquer coisa"</strong><br><br>
+      <em style="color:var(--muted)">Se o eixo ⊥ a aVL → ondas isodifásicas em aVL</em>
+    </div>
+  </div>
+  <div class="card-item" style="border-color:rgba(79,249,132,0.5);">
+    <span class="card-ico">🟢</span>
+    <div class="card-t" style="color:var(--green);">aVF — Perna Esquerda</div>
+    <div class="card-b">
+      <strong>Normalmente positivo</strong> em eixo normal. Olha a parede <strong>inferior</strong> do coração de baixo para cima.<br><br>
+      <strong>Junto com DI:</strong> DI positivo + aVF positivo = <strong>eixo normal</strong>! É o teste rápido mais cobrado.<br><br>
+      <strong style="color:var(--green);">Macete: "DI ✓ + aVF ✓ = eixo normal — os dois positivos!"</strong>
+    </div>
+  </div>
+</div>
+
+<div class="sec-divider"><h3>📍 Derivações Precordiais V1–V6 — Posição e Padrão</h3></div>
+
+<div class="compare-table" style="border-radius:14px;overflow:hidden;margin-bottom:20px;">
+  <table style="width:100%;border-collapse:collapse;">
+    <thead><tr><th>Derivação</th><th>Localização</th><th>QRS normal</th><th>O que "enxerga"</th></tr></thead>
+    <tbody>
+      <tr><td><strong>V1</strong></td><td>4º EIC, borda esternal <strong style="color:#e74c3c;">DIREITA</strong></td><td style="color:#e74c3c;">Predominantemente negativo (rS)</td><td>Septo + VD — vetor se afasta</td></tr>
+      <tr><td><strong>V2</strong></td><td>4º EIC, borda esternal <strong style="color:var(--green);">ESQUERDA</strong></td><td style="color:#e74c3c;">Negativo ou bifásico</td><td>Septo interventricular</td></tr>
+      <tr><td><strong>V3</strong></td><td>Entre V2 e V4</td><td>Transição (R = S)</td><td>Parede anterior do VE</td></tr>
+      <tr><td><strong>V4</strong></td><td>5º EIC, linha <strong>hemiclavicular esquerda</strong></td><td style="color:var(--green);">Positivo (R&gt;S)</td><td>Ápice do VE</td></tr>
+      <tr><td><strong>V5</strong></td><td>5º EIC, linha axilar <strong>ANTERIOR</strong> esquerda</td><td style="color:var(--green);">Positivo (R alto)</td><td>Parede lateral do VE</td></tr>
+      <tr><td><strong>V6</strong></td><td>5º EIC, linha axilar <strong>MÉDIA</strong> esquerda</td><td style="color:var(--green);">Positivo</td><td>Parede lateral do VE</td></tr>
+    </tbody>
+  </table>
 </div>
 
 <div class="info-block blue">
-  <div class="label">Checks de Normalidade</div>
-  <p>Em <strong>aVR</strong>: TODAS as ondas do QRS devem estar invertidas (negativas) — a máquina registra como negativo. Em <strong>V1</strong>: QRS parcialmente invertido (normal!). Esses são os checks de normalidade do ECG.</p>
+  <div class="label">💡 Progressão R nas Precordiais — Macete Visual</div>
+  <p>
+    De V1 → V6, a onda R vai <strong>crescendo progressivamente</strong> (progressão R normal):<br><br>
+    <strong>V1:</strong> r pequeno (rS) → <strong>V2-V3:</strong> transição → <strong>V4:</strong> R começa a dominar → <strong>V5-V6:</strong> R alto dominante<br><br>
+    <strong style="color:#f9c94f;">Macete: "V1 negativo → V6 positivo — como um amanhecer"</strong><br><br>
+    ⚠️ Progressão R ausente (R não cresce) → pode indicar infarto anterior.
+  </p>
 </div>
+
+<div class="info-block danger">
+  <div class="label">❗ Armadilha — V1, V2, V3 são bipolares?</div>
+  <p>"V1, V2 e V3 são derivações bipolares." → <strong>FALSO!</strong> São <strong>UNIPOLARES PRECORDIAIS</strong>. As bipolares são DI, DII e DIII (Triângulo de Einthoven). Precordiais são unipolares — têm apenas um eletrodo explorador positivo.</p>
+</div>
+
+<div class="sec-divider"><h3>📐 Eixo Elétrico — Tudo que Cai na Prova</h3></div>
+
+<div class="compare-table" style="border-radius:14px;overflow:hidden;margin-bottom:20px;">
+  <table style="width:100%;border-collapse:collapse;">
+    <thead><tr><th>Eixo</th><th>Faixa</th><th>DI</th><th>aVF</th><th>Causa comum</th></tr></thead>
+    <tbody>
+      <tr><td><strong style="color:var(--green);">Normal</strong></td><td>0° a +90°</td><td style="color:var(--green);">✓ Positivo</td><td style="color:var(--green);">✓ Positivo</td><td>Normal</td></tr>
+      <tr><td><strong style="color:#f9c94f;">Desvio Esquerdo</strong></td><td>0° a −90°</td><td style="color:var(--green);">✓ Positivo</td><td style="color:#e74c3c;">✗ Negativo</td><td>HVE, BRFE, IAM inferior</td></tr>
+      <tr><td><strong style="color:#e74c3c;">Desvio Direito</strong></td><td>+90° a +180°</td><td style="color:#e74c3c;">✗ Negativo</td><td style="color:var(--green);">✓ Positivo</td><td>HVD, TEP, BRDE, dextrocardia</td></tr>
+      <tr><td><strong style="color:var(--muted);">Extremo</strong></td><td>−90° a ±180°</td><td style="color:#e74c3c;">✗ Negativo</td><td style="color:#e74c3c;">✗ Negativo</td><td>Raro, patológico</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="formula">
+  Teste rápido do eixo: olhe DI e aVF<br>
+  DI ✓ + aVF ✓ = <strong>NORMAL</strong><br>
+  DI ✓ + aVF ✗ = <strong>DESVIO ESQUERDO</strong><br>
+  DI ✗ + aVF ✓ = <strong>DESVIO DIREITO</strong><br>
+  DI ✗ + aVF ✗ = <strong>EIXO EXTREMO</strong><br><br>
+  Eixo médio normal citado na prova: <strong>+60°</strong>
+</div>
+
+<div class="info-block success">
+  <div class="label">✓ Técnica das Isodifásicas — Passo a Passo</div>
+  <p>
+    1. Encontre a derivação com ondas isodifásicas (R = S, ou P praticamente zero)<br>
+    2. O eixo elétrico está <strong>perpendicular (90°)</strong> a essa derivação<br>
+    3. Para saber qual dos dois lados: olhe DII — se DII positivo → eixo no sentido horário; se negativo → anti-horário<br><br>
+    <strong>Exemplo:</strong> isodifásico em aVL (−30°) → eixo a 90° de aVL = <strong>+60°</strong> (normal médio)
+  </p>
+</div>
+
+<div class="sec-divider"><h3>🧠 Resumo Visual — Macetes Rápidos para Prova</h3></div>
+
+<div class="cg2">
+  <div class="card-item" style="border-color:rgba(231,76,60,0.4);">
+    <span class="card-ico">📋</span>
+    <div class="card-t">Derivações com QRS SEMPRE/FREQUENTEMENTE negativo</div>
+    <div class="card-b">
+      <strong style="color:#e74c3c;">aVR:</strong> SEMPRE negativo (P, QRS e T) — normal<br>
+      <strong style="color:#e74c3c;">V1:</strong> Predominantemente negativo (rS) — normal<br>
+      <strong style="color:#f9c94f;">V2:</strong> Pode ser negativo ou bifásico — normal<br><br>
+      <em style="color:var(--muted)">Se QRS positivo em aVR → inverteu os eletrodos ou dextrocardia!</em>
+    </div>
+  </div>
+  <div class="card-item" style="border-color:rgba(79,249,132,0.4);">
+    <span class="card-ico">📋</span>
+    <div class="card-t">Derivações com QRS SEMPRE/FREQUENTEMENTE positivo</div>
+    <div class="card-b">
+      <strong style="color:var(--green);">DII:</strong> Positivo em eixo normal — melhor derivação para ritmo<br>
+      <strong style="color:var(--green);">aVF:</strong> Positivo em eixo normal — representa parede inferior<br>
+      <strong style="color:var(--green);">V4–V6:</strong> Positivo — representam VE lateral<br><br>
+      <em style="color:var(--muted)">DII é a derivação padrão para identificar ritmo sinusal</em>
+    </div>
+  </div>
+  <div class="card-item" style="border-color:rgba(249,201,79,0.4);">
+    <span class="card-ico">📋</span>
+    <div class="card-t">aVL — O Curinga</div>
+    <div class="card-b">
+      Pode ser <strong>positivo, negativo ou isodifásico</strong> — depende do eixo.<br><br>
+      Em eixo normal (+60°): aVL tende a ser <strong>isodifásico</strong> (pois +60° é ⊥ a aVL que aponta −30°).<br><br>
+      <em style="color:var(--muted)">Não dá para memorizar aVL como "sempre X" — depende do paciente!</em>
+    </div>
+  </div>
+  <div class="card-item" style="border-color:rgba(79,156,249,0.4);">
+    <span class="card-ico">📋</span>
+    <div class="card-t">DII — A Derivação do Ritmo</div>
+    <div class="card-b">
+      DII é a derivação <strong>padrão para análise de ritmo</strong> porque:<br>
+      • Onda P bem visível e positiva<br>
+      • QRS positivo e nítido<br>
+      • Alinhada com o eixo elétrico médio normal (+60°)<br><br>
+      <em style="color:var(--muted)">Para calcular FC no ECG: use DII com os intervalos R-R</em>
+    </div>
+  </div>
+</div>
+
+<div class="sec-divider"><h3>🗺️ O que Cada Grupo de Derivações "Enxerga" no Coração</h3></div>
+
+<div class="compare-table" style="border-radius:14px;overflow:hidden;">
+  <table style="width:100%;border-collapse:collapse;">
+    <thead><tr><th>Parede do Coração</th><th>Derivações</th><th>Artéria Coronária</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Inferior</strong></td><td>DII, DIII, aVF</td><td>Coronária direita (CD)</td></tr>
+      <tr><td><strong>Lateral alta</strong></td><td>DI, aVL</td><td>Circunflexa (Cx)</td></tr>
+      <tr><td><strong>Lateral baixa</strong></td><td>V5, V6</td><td>Descendente anterior (DA) ou Cx</td></tr>
+      <tr><td><strong>Anterior / Septal</strong></td><td>V1, V2, V3, V4</td><td>Descendente anterior (DA)</td></tr>
+      <tr><td><strong>Cavidade (inverso)</strong></td><td>aVR</td><td>—</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="info-block warn">
+  <div class="label">⚠️ Por que isso importa na prova?</div>
+  <p>Se o ST está elevado em <strong>DII + DIII + aVF</strong> → infarto de parede <strong>inferior</strong>. Se está em <strong>V1–V4</strong> → infarto <strong>anterior/septal</strong>. O professor pode cobrar qual parede está comprometida dado o padrão de alterações.</p>
+</div>
+
 </div></div>
 
 <!-- ===== PEGADINHAS ===== -->
@@ -1302,11 +1360,7 @@ li { margin:5px 0; }
   <p>❌ <em>"O primeiro ruído cardíaco é gerado pelo fechamento das válvulas semilunares."</em> → <strong>FALSO.</strong> B1 = fechamento das válvulas <strong>AV (mitral + tricúspide)</strong> — início da sístole. B2 = fechamento das semilunares (aórtica + pulmonar) — início da diástole.</p>
 </div>
 
-<div class="info-block warn">
-  <div class="label">🟡 MÉDIA PRIORIDADE</div>
-  <h4>ANP promove retenção de sódio?</h4>
-  <p>❌ <em>"O Peptídeo Natriurético Auricular (ANP) promove retenção de sódio e água."</em> → <strong>FALSO.</strong> ANP é <strong>natriurético</strong> = promove <strong>EXCREÇÃO</strong> de sódio e água → reduz volemia e pressão arterial. Age em resposta ao estiramento atrial (sobrecarga de volume).</p>
-</div>
+
 
 <div class="info-block warn">
   <div class="label">🟡 MÉDIA PRIORIDADE</div>
@@ -1376,7 +1430,7 @@ li { margin:5px 0; }
 <!-- ===== QUIZ ===== -->
 <div id="quiz" class="section">
 <div class="container">
-<div class="chapter-title"><span class="chap-icon">❓</span> Simulado P2 — 112 Questões</div>
+<div class="chapter-title"><span class="chap-icon">❓</span> Simulado P2 — 90 Questões</div>
 <p style="color:var(--muted);font-size:13px;margin-bottom:24px;">Múltipla escolha e Verdadeiro/Falso com correção e explicação imediata. Inclui questões reais de provas comentadas.</p>
 <div class="quiz-container" id="quiz-container"></div>
 </div></div>
@@ -1453,8 +1507,6 @@ const flashcards = [
   ["Potenciais","Qual a dupla função do Ca²⁺ no coração?","1) ELÉTRICA: Fase 2 do PA — canal tipo L lento sustenta o platô. 2) MECÂNICA: CICR (Ca²⁺ do canal L dispara liberação de Ca²⁺ do RS) → ativa troponina C → contração. Ca²⁺ = chave do coração!"],
   ["Potenciais","Células nodais (NSA, NAV) — qual diferença do PA?","SEM fase 0 rápida de Na⁺ — dependem de Ca²⁺ tipo L para despolarização. Potencial de repouso mais positivo (~−55 mV). Despolarização lenta espontânea → rampa diastólica."],
   // --- REFRATÁRIO ---
-  ["Refratário","O que é o Período Refratário Absoluto (PRA)?","Célula completamente incapaz de responder — INDEPENDENTE da intensidade. Ocorre nas fases 0+1+2 (incluindo toda a meseta). Protege contra tetania cardíaca!"],
-  ["Refratário","Por que o coração não entra em tetania?","Por causa do PERÍODO REFRATÁRIO ABSOLUTO: dura ~200ms (toda a meseta). O músculo só pode ser re-estimulado após relaxar. Sem isso, uma segunda contração antes do relaxamento = tetania = morte."],
   // --- CONDUÇÃO ---
   ["Condução","Velocidades completas do sistema de condução","NSA→Aurículas: ~1m/s · Vias Internodais: 1–2m/s · Músculo Atrial: 0,3–0,5m/s · NAV: 0,02–0,05m/s (MAIS LENTO) · Feixe His: ~0,6m/s · Purkinje: 1,5–4m/s (MAIS RÁPIDO) · Músculo Ventricular: 0,3–0,5m/s"],
   ["Condução","Por que o NAV tem condução lenta (0,02–0,05 m/s)?","Retraso INTENCIONAL: permite que aurículas terminem de contrair completamente antes dos ventrículos se ativarem. Sem esse delay, a bomba cebadora atrial não completaria o enchimento ventricular."],
@@ -1490,7 +1542,6 @@ const flashcards = [
   ["⚠️ Pegadinha","Bomba cebadora — 80% ou 20%?","20–30%! A sístole atrial contribui com apenas 20–30% do enchimento ventricular. Os 70–80% ocorrem passivamente. FALSO afirmar 80%."],
   ["⚠️ Pegadinha","Tecido fibroso conduz o impulso atrial-ventricular?","FALSO! O anel fibroso é ISOLANTE. A única via elétrica atrial→ventricular é pelo Nó AV → Feixe de His. O anel fibroso SEPARA os dois sincícios."],
   ["⚠️ Pegadinha","Retorno venoso define pré-carga ou pós-carga?","PRÉ-CARGA! Retorno venoso → ↑ VTD → ↑ pré-carga. Pós-carga = resistência vascular periférica + pressão aórtica. Confundir isso é erro clássico."],
-  ["⚠️ Pegadinha","ANP — retém ou excreta sódio?","EXCRETA! ANP (Peptídeo Natriurético Auricular) é natriurético → promove excreção de Na⁺ e água → ↓ volemia → ↓ PA. Age em resposta ao estiramento atrial por sobrecarga de volume."],
   // --- CICLO CARDÍACO ---
   ["Ciclo Cardíaco","Quando as coronárias são mais perfundidas?","Durante a DIÁSTOLE ventricular. Na sístole, a pressão intramural alta comprime os vasos coronarianos. A relaxação diastólica permite fluxo máximo."],
   ["Ciclo Cardíaco","Ciclo cardíaco completo — duração e fases","~0,8 s a 75 bpm. Sequência: diástole (enchimento passivo) → sístole atrial (bomba cebadora, ~20%) → contração isovolumétrica → ejeção ventricular → relaxamento isovolumétrico → diástole."],
@@ -1499,7 +1550,6 @@ const flashcards = [
   ["Canais Iônicos","Vago → bradicardia — mecanismo iônico","ACh (vago) → receptores M2 → abre canais de K⁺ → ↑K⁺ sai → hiperpolarização do NSA → rampa diastólica mais lenta → mais tempo para atingir umbral → ↓ FC."],
   // --- CONTRAÇÃO ---
   ["Contração","Sequência do acoplamento excitação-contração","PA → Ca²⁺ tipo L entra → dispara CICR do RS → ↑↑ Ca²⁺ citosólico → Ca²⁺ + troponina C → libera tropomiosina → sítio ativo da actina exposto → miosina se liga → contração."],
-  ["Contração","Fosfocreatina — 2ª fonte de ATP na contração","Fosfocreatina reconstitui ATP rapidamente (sem O₂). Sustenta o exercício por 8–10 segundos. Sequência ATP: ATP armazenado (2–3s) → Fosfocreatina (8–10s) → Glicólise → β-oxidação."],
   // --- SINCÍCIO ---
   ["Sincício","Por que o impulso não vai de volta dos ventrículos aos átrios?","O anel fibroso é isolante. A condução é UNIDIRECIONAL por design anatômico. Sincício atrial e ventricular são separados — o único caminho é descendente: NSA → NAV → His → Purkinje → ventrículo."],
 ];
@@ -1526,7 +1576,6 @@ function initFlashcards() {
 
 // FILL-IN DATA
 const fillinData = [
-  { q:"O período refratário absoluto (PRA) ocorre nas fases _______ do potencial de ação e a célula é completamente incapaz de responder _______ da intensidade do estímulo.",
     opts:["A) Fase 3 apenas · dependendo", "B) Fases 0+1+2 (incluindo a meseta) · independente", "C) Fase 4 · dependendo", "D) Fases 1+2 · parcialmente"],
     correct:1, explain:"O PRA ocorre nas <strong>fases 0+1+2</strong> (incluindo toda a meseta). A célula é incapaz — <strong>independente</strong> da intensidade. Protege contra tetania cardíaca." },
   { q:"A Lei de Frank-Starling aplica-se principalmente aos _______, ajustando a _______ de contração, enquanto o Reflexo de Bainbridge atua na aurícula direita ajustando a _______.",
@@ -1576,7 +1625,6 @@ const quizData = [
   { q:'O retículo sarcoplasmático cardíaco é menos desenvolvido. Qual é a consequência fisiológica direta?', opts:['O coração não utiliza cálcio','O coração contrai exclusivamente com potássio','O coração necessita obrigatoriamente de cálcio extracelular além do armazenado','O coração depende exclusivamente de sódio'], cor:2, exp:'RS cardíaco menos desenvolvido → menor armazenamento de Ca²⁺ → coração NECESSITA OBRIGATORIAMENTE de Ca²⁺ extracelular. Diferença crítica em relação ao músculo esquelético.' },
   { q:'Qual é a velocidade de condução do NAV e qual o propósito desta lentidão?', opts:['~4,0 m/s — distribuição rápida','~1,0 m/s — não tem propósito','0,03 m/s — retraso intencional para enchimento ventricular completo','~0,6 m/s — filtro de estímulos'], cor:2, exp:'NAV conduz a 0,03 m/s — o mais lento. Propósito INTENCIONAL: permite que aurículas terminem de contrair completamente antes dos ventrículos. Sem isso a bomba cardíaca seria ineficiente.' },
   { q:'A MESETA (Fase 2) do PA cardíaco é mantida por qual equilíbrio iônico?', opts:['Entrada rápida de Na⁺ = saída de Ca²⁺','Saída de K⁺ ≈ entrada de Ca²⁺ (equilíbrio)','Entrada simultânea de Na⁺ e K⁺','Saída simultânea de Ca²⁺ e Na⁺'], cor:1, exp:'A Meseta é mantida pelo equilíbrio entre SAÍDA de K⁺ e ENTRADA de Ca²⁺ — ambos quase se igualam, mantendo o potencial positivo por ~200ms. Exclusiva do coração!' },
-  { q:'Durante o Período Refratário Absoluto (PRA), o que acontece?', opts:['Respondem apenas a estímulos de alta intensidade','São completamente incapazes de responder a QUALQUER estímulo','Estão em hiperpolarização','Os canais de Na⁺ estão abertos'], cor:1, exp:'No PRA, a célula é completamente incapaz de responder — independente da intensidade. Canais de Na⁺ e Ca²⁺ inativados. Ocorre nas fases 0+1+2 (toda a meseta). Protege contra tetania!' },
   { q:'Qual estrutura automática tem a MENOR frequência intrínseca e quando assume o comando?', opts:['NSA — em repouso','NAV — em bloqueio sinoatrial','Fibras de Purkinje — apenas quando NSA E NAV falham','Feixe de His — em bloqueio de ramo'], cor:2, exp:'Fibras de Purkinje: 15–40 bpm — frequência mais baixa. Marca-passo de EMERGÊNCIA. Assumem APENAS quando NSA e NAV falham completamente.' },
   { q:'Em qual situação a Lei de Frank-Starling DEIXA de funcionar?', opts:['Durante exercício físico intenso','Em coração com FC > 100 bpm','Em IC descompensada com estiramento excessivo','Quando a pré-carga está reduzida'], cor:2, exp:'Frank-Starling funciona SOMENTE dentro dos limites fisiológicos. Em IC descompensada, estiramento excessivo REDUZ a eficiência. A lei não se aplica em miocardiopatias ou disfunção sistólica grave.' },
   { q:'A pré-carga é definida em qual momento e como também pode ser chamada?', opts:['Sístole ventricular — sobrecarga de pressão','Diástole — sobrecarga de volume','Sístole atrial — sobrecarga de volume','Diástole — pós-resistência'], cor:1, exp:'Pré-carga: definida na DIÁSTOLE (enchimento ventricular). Representa o VTD ≈ 120mL. Também chamada "Sobrecarga de Volume". ↑ Retorno venoso = ↑ Pré-carga.' },
@@ -1608,23 +1656,11 @@ const quizData = [
   { q:'[PROVA] Se há alteração em DI, DII e aVL, qual eletrodo de membro deve ser suspeitado?', opts:['Braço direito','Braço esquerdo','Perna direita','Perna esquerda'], cor:0, exp:'DI, DII e aVL dependem do eletrodo do braço direito para formar os vetores. Alteração nessas 3 derivações → suspeitar do eletrodo do braço direito.' },
   { q:'[PROVA] O reflexo de Bainbridge está relacionado principalmente com:', opts:['Distensão das fibras ventriculares','Contração rápida dos músculos esqueléticos','Regulação da força de contração auricular','Regulação da frequência cardíaca'], cor:3, exp:'Bainbridge = reflexo aurículo-cardíaco que regula a FREQUÊNCIA CARDÍACA. Quando aumenta retorno venoso e há distensão atrial → ↑ FC. Relacionado ao cronotropismo — não força contrátil.' },
   { q:'[PROVA] Qual é o principal parâmetro que regula e define a pós-carga cardíaca?', opts:['Resistência vascular periférica','Elasticidade pulmonar','Fração de ejeção','Retorno venoso'], cor:0, exp:'Pós-carga = carga contra a qual o ventrículo ejeta. Aumenta quando aumenta a resistência vascular periférica / pressão arterial. Retorno venoso = pré-carga (não pós-carga).' },
-  { q:'[PROVA] Qual proteína mantém os filamentos de actina e miosina em posição no músculo esquelético?', opts:['Fibronina','Tinina','Cistina','Titina'], cor:3, exp:'TITINA — proteína elástica gigante que mantém o alinhamento dos filamentos grossos e contribui para a elasticidade do sarcômero. Pegadinha de nomes parecidos: Titina é a correta.' },
-  { q:'[PROVA] Para que ocorra contração do músculo esquelético, a acetilcolina é liberada porque:', opts:['Pequenas quantidades de K⁺ entram na fibra nervosa','Grandes quantidades de Na⁺ entram na membrana muscular','Quantidades de Ca²⁺ entram no terminal nervoso','Grandes quantidades de Cl⁻ entram no núcleo'], cor:2, exp:'Chegada do PA ao terminal pré-sináptico → abre canais de Ca²⁺. O Ca²⁺ que entra promove fusão de vesículas e libera ACh. O Na⁺ é importante no PA, mas a LIBERAÇÃO de ACh depende diretamente do Ca²⁺.' },
   { q:'[PROVA] A carga contra a qual o coração contrai e exerce sua força contrátil denomina-se:', opts:['Pré-carga','Diástole','Pós-carga','Sístole'], cor:2, exp:'Pós-carga = pressão/resistência que o ventrículo precisa vencer para ejetar sangue. Pré-carga = enchimento antes da contração. Pós-carga varia durante a sístole ventricular.' },
-  { q:'[PROVA] As fibras musculares UNITÁRIAS se caracterizam por (marque o INCORRETO):', opts:['Poder contrair cada fibra independentemente das demais','Estar associadas por membranas aderidas','Ser massa de fibras que contraem juntas','Estarem nas paredes da maioria das vísceras'], cor:0, exp:'INCORRETO: contrair cada fibra independentemente é característica das fibras MULTIUNITÁRIAS. Fibras unitárias funcionam como massa — muitas células comunicam e contraem JUNTAS.' },
-  { q:'[PROVA] Sobre temperatura e função cardíaca, qual afirmação é correta?', opts:['Apenas febre aumenta a FC; hipotermia não tem efeito','Temperatura não afeta a FC','Aumento de temperatura reduz a permeabilidade iônica','Febre ↑ FC; hipotermia ↓ FC; calor excessivo prolongado pode debilitar o coração'], cor:3, exp:'Febre aumenta FC; hipotermia reduz FC; calor excessivo prolongado pode enfraquecer o coração. A pegadinha: o calor NÃO reduz permeabilidade — aumenta. Afirmações sobre redução de permeabilidade pelo calor são FALSAS.' },
   { q:'[PROVA] Na curva pressão-volume ventricular, a onda T do ECG representa:', opts:['Repolarização auricular','Contração da aurícula','Repolarização do ventrículo','Despolarização do ventrículo'], cor:2, exp:'Onda T = repolarização ventricular (fase 3 do PA). Precede o relaxamento ventricular. QRS = despolarização ventricular; onda P = despolarização atrial.' },
   { q:'[PROVA] O aumento do tônus simpático:', opts:['Diminui a pressão para cada volume','Aumenta a pressão para cada volume arterial ou venoso','Mantém a pressão igual','Não tem efeito sobre a pressão'], cor:1, exp:'Simpático causa vasoconstrição → tônus vascular ↑ → para o mesmo volume, a pressão é MAIOR. O parassimpático não tem o mesmo efeito vascular sistêmico amplo.' },
   { q:'[PROVA] "O gasto cardíaco é controlado pela soma de todos os fluxos teciduais locais." Corresponde a qual parte da teoria básica da função circulatória?', opts:['Primeira parte','Segunda parte','Terceira parte','Quarta parte'], cor:0, exp:'Na teoria básica de Guyton, a PRIMEIRA PARTE: o fluxo para cada tecido é controlado conforme suas necessidades locais; o DC acompanha a soma desses fluxos. O professor costuma cobrar essa frase quase literal.' },
-  { q:'[PROVA] A enzima ativada para contração do músculo liso é a miosina quinase. Essa afirmação é:', opts:['Verdadeiro','Falso — é adenil ciclase','Falso — é fosfato desidrogenase','Falso — é miosina fosfatase'], cor:0, exp:'VERDADEIRO. No músculo liso, Ca²⁺-calmodulina ativa a MIOSINA QUINASE de cadeia leve → fosforilação da miosina → contração. Miosina fosfatase DESFOSFORILA a miosina → favorece relaxamento.' },
   { q:'[PROVA] A pressão a ser gerada no ventrículo esquerdo para abrir a válvula aórtica é aproximadamente:', opts:['100 mmHg','60 mmHg','80 mmHg','120 mmHg'], cor:3, exp:'O ventrículo esquerdo precisa superar a pressão aórtica. Em condições didáticas usa-se ~120 mmHg (pressão sistólica). Esta é a resposta padrão para provas.' },
-  { q:'[PROVA] Lipossolubilidade, em pareamento, corresponde a:', opts:['Pressão necessária para deter osmose','Transporte contra gradiente','Fator que determina rapidez com que substância atravessa a membrana','Potencial que impede difusão líquida'], cor:2, exp:'Lipossolubilidade = fator que determina a RAPIDEZ de passagem pela bicamada lipídica. Quanto mais lipossolúvel, mais fácil a travessia. Não é osmose nem transporte ativo.' },
-  { q:'[PROVA] Potencial de Nernst corresponde a:', opts:['Pressão osmótica','Transporte ativo','Lipossolubilidade','Nível de potencial através da membrana que impede a difusão líquida de um íon'], cor:3, exp:'Potencial de Nernst = potencial elétrico necessário para equilibrar o gradiente químico de um íon específico, impedindo sua difusão líquida. NÃO é sinônimo de pressão osmótica nem potencial de ação total.' },
-  { q:'[PROVA] Difusão corresponde a:', opts:['Pressão necessária para deter osmose','Transporte contra gradiente','Fator lipossolúvel','Energia cinética que gera movimento normal das moléculas'], cor:3, exp:'Difusão = movimento espontâneo de moléculas pela energia cinética, do maior para menor gradiente. Quando exige energia contra o gradiente = transporte ativo.' },
-  { q:'[PROVA] Retroalimentação positiva corresponde a:', opts:['Retorno ao valor médio','Proteína transportadora contra gradiente','Lipossolubilidade','Processo que amplifica o estímulo, como abertura de canais de Na⁺ no PA'], cor:3, exp:'Feedback positivo AMPLIFICA a mudança inicial. No PA, entrada de Na⁺ abre mais canais de Na⁺ → ainda mais Na⁺ entra → explosivo. Feedback negativo CORRIGE e estabiliza.' },
-  { q:'[PROVA] Transporte ativo corresponde a:', opts:['Osmose','Proteína transportadora contra gradiente de concentração','Difusão simples','Energia cinética'], cor:1, exp:'Transporte ativo = usa energia (ATP) e proteína transportadora para mover substâncias CONTRA o gradiente. Ex: Bomba Na⁺/K⁺. Transporte passivo não gasta energia metabólica direta.' },
-  { q:'[PROVA] Vmax, na difusão facilitada, corresponde a:', opts:['Retroalimentação negativa','−86 mV','Transporte ativo','Na difusão facilitada, o fluxo se aproxima de um máximo'], cor:3, exp:'Vmax = saturação dos transportadores. Quando todos estão ocupados, o fluxo não aumenta mais — atinge o máximo. Difusão SIMPLES não tem Vmax porque não depende de transportadores.' },
-  { q:'[PROVA] Retroalimentação negativa corresponde a:', opts:['Se fator aumenta ou diminui, surgem mudanças que fazem retornar ao valor médio','−86 mV','Movimento contra gradiente','+61 mV'], cor:0, exp:'Feedback negativo = mecanismo de HOMEOSTASE. Corrije desvios e retorna ao valor de referência. Ex: controle de pressão arterial, temperatura. Feedback positivo amplifica — não corrige.' },
   { q:'[PROVA] O complexo QRS marca:', opts:['Repolarização atrial','Despolarização e contração auricular','Despolarização e contração ventricular','Repolarização ventricular'], cor:2, exp:'QRS = despolarização ventricular, que desencadeia a contração dos ventrículos. Onda P = despolarização atrial. Onda T = repolarização ventricular. Repolarização atrial fica oculta pelo QRS.' },
   { q:'[PROVA] A onda T marca:', opts:['Despolarização atrial','Despolarização ventricular','Contração auricular','Repolarização dos ventrículos'], cor:3, exp:'Onda T = repolarização ventricular (fase 3 do PA). Representa a recuperação elétrica dos ventrículos. NÃO representa repolarização atrial (que fica oculta no QRS).' },
   { q:'[PROVA] A repolarização da aurícula no ECG:', opts:['É sempre a onda T','É o complexo QRS','É a onda P','Sua ausência visível não significa patologia'], cor:3, exp:'A repolarização atrial EXISTE mas fica mascarada pelo complexo QRS (muito mais intenso). Não visualizá-la é NORMAL — não é patologia.' },
@@ -1635,7 +1671,6 @@ const quizData = [
   { q:'[PROVA] Quantidade de sangue ejetada pelo coração em 1 minuto:', opts:['Volume telesistólico','Volume sistólico','Gasto cardíaco','Volume telediastólico'], cor:2, exp:'Gasto Cardíaco = sangue ejetado por MINUTO = VS × FC. Volume Sistólico é por batimento — não por minuto.' },
   { q:'[PROVA] Derivação que usa o registro do eletrodo da perna esquerda:', opts:['aVR','aVL','aVF','V1'], cor:2, exp:'aVF olha o coração a partir dos pés (perna esquerda). aVR = braço direito. aVL = braço esquerdo.' },
   { q:'[PROVA] Quantidade de sangue residual no interior do ventrículo ao final da sístole:', opts:['Volume telesistólico','Volume sistólico','Gasto cardíaco','Volume telediastólico'], cor:0, exp:'VTS = Volume Telesistólico = volume RESIDUAL após a contração ≈ 50 mL. A palavra "residual" entrega a resposta.' },
-  { q:'[PROVA] Período do potencial de membrana em que não se pode produzir novo PA enquanto a membrana segue despolarizada:', opts:['V1','Pós-carga','Período refratário','Unidade motora'], cor:2, exp:'Período Refratário (Absoluto) = célula incapaz de gerar novo PA — canais de Na⁺ inativados. Protege contra tetania cardíaca. Abrange fases 0+1+2 (toda a meseta).' },
   { q:'[PROVA] Terminal de motoneurônio e grupo de fibras de músculo esquelético que ele inerva:', opts:['Período refratário','Pós-carga','aVR','Unidade motora'], cor:3, exp:'Unidade Motora = um neurônio motor somático e TODAS as fibras musculares que ele inerva. NÃO confundir com sincício funcional cardíaco.' },
   { q:'[PROVA] Tensão nas paredes ventriculares durante a ejeção sanguínea na sístole:', opts:['Pré-carga','Período refratário','Pós-carga','Unidade motora'], cor:2, exp:'Pós-carga = tensão/resistência nas paredes ventriculares durante a EJEÇÃO (sístole). Pré-carga = enchimento antes da sístole.' },
   { q:'[PROVA] Derivação obtida com eletrodo no 4° espaço intercostal direito, linha paraesternal:', opts:['V1','V2','aVR','aVF'], cor:0, exp:'V1 = 4° espaço intercostal DIREITO junto ao esterno (linha paraesternal direita). V2 = 4° espaço intercostal ESQUERDO. Posição clássica de prova.' },
@@ -1673,15 +1708,12 @@ const quizData = [
   { q:'[V/F] A pós-carga é determinada principalmente pelo retorno venoso durante a diástole.', opts:['VERDADEIRO — retorno venoso aumenta pós-carga','FALSO — pós-carga é determinada pela resistência vascular periférica e pressão aórtica. Retorno venoso define PRÉ-carga','VERDADEIRO — ambos são a mesma coisa','FALSO — pós-carga é determinada pela FC'], cor:1, exp:'FALSO. Pós-carga = resistência vascular periférica + pressão aórtica (resitência à ejeção na sístole). Retorno venoso define PRÉ-CARGA (VTD, enchimento diastólico).' },
   { q:'[ALT] Qual estrutura assume como marcapasso com frequência de 40–60 bpm quando o nó sinusal falha?', opts:['Fibras de Purkinje','Nó Atrioventricular (AV)','Feixe de His','Músculo auricular'], cor:1, exp:'NAV assume como marcapasso SECUNDÁRIO: 40–60 bpm. Sequência de falhas: NSA (60–100 bpm) → NAV (40–60 bpm) → Purkinje (15–40 bpm). A FC cai a cada falha do marcapasso superior.' },
   { q:'[ALT] Na contração muscular, qual íon se liga à troponina C para liberar o sítio ativo da actina?', opts:['Na⁺','K⁺','Ca²⁺','Mg²⁺'], cor:2, exp:'Ca²⁺ se liga à TROPONINA C → modifica o complexo troponina-tropomiosina → libera o sítio ativo da actina → miosina se liga → contração. Sem Ca²⁺ = sem contração.' },
-  { q:'[ALT] Na contração isotônica, o que ocorre com o tônus e o comprimento muscular?', opts:['Tônus muda, comprimento fica igual','Tônus fica igual, comprimento muda','Ambos mudam em sentidos opostos','Ambos ficam iguais'], cor:1, exp:'Contração ISOTÔNICA = "tônus igual" → o comprimento MUDA (músculo encurta ou alonga). Contração ISOMÉTRICA = comprimento igual, mas o tônus (tensão) muda.' },
   { q:'[ALT] A fração de ejeção em coração saudável é de aproximadamente:', opts:['30–40%','80–90%','~60%','~10%'], cor:2, exp:'FE normal ≈ 55–70% (valor didático: ~60%). FE = VS/VTD = 70/120 ≈ 58%. FE < 40% = IC sistólica grave. FE ≥ 50% com sintomas = IC com FE preservada (disfunção diastólica).' },
   { q:'[ABERTA] Complete: O volume de sangue ejetado pelo VE a cada batimento em repouso (~70 mL) denomina-se:', opts:['Volume Telediastólico (VTD)','Volume Telesistólico (VTS)','Volume Sistólico (VS)','Débito Cardíaco (DC)'], cor:2, exp:'Volume Sistólico (VS) = volume EJETADO por batimento. VS = VTD − VTS = 120 − 50 = 70 mL. Não confundir com DC (por minuto) nem VTD (total no final da diástole).' },
   { q:'[ABERTA] A velocidade padrão do papel no ECG convencional é:', opts:['10 mm/s','50 mm/s','25 mm/s','100 mm/s'], cor:2, exp:'25 mm/s é o padrão universal. Com essa velocidade: 1 mm (quadradinho) = 0,04 s; 5 mm (quadrado grande) = 0,2 s; 25 mm = 1 segundo.' },
   { q:'[ABERTA] O grau de tensão/estiramento da parede ventricular no final da diástole, determinado pelo retorno venoso, denomina-se:', opts:['Pós-carga','Débito Cardíaco','Pré-carga','Fração de Ejeção'], cor:2, exp:'PRÉ-CARGA = tensão da parede ventricular no final da diástole. Determinada pelo retorno venoso e VTD. Quanto maior o retorno venoso → maior VTD → maior pré-carga → Lei de Frank-Starling.' },
-  { q:'[ALT] Qual é a 2ª fonte de ATP para a contração muscular e por quanto tempo sustenta o exercício?', opts:['Glicólise aeróbica — 30 min','ATP armazenado — 2–3 s','Fosfocreatina — 8–10 s','Beta-oxidação — 60 min'], cor:2, exp:'Fosfocreatina é a 2ª fonte: reconstitui ATP rapidamente, sustenta por 8–10 s. Sequência: ATP armazenado (2–3s) → Fosfocreatina (8–10s) → Glicólise anaeróbica → Glicólise aeróbica → β-oxidação.' },
   { q:'[ALT] Um paciente perde o nó sinusal; o NAV assume com 56 VS × 53 FC. Qual o débito cardíaco resultante?', opts:['5.600 mL/min','4.200 mL/min','2.968 mL/min (~2,9 L)','1.500 mL/min'], cor:2, exp:'DC = VS × FC = 56 × 53 = 2.968 mL/min ≈ 2,9 L/min. Com NSA normal: 70×80=5.600 mL/min. Perder o NSA reduz quase 50% do débito — explica os sintomas graves de bloqueio sinoatrial.' },
   { q:'[ALT] Qual é o segmento do ECG que, quando elevado ou deprimido, indica IAM ou isquemia?', opts:['Segmento PR','Intervalo RR','Segmento ST','Onda U'], cor:2, exp:'Segmento ST: isoelétrico = normal (Fase 2/meseta). Supra-ST = IAM (corrente de lesão, oclusão total). Infra-ST = isquemia subendocárdica. O mais importante da emergência cardíaca!' },
-  { q:'[ALT] Na contração isométrica, o que ocorre?', opts:['O comprimento muda, o tônus fica igual','O tônus muda, o comprimento fica igual','Ambos mudam','Nenhum muda'], cor:1, exp:'Contração ISOMÉTRICA = "comprimento igual" (iso=igual, métrico=comprimento) → o TÔNUS (tensão) muda, mas o músculo não encurta. Ex: segurar um peso estático sem mover o braço.' },
 ];
 
 
