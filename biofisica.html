@@ -452,6 +452,27 @@ li { margin:5px 0; }
   .container { padding: 16px 14px; }
   .flashcard-grid { grid-template-columns: 1fr; }
   .t2c { grid-template-columns: 1fr; }
+
+  /* ── FIX MOBILE: rodapé com elementos fixos cobre o conteúdo ──────── */
+  /* Espaço extra no fim da página para o último botão não ficar coberto */
+  body { padding-bottom: calc(140px + env(safe-area-inset-bottom, 0px)); }
+
+  /* Botão "Voltar" — mais compacto e elevado para não sobrepor o timer */
+  a[href="dashboard.html"] {
+    bottom: 18px !important; left: 14px !important;
+    padding: 9px 18px !important; font-size: 12px !important;
+  }
+  /* Botão "↑ topo" — sobe pra não bater com o timer */
+  #scrolltop {
+    bottom: 80px !important; right: 14px !important;
+    width: 40px !important; height: 40px !important;
+    font-size: 16px !important;
+  }
+  /* Widget do timer de estudo — garante posição abaixo do scrolltop */
+  .st-widget { bottom: 14px !important; right: 14px !important; }
+
+  /* Botões de "Próxima" do quiz com margem extra no mobile */
+  .quiz-nav { margin-bottom: 20px !important; }
 }
 </style>
 </head>
