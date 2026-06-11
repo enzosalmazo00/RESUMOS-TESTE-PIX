@@ -302,6 +302,28 @@ nav.tabs button.active {
 }
 .score-msg { color:var(--muted); font-size:16px; margin-top:8px; }
 
+/* TOGGLE BILÍNGUE — Questões de Prova */
+.prlang-btn {
+  background:var(--card); border:1px solid var(--border);
+  color:var(--muted); padding:8px 18px; border-radius:50px;
+  font-family:var(--font-display); font-size:13px; font-weight:600;
+  cursor:pointer; transition:all 0.2s;
+}
+.prlang-btn:hover { border-color:#e74c3c; color:#fff; }
+.prlang-btn.active {
+  background:linear-gradient(135deg,#e74c3c,#f9c94f);
+  color:var(--bg); border-color:transparent;
+  box-shadow:0 4px 16px rgba(231,76,60,0.3);
+}
+.pr-orig {
+  font-size:13px; color:var(--muted); font-style:italic;
+  margin-top:12px; padding:12px 16px; border-left:2px solid rgba(231,76,60,0.3);
+  background:rgba(0,0,0,0.2); border-radius:0 8px 8px 0;
+  display:none;
+}
+.pr-orig.show { display:block; }
+.pr-orig strong { color:#f9c94f; font-style:normal; }
+
 .formula {
   background: rgba(0,0,0,0.4); border:1px solid rgba(231,76,60,0.3);
   border-radius:12px; padding:20px 24px; margin:20px 0;
@@ -462,6 +484,7 @@ li { margin:5px 0; }
   <button onclick="showSection('flashcards',this)">🃏 Flashcards</button>
   <button onclick="showSection('fillin',this)">✏️ Completar</button>
   <button onclick="showSection('quiz',this)">❓ Simulado</button>
+  <button onclick="showSection('provareal',this)">📝 Caíram na Prova</button>
 </nav>
 
 <!-- ===== INTRODUÇÃO ===== -->
@@ -1435,6 +1458,21 @@ li { margin:5px 0; }
 <div class="quiz-container" id="quiz-container"></div>
 </div></div>
 
+<!-- ===== CAÍRAM NA PROVA ===== -->
+<div id="provareal" class="section">
+<div class="container">
+<div class="chapter-title"><span class="chap-icon">📝</span> Questões que Caíram em Prova</div>
+<p style="color:var(--muted);font-size:13px;margin-bottom:16px;">Questões reais cobradas nas provas anteriores de Biofísica Cardíaca. Bilíngue ES/PT — clique no toggle para alternar.</p>
+
+<!-- Toggle bilíngue -->
+<div style="display:flex;justify-content:center;gap:8px;margin-bottom:28px;">
+  <button id="provarealLangEs" class="prlang-btn active" onclick="setProvarealLang('es')">🇪🇸 Español</button>
+  <button id="provarealLangPt" class="prlang-btn" onclick="setProvarealLang('pt')">🇧🇷 Português</button>
+</div>
+
+<div class="quiz-container" id="provareal-container"></div>
+</div></div>
+
 <button id="scrolltop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <!-- BOTÃO VOLTAR -->
@@ -1477,6 +1515,7 @@ function showSection(id, btn) {
   if(id==='flashcards') initFlashcards();
   if(id==='fillin') initFillin();
   if(id==='quiz') initQuiz();
+  if(id==='provareal') initProvareal();
 }
 
 function toggleGloss(el) {
@@ -1746,7 +1785,7 @@ function renderQuestion() {
 }
 function answer(chosen) {
   const q = quizData[qIdx];
-  const opts = document.querySelectorAll('.quiz-opt');
+  const opts = document.querySelectorAll('#quiz-container .quiz-opt');
   opts.forEach(o=>{ o.classList.add('answered'); o.style.pointerEvents='none'; });
   if(chosen===q.cor){ opts[chosen].classList.add('correct'); score++; }
   else { opts[chosen].classList.add('wrong'); opts[q.cor].classList.add('correct'); }
@@ -1771,6 +1810,240 @@ function renderScore(container) {
   </div>`;
 }
 function restartQuiz() { qIdx=0; score=0; quizInited=false; initQuiz(); }
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// CAÍRAM NA PROVA — Questões reais bilíngues ES/PT
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const provarealData = [
+  // 1
+  {
+    q_es: "Al periodo de tiempo que dura el potencial de acción de los ventrículos, se conoce como:",
+    q_pt: "O período de tempo que dura o potencial de ação dos ventrículos é conhecido como:",
+    opts_es: ["Sístole Eléctrica", "Sístole Mecánica", "Sístole Hemodinámica", "Asistolia"],
+    opts_pt: ["Sístole Elétrica", "Sístole Mecânica", "Sístole Hemodinâmica", "Assistolia"],
+    cor: 0,
+    exp_es: "<strong>Correcta: a) Sístole Eléctrica.</strong> Es el tiempo total del potencial de acción ventricular (despolarización + repolarización), incluyendo las fases 0, 1, 2, 3. La <em>sístole mecánica</em> corresponde a la contracción muscular efectiva (sólo durante la meseta del PA). La <em>hemodinámica</em> se refiere a la eyección de sangre. <em>Asistolia</em> es ausencia de actividad eléctrica.",
+    exp_pt: "<strong>Correta: a) Sístole Elétrica.</strong> É o tempo total do potencial de ação ventricular (despolarização + repolarização), incluindo as fases 0, 1, 2, 3. A <em>sístole mecânica</em> corresponde à contração muscular efetiva (apenas durante o platô do PA). A <em>hemodinâmica</em> se refere à ejeção de sangue. <em>Assistolia</em> é ausência de atividade elétrica."
+  },
+
+  // 2.16 — Período Refractario (B)
+  {
+    q_es: "Período del potencial de membrana donde no se puede producir un nuevo potencial de acción en una fibra o célula excitable mientras la membrana sigue despolarizada por el potencial precedente.",
+    q_pt: "Período do potencial de membrana em que não se pode produzir um novo potencial de ação em uma fibra ou célula excitável enquanto a membrana ainda está despolarizada pelo potencial precedente.",
+    opts_es: ["V1", "Período Refractario", "Poscarga", "Unidad Motora", "AVR", "Precarga"],
+    opts_pt: ["V1", "Período Refratário", "Pós-carga", "Unidade Motora", "AVR", "Pré-carga"],
+    cor: 1,
+    exp_es: "<strong>Correcta: B) Período Refractario.</strong> Es la propiedad de la membrana excitable de no responder a nuevos estímulos mientras se mantiene despolarizada. En el miocardio dura prácticamente toda la sístole (~250 ms), lo que <strong>impide la tetanización</strong> y protege la función de bomba.",
+    exp_pt: "<strong>Correta: B) Período Refratário.</strong> É a propriedade da membrana excitável de não responder a novos estímulos enquanto permanece despolarizada. No miocárdio dura praticamente toda a sístole (~250 ms), o que <strong>impede a tetanização</strong> e protege a função de bomba."
+  },
+
+  // 2.17 — Unidad Motora (D)
+  {
+    q_es: "Consiste en una terminal de motoneurona y un grupo de fibras de músculo esquelético que ella inerva.",
+    q_pt: "Consiste em uma terminação de motoneurônio e um grupo de fibras de músculo esquelético que ela inerva.",
+    opts_es: ["V1", "Período Refractario", "Poscarga", "Unidad Motora", "AVR", "Precarga"],
+    opts_pt: ["V1", "Período Refratário", "Pós-carga", "Unidade Motora", "AVR", "Pré-carga"],
+    cor: 3,
+    exp_es: "<strong>Correcta: D) Unidad Motora.</strong> Es la unidad funcional del músculo esquelético: una motoneurona α + todas las fibras musculares que ella inerva. Cuanto menor el número de fibras por motoneurona, mayor la precisión del movimiento (músculos extraoculares ~10 fibras, glúteo ~2000).",
+    exp_pt: "<strong>Correta: D) Unidade Motora.</strong> É a unidade funcional do músculo esquelético: um motoneurônio α + todas as fibras musculares que ele inerva. Quanto menor o número de fibras por motoneurônio, maior a precisão do movimento (músculos extraoculares ~10 fibras, glúteo ~2000)."
+  },
+
+  // 2.18 — AVR (E)
+  {
+    q_es: "Derivación que en condiciones normales debe presentar todas las ondas invertidas, siendo una derivación unipolar.",
+    q_pt: "Derivação que em condições normais deve apresentar todas as ondas invertidas, sendo uma derivação unipolar.",
+    opts_es: ["V1", "Período Refractario", "Poscarga", "Unidad Motora", "AVR", "Precarga"],
+    opts_pt: ["V1", "Período Refratário", "Pós-carga", "Unidade Motora", "AVR", "Pré-carga"],
+    cor: 4,
+    exp_es: "<strong>Correcta: E) AVR.</strong> aVR es una derivación unipolar aumentada que mira el corazón <em>desde el hombro derecho</em>. Como el vector eléctrico cardíaco se aleja de ese punto, todas las ondas (P, QRS, T) aparecen <strong>invertidas</strong> en un ECG normal. Si están positivas, sospechar inversión de electrodos o dextrocardia.",
+    exp_pt: "<strong>Correta: E) AVR.</strong> aVR é uma derivação unipolar aumentada que olha o coração <em>a partir do ombro direito</em>. Como o vetor elétrico cardíaco se afasta desse ponto, todas as ondas (P, QRS, T) aparecem <strong>invertidas</strong> num ECG normal. Se estiverem positivas, suspeite de inversão de eletrodos ou dextrocardia."
+  },
+
+  // 2.19 — Poscarga (C)
+  {
+    q_es: "Tensión que se presenta, durante la sístole, en las paredes ventriculares durante la eyección sanguínea.",
+    q_pt: "Tensão que se apresenta, durante a sístole, nas paredes ventriculares durante a ejeção sanguínea.",
+    opts_es: ["V1", "Período Refractario", "Poscarga", "Unidad Motora", "AVR", "Precarga"],
+    opts_pt: ["V1", "Período Refratário", "Pós-carga", "Unidade Motora", "AVR", "Pré-carga"],
+    cor: 2,
+    exp_es: "<strong>Correcta: C) Poscarga.</strong> Es la resistencia que el ventrículo debe vencer para eyectar la sangre — depende principalmente de la <strong>presión aórtica</strong> y la resistencia vascular periférica. ↑ poscarga (hipertensión, estenosis aórtica) = más trabajo cardíaco. NO confundir con precarga (volumen telediastólico).",
+    exp_pt: "<strong>Correta: C) Pós-carga.</strong> É a resistência que o ventrículo deve vencer para ejetar o sangue — depende principalmente da <strong>pressão aórtica</strong> e da resistência vascular periférica. ↑ pós-carga (hipertensão, estenose aórtica) = mais trabalho cardíaco. NÃO confundir com pré-carga (volume telediastólico)."
+  },
+
+  // 2.20 — V1 (A)
+  {
+    q_es: "Derivación que se logra al utilizar el registro del electrodo que se posiciona en el 4° Espacio Intercostal derecho, sobre la línea paraesternal.",
+    q_pt: "Derivação obtida pelo registro do eletrodo posicionado no 4° espaço intercostal direito, sobre a linha paraesternal.",
+    opts_es: ["V1", "Período Refractario", "Poscarga", "Unidad Motora", "AVR", "Precarga"],
+    opts_pt: ["V1", "Período Refratário", "Pós-carga", "Unidade Motora", "AVR", "Pré-carga"],
+    cor: 0,
+    exp_es: "<strong>Correcta: A) V1.</strong> Las derivaciones precordiales se posicionan así: <strong>V1 = 4° EIC derecho paraesternal</strong>, V2 = 4° EIC izquierdo paraesternal, V3 entre V2 y V4, V4 = 5° EIC línea medioclavicular izquierda, V5 = línea axilar anterior izquierda, V6 = línea axilar media izquierda. V1 y V2 evalúan septo y ventrículo derecho.",
+    exp_pt: "<strong>Correta: A) V1.</strong> As derivações precordiais se posicionam assim: <strong>V1 = 4° EIC direito paraesternal</strong>, V2 = 4° EIC esquerdo paraesternal, V3 entre V2 e V4, V4 = 5° EIC linha hemiclavicular esquerda, V5 = linha axilar anterior esquerda, V6 = linha axilar média esquerda. V1 e V2 avaliam septo e ventrículo direito."
+  },
+
+  // 3
+  {
+    q_es: "El estiramiento de la pared ventricular previo a la sístole es un parámetro fisiológico para que el músculo cardíaco adecue su fuerza muscular de contracción, y está relacionado con el cumplimiento de:",
+    q_pt: "O estiramento da parede ventricular previamente à sístole é um parâmetro fisiológico para que o músculo cardíaco adeque sua força muscular de contração, e está relacionado ao cumprimento de:",
+    opts_es: ["Ley de Poiseuille", "Reflejo Vasovagal", "Reflejo de Bainbridge", "Ley de Frank-Starling"],
+    opts_pt: ["Lei de Poiseuille", "Reflexo Vasovagal", "Reflexo de Bainbridge", "Lei de Frank-Starling"],
+    cor: 3,
+    exp_es: "<strong>Correcta: d) Ley de Frank-Starling.</strong> Cuanto más se estiran las fibras miocárdicas (mayor volumen telediastólico/precarga), mayor la fuerza de contracción — hasta un punto óptimo. Las alternativas falsas: <em>Poiseuille</em> rige el flujo en tubos rígidos (Q ∝ ΔP·r⁴/ηL); <em>Vasovagal</em> es respuesta autonómica con bradicardia y vasodilatación; <em>Bainbridge</em> es taquicardia refleja por estiramiento atrial.",
+    exp_pt: "<strong>Correta: d) Lei de Frank-Starling.</strong> Quanto mais as fibras miocárdicas se estiram (maior volume telediastólico/pré-carga), maior a força de contração — até um ponto ótimo. As alternativas falsas: <em>Poiseuille</em> rege o fluxo em tubos rígidos (Q ∝ ΔP·r⁴/ηL); <em>Vasovagal</em> é resposta autonômica com bradicardia e vasodilatação; <em>Bainbridge</em> é taquicardia reflexa por estiramento atrial."
+  },
+
+  // 4
+  {
+    q_es: "Es la cantidad de flujo sanguíneo que es eyectado por el corazón a los grandes vasos durante 1 sístole:",
+    q_pt: "É a quantidade de fluxo sanguíneo que é ejetado pelo coração para os grandes vasos durante 1 sístole:",
+    opts_es: ["Volumen Sistólico", "Ciclo Cardiaco", "Gasto Cardiaco", "Retorno Venoso"],
+    opts_pt: ["Volume Sistólico", "Ciclo Cardíaco", "Débito Cardíaco", "Retorno Venoso"],
+    cor: 0,
+    exp_es: "<strong>Correcta: a) Volumen Sistólico.</strong> VS = volumen eyectado por latido (~70 mL en adulto en reposo) = VDF − VSF. Las alternativas falsas: <em>Ciclo cardíaco</em> es el conjunto de eventos eléctricos+mecánicos de un latido; <em>Gasto cardíaco</em> (DC) es VS × FC (volumen/minuto, ~5 L/min); <em>Retorno venoso</em> es el volumen que llega a las cavidades derechas.",
+    exp_pt: "<strong>Correta: a) Volume Sistólico.</strong> VS = volume ejetado por batimento (~70 mL em adulto em repouso) = VDF − VSF. As alternativas falsas: <em>Ciclo cardíaco</em> é o conjunto de eventos elétricos+mecânicos de um batimento; <em>Débito cardíaco</em> (DC) é VS × FC (volume/minuto, ~5 L/min); <em>Retorno venoso</em> é o volume que chega às câmaras direitas."
+  },
+
+  // 5
+  {
+    q_es: "A la propiedad cardíaca de poder conducir los potenciales de acción (conductividad), se puede denominar:",
+    q_pt: "A propriedade cardíaca de poder conduzir os potenciais de ação (condutividade) pode ser denominada:",
+    opts_es: ["Cronotropismo", "Batmotropismo", "Inotropismo", "Dromotropismo"],
+    opts_pt: ["Cronotropismo", "Batmotropismo", "Inotropismo", "Dromotropismo"],
+    cor: 3,
+    exp_es: "<strong>Correcta: d) Dromotropismo.</strong> Mnemotécnica de las propiedades cardíacas: <strong>Dromo</strong> = condución (velocidad de propagación del PA); <strong>Crono</strong> = frecuencia (automatismo); <strong>Bat(m)mo</strong> = excitabilidad (capacidad de responder a estímulos); <strong>Ino</strong> = fuerza de contracción. ↑ Dromotropismo (simpático) = conducción más rápida; ↓ Dromotropismo (parasimpático, bloqueos) = conducción más lenta.",
+    exp_pt: "<strong>Correta: d) Dromotropismo.</strong> Mnemônico das propriedades cardíacas: <strong>Dromo</strong> = condução (velocidade de propagação do PA); <strong>Crono</strong> = frequência (automatismo); <strong>Bat(m)mo</strong> = excitabilidade (capacidade de responder a estímulos); <strong>Ino</strong> = força de contração. ↑ Dromotropismo (simpático) = condução mais rápida; ↓ Dromotropismo (parassimpático, bloqueios) = condução mais lenta."
+  },
+
+  // 6
+  {
+    q_es: "¿Cuál es el nombre de la estructura de unión intercelular entre las células miocárdicas contráctiles y que permiten el paso del Potencial de Acción de una célula a otra de forma secuencial?",
+    q_pt: "Qual é o nome da estrutura de junção intercelular entre as células miocárdicas contráteis e que permitem a passagem do Potencial de Ação de uma célula a outra de forma sequencial?",
+    opts_es: ["Línea Z", "Banda I", "Discos Intercalares", "Túbulos T"],
+    opts_pt: ["Linha Z", "Banda I", "Discos Intercalares", "Túbulos T"],
+    cor: 2,
+    exp_es: "<strong>Correcta: c) Discos Intercalares.</strong> Contienen <strong>gap junctions</strong> (uniones comunicantes) que permiten el paso iónico directo entre células = sincicio funcional eléctrico. Las alternativas falsas: <em>Línea Z</em> es el límite del sarcómero (anclaje de actina); <em>Banda I</em> es la región de sólo actina (clara); <em>Túbulos T</em> son invaginaciones de membrana que acoplan la excitación con la contracción dentro de UNA célula.",
+    exp_pt: "<strong>Correta: c) Discos Intercalares.</strong> Contêm <strong>gap junctions</strong> (junções comunicantes) que permitem a passagem iônica direta entre células = sincício funcional elétrico. As alternativas falsas: <em>Linha Z</em> é o limite do sarcômero (ancoragem de actina); <em>Banda I</em> é a região de só actina (clara); <em>Túbulos T</em> são invaginações da membrana que acoplam a excitação à contração dentro de UMA célula."
+  },
+
+  // 7 — V/F
+  {
+    q_es: "Normalmente los potenciales de acción en el corazón se propagan en el Sistema de Conducción de forma unidireccional.",
+    q_pt: "Normalmente os potenciais de ação no coração se propagam no Sistema de Condução de forma unidirecional.",
+    opts_es: ["VERDADERO", "FALSO"],
+    opts_pt: ["VERDADEIRO", "FALSO"],
+    cor: 0,
+    exp_es: "<strong>VERDADERO.</strong> La propagación normal sigue la secuencia <strong>nodo SA → atrios → nodo AV → His → ramas → Purkinje → ventrículos</strong>. La unidireccionalidad se garantiza por el <em>período refractario</em>: la zona ya despolarizada no puede ser re-excitada, evitando que el impulso regrese. Esta es la base eléctrica que impide arritmias reentrantes en condiciones normales.",
+    exp_pt: "<strong>VERDADEIRO.</strong> A propagação normal segue a sequência <strong>nó SA → átrios → nó AV → His → ramos → Purkinje → ventrículos</strong>. A unidirecionalidade é garantida pelo <em>período refratário</em>: a zona já despolarizada não pode ser re-excitada, impedindo que o impulso retorne. Esta é a base elétrica que impede arritmias reentrantes em condições normais."
+  },
+
+  // 8 — V/F
+  {
+    q_es: "Durante la diástole, el Retorno Venoso es el principal factor que define la Poscarga.",
+    q_pt: "Durante a diástole, o Retorno Venoso é o principal fator que define a Pós-carga.",
+    opts_es: ["VERDADERO", "FALSO"],
+    opts_pt: ["VERDADEIRO", "FALSO"],
+    cor: 1,
+    exp_es: "<strong>FALSO.</strong> El retorno venoso define la <strong>PRECARGA</strong> (volumen telediastólico — cuanto el ventrículo se llena antes de contraer), NO la poscarga. La <strong>POSCARGA</strong> es la resistencia contra la cual el ventrículo eyecta, determinada principalmente por la <em>presión aórtica</em> y la resistencia vascular sistémica. Confusión clásica — ¡cuidado!",
+    exp_pt: "<strong>FALSO.</strong> O retorno venoso define a <strong>PRÉ-CARGA</strong> (volume telediastólico — quanto o ventrículo se enche antes de contrair), NÃO a pós-carga. A <strong>PÓS-CARGA</strong> é a resistência contra a qual o ventrículo ejeta, determinada principalmente pela <em>pressão aórtica</em> e resistência vascular sistêmica. Confusão clássica — atenção!"
+  },
+
+  // 9 — V/F
+  {
+    q_es: "En caso que no se produzca contracción de los músculos auriculares (pectíneos), la función cardíaca seguirá de forma normal sin alterar la función del corazón.",
+    q_pt: "Caso não ocorra contração dos músculos auriculares (pectíneos), a função cardíaca seguirá de forma normal sem alterar a função do coração.",
+    opts_es: ["VERDADERO", "FALSO"],
+    opts_pt: ["VERDADEIRO", "FALSO"],
+    cor: 1,
+    exp_es: "<strong>FALSO.</strong> Aunque el llenado pasivo ventricular contribuya con la mayor parte (~70-80%) del volumen telediastólico, la <strong>contracción atrial activa (\"atrial kick\")</strong> aporta los ~20-30% finales — crítico en situaciones de alta demanda (ejercicio, taquicardia). Cuando falta (ej.: <em>fibrilación atrial</em>), hay caída del gasto cardíaco, especialmente en pacientes con disfunción diastólica. <em>Las orejuelas también son sitio de formación de trombos cuando hay FA.</em>",
+    exp_pt: "<strong>FALSO.</strong> Embora o enchimento passivo ventricular contribua com a maior parte (~70-80%) do volume telediastólico, a <strong>contração atrial ativa (\"atrial kick\")</strong> contribui com os ~20-30% finais — crítico em situações de alta demanda (exercício, taquicardia). Quando falta (ex: <em>fibrilação atrial</em>), há queda do débito cardíaco, especialmente em pacientes com disfunção diastólica. <em>Os apêndices atriais também são sítio de formação de trombos quando há FA.</em>"
+  }
+];
+
+let prIdx = 0, prScore = 0, prInited = false, prLang = "es";
+
+function setProvarealLang(lang) {
+  prLang = lang;
+  document.getElementById("provarealLangEs").classList.toggle("active", lang === "es");
+  document.getElementById("provarealLangPt").classList.toggle("active", lang === "pt");
+  if (prInited) renderProvarealQuestion();
+}
+
+function initProvareal() {
+  if (prInited) return;
+  prInited = true; prIdx = 0; prScore = 0;
+  renderProvarealQuestion();
+}
+
+function renderProvarealQuestion() {
+  const container = document.getElementById('provareal-container');
+  if (prIdx >= provarealData.length) { renderProvarealScore(container); return; }
+  const q = provarealData[prIdx];
+  const pct = Math.round((prIdx / provarealData.length) * 100);
+  const qText = prLang === "es" ? q.q_es : q.q_pt;
+  const opts = prLang === "es" ? q.opts_es : q.opts_pt;
+  // Mostra o original em espanhol como referência quando idioma é PT
+  const origBlock = prLang === "pt"
+    ? `<div class="pr-orig show"><strong>📌 Original (ES):</strong><br>${q.q_es}</div>`
+    : '';
+
+  container.innerHTML = `
+    <div style="margin-bottom:28px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <span class="quiz-num">Questão ${prIdx + 1} / ${provarealData.length}</span>
+        <span style="font-family:var(--font-mono);font-size:.72rem;color:#e74c3c;">Score: ${prScore}/${prIdx}</span>
+      </div>
+      <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:${pct}%"></div></div>
+    </div>
+    <div class="quiz-q">${qText}</div>
+    ${origBlock}
+    <div class="quiz-opts">${opts.map((o, i) =>
+      `<button class="quiz-opt" onclick="answerProvareal(${i})">
+        <span class="opt-letter">${String.fromCharCode(65 + i)})</span><span>${o}</span>
+      </button>`).join('')}</div>
+    <div class="quiz-explain" id="prexp"></div>
+    <div class="quiz-nav" id="prnav" style="display:none;">
+      <span style="color:var(--muted);font-size:12px">${prScore} acerto${prScore===1?'':'s'} até agora</span>
+      <button class="btn" onclick="nextProvareal()">Próxima →</button>
+    </div>`;
+}
+
+function answerProvareal(chosen) {
+  const q = provarealData[prIdx];
+  const opts = document.querySelectorAll('#provareal-container .quiz-opt');
+  opts.forEach(o => { o.classList.add('answered'); o.style.pointerEvents = 'none'; });
+  if (chosen === q.cor) {
+    opts[chosen].classList.add('correct');
+    prScore++;
+  } else {
+    opts[chosen].classList.add('wrong');
+    opts[q.cor].classList.add('correct');
+  }
+  const ex = document.getElementById('prexp');
+  const expText = prLang === "es" ? q.exp_es : q.exp_pt;
+  ex.innerHTML = `<strong>${chosen === q.cor ? '✅ ¡Correcto!' : '❌ Incorrecto.'}</strong><br><br>${expText}`;
+  ex.classList.add('show');
+  document.getElementById('prnav').style.display = 'flex';
+}
+
+function nextProvareal() { prIdx++; renderProvarealQuestion(); }
+
+function renderProvarealScore(container) {
+  const pct = Math.round((prScore / provarealData.length) * 100);
+  let msg, color;
+  if (pct >= 90)      { msg = '🏆 ¡Excelente! / Excelente! Você domina o conteúdo cobrado em prova.'; color = 'var(--green)'; }
+  else if (pct >= 70) { msg = '✅ Muy bien / Muito bom! Revise os erros e retome.'; color = '#f9c94f'; }
+  else if (pct >= 50) { msg = '📚 Regular — refaça os módulos com dificuldade!'; color = 'var(--accent)'; }
+  else                { msg = '💪 Continue estudando — você vai chegar lá!'; color = '#e74c3c'; }
+  container.innerHTML = `<div class="score-card">
+    <div class="score-big">${prScore}<span style="font-size:2.5rem;color:var(--muted)">/${provarealData.length}</span></div>
+    <div style="font-family:var(--font-display);font-size:2.2rem;font-weight:700;margin:10px 0;color:${color};">${pct}%</div>
+    <div class="score-msg">${msg}</div>
+    <button class="btn" style="margin-top:28px" onclick="restartProvareal()">🔄 Refazer questões</button>
+  </div>`;
+}
+
+function restartProvareal() { prIdx = 0; prScore = 0; prInited = false; initProvareal(); }
 </script>
 
 <script src="study-timer.js"></script>
