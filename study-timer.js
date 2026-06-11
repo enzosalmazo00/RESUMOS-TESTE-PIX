@@ -11,15 +11,18 @@
 "use strict";
 
 // ── Estado ────────────────────────────────────────────────────────────────────
-var startTime      = null;       // timestamp do início da sessão
-var elapsedAtStart = 0;          // segundos já estudados hoje antes desta sessão
+var startTime      = null;       // timestamp do início da sessão de estudo
+var elapsedAtStart = 0;          // segundos já estudados hoje (NESTA matéria) antes desta sessão
 var timerInterval  = null;
 var saveInterval   = null;
 
-// Modo regressivo
-var isCountdown    = false;
-var countdownGoal  = 0;          // meta em segundos
-var countdownDone  = false;
+// Modo regressivo — SESSÃO INDEPENDENTE do tempo acumulado de estudo
+// Quando aluno programa um pomodoro de 25min, conta os 25min DESSA SESSÃO,
+// não importa quanto tempo ele já estudou no dia.
+var isCountdown        = false;
+var countdownGoal      = 0;          // meta em segundos
+var countdownStartTime = null;       // quando o countdown começou (timestamp)
+var countdownDone      = false;
 
 // ── Notificações por marco de estudo ──────────────────────────────────────────
 // Sistema ROTATIVO: pool de 50 frases motivacionais sorteadas aleatoriamente,
@@ -353,12 +356,20 @@ function elapsedSec() {
   return elapsedAtStart + Math.floor((Date.now() - startTime) / 1000);
 }
 
+// Segundos decorridos APENAS no countdown atual (independente do estudo acumulado)
+function countdownElapsedSec() {
+  if (!countdownStartTime) return 0;
+  return Math.floor((Date.now() - countdownStartTime) / 1000);
+}
+
 function tick() {
   var t = document.getElementById("stTime");
   if (!t) return;
 
   if (isCountdown) {
-    var goalReached = elapsedSec() >= countdownGoal;
+    // Compara o tempo da SESSÃO de countdown (não o tempo acumulado de estudo)
+    var elapsed = countdownElapsedSec();
+    var goalReached = elapsed >= countdownGoal;
     if (goalReached && !countdownDone) {
       countdownDone = true;
       document.getElementById("stTimer").classList.remove("countdown");
@@ -366,16 +377,17 @@ function tick() {
       document.getElementById("stLabel").textContent = "concluído!";
       t.textContent = "✓ feito";
       playDoneSound();
-      showToast("🎉 <strong>Timer concluído!</strong> Você completou os " + Math.round(countdownGoal/60) + " minutos programados. Pode fazer uma pausa merecida!", "success");
+      showToast("🎉 <strong>Timer concluído!</strong> Você completou os " + Math.round(countdownGoal/60) + " minutos programados. Excelente foco!", "success");
     } else if (!goalReached) {
-      var remaining = countdownGoal - elapsedSec();
+      var remaining = countdownGoal - elapsed;
       t.textContent = formatTime(remaining);
     }
   } else {
     t.textContent = formatTime(elapsedSec());
   }
 
-  // Notificações de pausa — persistente no localStorage, anti-cascata
+  // Notificações de pausa — sempre baseadas no TEMPO ACUMULADO DE ESTUDO
+  // (não muda quando o aluno está usando countdown — continua contando estudo normal)
   var min = elapsedSec() / 60;
   var shownToday = loadShown();
   var newShown = false;
@@ -394,9 +406,10 @@ function tick() {
 }
 
 function startCountdown(min) {
-  isCountdown   = true;
-  countdownGoal = min * 60;
-  countdownDone = false;
+  isCountdown        = true;
+  countdownGoal      = min * 60;
+  countdownStartTime = Date.now();   // ← timestamp INDEPENDENTE do tempo de estudo
+  countdownDone      = false;
   var timer = document.getElementById("stTimer");
   if (timer) {
     timer.classList.add("countdown");
@@ -408,8 +421,9 @@ function startCountdown(min) {
 }
 
 function stopCountdown() {
-  isCountdown   = false;
-  countdownDone = false;
+  isCountdown        = false;
+  countdownDone      = false;
+  countdownStartTime = null;
   var timer = document.getElementById("stTimer");
   if (timer) timer.classList.remove("countdown", "done");
   var lbl = document.getElementById("stLabel");
@@ -465,29 +479,43 @@ function processQueue() {
 // ── Persistência no Supabase ──────────────────────────────────────────────────
 function todayStr() { return new Date().toISOString().slice(0,10); }
 
-// Carrega minutos já estudados hoje (de sessões anteriores)
+// Detecta a matéria atual pela URL (ex: imunologia_p2.html → "imunologia_p2")
+function getCurrentMateria() {
+  try {
+    var path = window.location.pathname;
+    var fname = path.substring(path.lastIndexOf("/")+1).replace(".html","");
+    if (fname && fname !== "dashboard" && fname !== "login" && fname !== "admin" && fname !== "index" && fname !== "") {
+      return fname;
+    }
+  } catch(e) {}
+  return null;
+}
+
+// Carrega minutos JÁ estudados HOJE para a matéria ATUAL (de sessões anteriores)
 async function loadTodayMinutes() {
   try {
+    var materia = getCurrentMateria();
+    if (!materia) return 0;
     var client = window.authClient;
     var session = window.authSession;
     if (!client || !session) return 0;
     var res = await client.from("estudo_diario")
-      .select("minutos,ultima_materia,streak_dias")
+      .select("minutos")
       .eq("user_id", session.user.id)
       .eq("data", todayStr())
+      .eq("materia", materia)
       .maybeSingle();
     if (res.data) return res.data.minutos || 0;
     return 0;
   } catch(e) { return 0; }
 }
 
-// Calcula streak considerando o dia anterior
+// Calcula streak considerando se o aluno estudou ontem (qualquer matéria)
 async function computeStreak() {
   try {
     var client = window.authClient;
     var session = window.authSession;
     if (!client || !session) return 1;
-    // Busca o registro mais recente antes de hoje
     var yest = new Date(); yest.setDate(yest.getDate()-1);
     var yestStr = yest.toISOString().slice(0,10);
     var res = await client.from("estudo_diario")
@@ -504,36 +532,30 @@ async function computeStreak() {
   } catch(e) { return 1; }
 }
 
-// Salva os minutos atuais (upsert)
+// Salva os minutos atuais (upsert por user_id+data+materia)
 async function saveToSupabase() {
   try {
+    var materia = getCurrentMateria();
+    if (!materia) return; // só salva quando está numa página de matéria
+
     var client = window.authClient;
     var session = window.authSession;
     if (!client || !session) return;
+
     var totalMin = Math.floor(elapsedSec() / 60);
     if (totalMin < 1) return;
-
-    // Detecta matéria pela URL (ex: imunologia_p2.html → "imunologia_p2")
-    var materia = "";
-    try {
-      var path = window.location.pathname;
-      var fname = path.substring(path.lastIndexOf("/")+1).replace(".html","");
-      if (fname && fname !== "dashboard" && fname !== "login" && fname !== "admin") {
-        materia = fname;
-      }
-    } catch(e) {}
 
     var streak = await computeStreak();
 
     var payload = {
       user_id: session.user.id,
       data: todayStr(),
+      materia: materia,
       minutos: totalMin,
       streak_dias: streak
     };
-    if (materia) payload.ultima_materia = materia;
 
-    await client.from("estudo_diario").upsert(payload, { onConflict: "user_id,data" });
+    await client.from("estudo_diario").upsert(payload, { onConflict: "user_id,data,materia" });
   } catch(e) { console.warn("[study-timer] save error:", e); }
 }
 

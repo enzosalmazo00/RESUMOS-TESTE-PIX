@@ -1261,25 +1261,33 @@ window.switchTab = function(tab) {
     return pick;
   }
 
-  // ── Tempo estudado hoje (lê do Supabase) ───────────────────────
-  // Retorna { h, m, subj, streakFromDB } ou null se não tem dados
+  // ── Tempo estudado hoje (lê do Supabase, todas as matérias) ────
+  // Retorna { totalMin, streak, materias: [{materia, minutos}, ...] } ou null
   async function skLoadTodayData(){
     try {
       var client = window.authClient;
       var session = window.authSession;
       if (!client || !session) return null;
       var today = skToday();
+      // Busca TODAS as matérias estudadas hoje
       var res = await client.from("estudo_diario")
-        .select("minutos,ultima_materia,streak_dias")
+        .select("materia,minutos,streak_dias")
         .eq("user_id", session.user.id)
         .eq("data", today)
-        .maybeSingle();
-      if (res.data) {
-        return {
-          minutos: res.data.minutos || 0,
-          subj: res.data.ultima_materia || "",
-          streak: res.data.streak_dias || 1
-        };
+        .order("minutos", { ascending: false });
+      if (res.data && res.data.length > 0) {
+        var totalMin = 0;
+        var streak = 1;
+        var materias = [];
+        res.data.forEach(function(row){
+          var m = row.minutos || 0;
+          totalMin += m;
+          if (row.streak_dias && row.streak_dias > streak) streak = row.streak_dias;
+          if (m >= 1 && row.materia) {
+            materias.push({ materia: row.materia, minutos: m });
+          }
+        });
+        return { totalMin: totalMin, streak: streak, materias: materias };
       }
     } catch(e) { console.warn("[streak] load error:", e); }
     return null;
@@ -1718,27 +1726,76 @@ window.switchTab = function(tab) {
     else if(T.ck==="minimal") skCkMinimal(W/2,ckY,r,opts.hrs,opts.mins,T);
     else if(T.ck==="roman")   skCkRoman(W/2,ckY,r,opts.hrs,opts.mins,T);
 
-    // Tempo
-    skCX.font="600 34px Poppins,system-ui,sans-serif";skCX.fillStyle="rgba(255,255,255,0.38)";skCX.textAlign="center";
-    skCX.fillText("TEMPO DE ESTUDO",W/2,1510);
-    var tg2=skCX.createLinearGradient(W/2-160,0,W/2+160,0);
-    tg2.addColorStop(0,T.a1);tg2.addColorStop(1,T.a3);
-    skCX.font="700 72px Poppins,system-ui,sans-serif";skCX.fillStyle=tg2;
-    skCX.fillText(opts.hrs+"h "+(opts.mins<10?"0":"")+opts.mins+"min",W/2,1588);
+    // ── Lista de matérias estudadas + tempo total ─────────────────
+    var listY = 1455;
+    skCX.font="600 30px Poppins,system-ui,sans-serif";
+    skCX.fillStyle="rgba(255,255,255,0.32)";
+    skCX.textAlign="center";
+    skCX.textBaseline="alphabetic";
+    skCX.fillText("MATÉRIAS ESTUDADAS HOJE", W/2, listY);
 
-    // Tag matéria
-    if(opts.subj){
-      skCX.font="700 34px Poppins,system-ui,sans-serif";
-      var tw=skCX.measureText(opts.subj).width+56,tx=W/2-tw/2,ty=1618;
-      skRR(tx,ty,tw,56,28);skCX.fillStyle=T.tag[0];skCX.fill();
-      skCX.strokeStyle=T.tag[1];skCX.lineWidth=1;skRR(tx,ty,tw,56,28);skCX.stroke();
-      skCX.fillStyle=T.tag[2];skCX.textAlign="center";skCX.fillText(opts.subj,W/2,1656);
+    var listStartY = listY + 38;
+    var materias = (opts.materias && opts.materias.length > 0) ? opts.materias : null;
+
+    if (materias) {
+      var maxShow = Math.min(materias.length, 4);
+      var rowH = 50;
+      var leftX = 130, rightX = W - 130;
+      for (var mi = 0; mi < maxShow; mi++) {
+        var item = materias[mi];
+        var rowY = listStartY + mi * rowH;
+        var label = skFormatSubj(item.materia);
+        var mh = Math.floor(item.minutos / 60);
+        var mm = item.minutos % 60;
+        var tempoStr = mh > 0 ? (mh + "h" + (mm < 10 ? "0" : "") + mm + "min") : (mm + "min");
+
+        // Nome da matéria (esquerda)
+        skCX.textAlign="left";
+        skCX.font="600 30px Poppins,system-ui,sans-serif";
+        skCX.fillStyle = mi === 0 ? T.tag[2] : "rgba(255,255,255,0.78)";
+        skCX.fillText("• " + label, leftX, rowY);
+
+        // Tempo (direita)
+        skCX.textAlign="right";
+        skCX.font="700 30px Poppins,system-ui,sans-serif";
+        skCX.fillStyle = mi === 0 ? T.tag[2] : "rgba(255,255,255,0.65)";
+        skCX.fillText(tempoStr, rightX, rowY);
+      }
+
+      // Se houver mais matérias além das 4 mostradas
+      if (materias.length > 4) {
+        skCX.textAlign="center";
+        skCX.font="italic 22px Poppins,system-ui,sans-serif";
+        skCX.fillStyle="rgba(255,255,255,0.4)";
+        skCX.fillText("e mais " + (materias.length - 4) + " matéria" + (materias.length-4>1?"s":""), W/2, listStartY + maxShow * rowH);
+      }
+
+      // Linha separadora antes do total
+      var totalY = listStartY + maxShow * rowH + (materias.length > 4 ? 36 : 30);
+      var sepG = skCX.createLinearGradient(150, 0, W-150, 0);
+      sepG.addColorStop(0,"transparent");
+      sepG.addColorStop(0.5, T.a1+"66");
+      sepG.addColorStop(1,"transparent");
+      skCX.strokeStyle = sepG; skCX.lineWidth = 1;
+      skCX.beginPath(); skCX.moveTo(150, totalY); skCX.lineTo(W-150, totalY); skCX.stroke();
+
+      // Total
+      skCX.textAlign="center";
+      skCX.font="700 32px Poppins,system-ui,sans-serif";
+      skCX.fillStyle="rgba(255,255,255,0.45)";
+      skCX.fillText("TEMPO TOTAL", W/2, totalY + 42);
+
+      var tg2 = skCX.createLinearGradient(W/2-160, 0, W/2+160, 0);
+      tg2.addColorStop(0, T.a1); tg2.addColorStop(1, T.a3);
+      skCX.font="800 62px Poppins,system-ui,sans-serif";
+      skCX.fillStyle = tg2;
+      skCX.fillText(opts.hrs+"h "+(opts.mins<10?"0":"")+opts.mins+"min", W/2, totalY + 102);
     }
 
     // Frase
-    skCX.font='italic 36px Poppins,system-ui,sans-serif';
-    skCX.fillStyle="rgba(255,255,255,0.56)";skCX.textAlign="center";
-    skWC('"'+opts.phrase+'"',W/2,1730,W-100,52);
+    skCX.font='italic 34px Poppins,system-ui,sans-serif';
+    skCX.fillStyle="rgba(255,255,255,0.5)";skCX.textAlign="center";
+    skWC('"'+opts.phrase+'"',W/2,1810,W-120,46);
 
     // Data
     var ds=new Date().toLocaleDateString("pt-BR",{day:"numeric",month:"long",year:"numeric"});
@@ -1747,7 +1804,7 @@ window.switchTab = function(tab) {
   }
 
   // ── Estado e dados ─────────────────────────────────────────────
-  var skState = { streak:1, best:1, tier:null, tema:"fogo", name:"", subj:"", hrs:0, mins:0 };
+  var skState = { streak:1, best:1, tier:null, tema:"fogo", name:"", materias:[], hrs:0, mins:0, totalMin:0 };
   var skVariantSeed = Date.now();  // Muda a cada clique em "Gerar" — randomiza visualmente o card
 
   // Frase determinística por usuário+dia (hash simples)
@@ -1805,31 +1862,26 @@ window.switchTab = function(tab) {
     var tierToTema = { "Iniciante":"fogo", "Constante":"aurora", "Dedicado":"cosmos", "Veterano":"matrix", "Lendário":"premium" };
     var tierTema = tierToTema[t.label] || "fogo";
 
-    // 4. Minutos: do Supabase
-    var minutos = (todayData && todayData.minutos) || 0;
+    // 4. Minutos totais + lista de matérias
+    var minutos = (todayData && todayData.totalMin) || 0;
     var hrs = Math.floor(minutos / 60);
     var mins = minutos % 60;
+    var materias = (todayData && todayData.materias) || [];
 
     // 5. Nome do perfil
     var name = (window.profile && window.profile.nome_preferido) ||
                localStorage.getItem("ez-nome-aluno") ||
                "Aluno";
 
-    // 6. Matéria do Supabase, ou fallback
-    var subj = "";
-    if (todayData && todayData.subj) {
-      subj = skFormatSubj(todayData.subj);
-    } else {
-      subj = "Estudo do dia";
-    }
-
     skState = {
       streak: streak, best: best, tier: t,
       tema: temaSorteado,       // visual do card (sorteado)
       tierTema: tierTema,       // ícone do tier (fixo pelo streak)
-      name: name, subj: subj, hrs: hrs, mins: mins,
+      name: name,
+      materias: materias,       // [{materia, minutos}, ...] ordenado por tempo desc
+      hrs: hrs, mins: mins, totalMin: minutos,
       phrase: SK_FR[skFI],
-      hasData: !!(todayData && todayData.minutos > 0)
+      hasData: !!(todayData && todayData.totalMin > 0)
     };
     return skState;
   }
@@ -1868,7 +1920,7 @@ window.switchTab = function(tab) {
     var best = parseInt(localStorage.getItem("ez-sk-best")) || streak;
     if (streak > best) { best = streak; localStorage.setItem("ez-sk-best", best); }
     var t = skTierFor(streak);
-    var minutos = (todayData && todayData.minutos) || 0;
+    var minutos = (todayData && todayData.totalMin) || 0;
     var hrs = Math.floor(minutos / 60), mins = minutos % 60;
 
     var n = document.getElementById("sk-num");
